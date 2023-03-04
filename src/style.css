@@ -1,7 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-#app,body,html{
-  height: 100%;
+@layer utilities {
+  #app,body,html{
+    height: 100%;
+  }
+  
 }

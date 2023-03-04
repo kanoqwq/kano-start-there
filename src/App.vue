@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import Home from './components/Home.vue'
+import Search from './components/Search.vue'
+// iconfont
+import '../public/js/iconfont.js'
 </script>
 
 <template>
-  <Home />
+  <Search />
 </template>
 
 <style scoped lang="less"></style>
