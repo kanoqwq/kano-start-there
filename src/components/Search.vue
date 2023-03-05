@@ -174,7 +174,7 @@ const removeActive = (): void => {
 .container {
   height: 100%;
   padding: 0 15px;
-
+  // overflow: scroll;
   .search-suggestion {
     width: 100%;
     top: 89%;

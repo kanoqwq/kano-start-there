@@ -2,8 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 @layer utilities {
-  #app,body,html{
+  body,html{
     height: 100%;
+    overflow: hidden;
   }
   .dark-hover-bg{
     background-color: rgb(23 30 40) !important;
