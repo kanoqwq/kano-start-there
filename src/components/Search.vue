@@ -1,15 +1,16 @@
 <template>
   <div class="container mx-auto">
     <div class="search relative flex flex-col">
-      <div class="search-engine flex overflow-hidden" ref="searchEngineElement">
+      <!-- <div class="search-engine flex overflow-hidden" ref="searchEngineElement"> -->
+      <form action="#" method="get" class="search-engine flex overflow-hidden" ref="searchEngineElement">
         <div class="flex items-center" @click="switchEngine">
           <svg class="icon kano-icon" aria-hidden="true">
             <use :xlink:href="selectedEngine.icon"></use>
           </svg>
         </div>
         <input type="text" v-model="searchContent" @keyup.enter="enterEvent" @input="searchSuggestion"
-          @keyup="moveSuggestion" class="input pl-3 box-border outline-none"
-          :placeholder="`在${selectedEngine.name}上搜索`" />
+          @keydown="moveSuggestion" @mouseenter="eventMouse" @mouseleave="eventMouse"
+          class="input pl-3 box-border outline-none" :placeholder="`在${selectedEngine.name}上搜索`" />
         <div class="clear-input" @click="clearContent" v-show="searchContent">
           <svg class="icon close" aria-hidden="false">
             <use xlink:href="#icon-close"></use>
@@ -20,8 +21,9 @@
             <use xlink:href="#icon-search"></use>
           </svg>
         </button>
-      </div>
-      <div class="search-suggestion top-border absolute" v-show="suggestWords.length" ref="searchSuggestionElement">
+        <!-- </div> -->
+      </form>
+      <div class="search-suggestion top-border absolute" v-show="suggestWords.length">
         <ul>
           <li :class="{ active: item.isSelected }" v-for="(item, index) in suggestWords" :key="index"
             @click="startSearch(item.title)">{{ item.title }}</li>
@@ -80,6 +82,20 @@ const startSearch = (keyWord = ''): void => {
   window.open(reqUrl, '_blank')
 }
 
+// 鼠标滑过改变阴影
+const searchEngineElement = ref<HTMLFormElement>()
+const eventMouse = (e: MouseEvent) => {
+  if (e.type == 'mouseenter') {
+    if (searchContent.value.length == 0) {
+      searchEngineElement.value?.classList.add("shadow")
+    }
+  } else {
+    if (searchContent.value.length == 0) {
+      searchEngineElement.value?.classList.remove("shadow")
+    }
+  }
+}
+
 //回车搜索
 const enterEvent = (): void => {
   startSearch()
@@ -92,6 +108,8 @@ let suggestWords = ref<Array<SuggestWords>>([])
 //搜索建议
 //http://suggestion.baidu.com/su?wd=关键词&p=3&cb=callbackFunction&t=time
 const searchSuggestion = throttle(async (): Promise<void> => {
+  //清除阴影
+  searchEngineElement.value?.classList.remove("shadow")
   //清除一下历史选择的index
   suggestionIndex = -1
   if (searchContent.value) {
@@ -118,29 +136,34 @@ const searchSuggestion = throttle(async (): Promise<void> => {
   } else {
     suggestWords.value.length = 0
   }
-}, 211)
+}, 333)
 
 const clearContent = (): void => {
   suggestWords.value.length = 0
   searchContent.value = ''
 }
-
 //实现上下键选择候选词
 const moveSuggestion = (e: KeyboardEvent): void => {
   let key = e.key
   if (key == 'ArrowUp') {
+    //阻止上下按键操作光标
+    e.preventDefault()
     if (suggestionIndex == 0 || suggestionIndex == -1) {
       suggestionIndex = suggestWords.value.length - 1
-    } else {
+    }
+    else {
       suggestionIndex = (suggestionIndex - 1) % suggestWords.value.length;
     }
     removeActive();
     suggestWords.value[suggestionIndex].isSelected = true
     searchContent.value = suggestWords.value[suggestionIndex].title
-  } else if (key == 'ArrowDown') {
+  }
+  else if (key == 'ArrowDown') {
+    e.preventDefault()
     if (suggestWords.value.length - 1 == suggestionIndex) {
       suggestionIndex = 0
-    } else {
+    }
+    else {
       suggestionIndex = (suggestionIndex + 1) % suggestWords.value.length;
     }
     removeActive();
@@ -184,6 +207,8 @@ const removeActive = (): void => {
     height: 50px;
     border: 1px solid #ccc;
     border-radius: 6px;
+    transition: all .2s;
+    transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
 
     .clear-input {
       display: flex;
@@ -194,6 +219,10 @@ const removeActive = (): void => {
         width: 14px;
       }
     }
+  }
+
+  .shadow {
+    box-shadow: 2px 8px 16px #999;
   }
 
   .search {
