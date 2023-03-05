@@ -5,5 +5,11 @@
   #app,body,html{
     height: 100%;
   }
-  
+  .dark-hover-bg{
+    background-color: rgb(23 30 40) !important;
+  }
+  .dark-bg {
+    background-color: rgb(31 41 55 / 1) !important;
+    color: #ccc;
+  }
 }

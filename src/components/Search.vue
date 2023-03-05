@@ -17,14 +17,14 @@
             <use xlink:href="#icon-close"></use>
           </svg>
         </div>
-        <button class="search-btn flex justify-center items-center" @click="startSearch()">
+        <button class="search-btn flex justify-center items-center dark:hover:dark-bg" @click="startSearch()">
           <svg class="icon" aria-hidden="false" height="30px">
             <use xlink:href="#icon-search"></use>
           </svg>
         </button>
         <!-- </div> -->
       </form>
-      <div class="search-suggestion top-border absolute" v-show="suggestWords.length">
+      <div class="search-suggestion top-border absolute dark:dark-bg" v-show="suggestWords.length">
         <ul>
           <li :class="{ active: item.isSelected }" v-for="(item, index) in suggestWords" :key="index"
             @click="startSearch(item.title)">{{ item.title }}</li>
@@ -189,9 +189,10 @@ const removeActive = (): void => {
 
     li:hover,
     .active {
-      background-color: #eee;
+      background-color: rgb(0 0 0 / .1)
     }
   }
+
 
   .search-engine {
     height: 50px;
@@ -229,6 +230,7 @@ const removeActive = (): void => {
     .input {
       width: 500px;
       color: #666;
+      background: transparent;
     }
 
     &-btn {
