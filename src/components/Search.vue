@@ -38,22 +38,23 @@ import { ref, reactive } from 'vue'
 import throttle from 'lodash/throttle'
 // import { globalKey } from '../symbols/'
 import { suggestAPI } from '../utils/searchSuggestions'
+import { isMobile } from '../utils/ua';
 interface SearchEngine {
   name: string,
   icon: string,
   url: string,
   method: 'suggestBaidu' | 'suggestBing'
 }
-
+console.log(isMobile());
 let searchEngines: Array<SearchEngine> = [{
   name: 'Baidu',
   icon: '#icon-bxl-baidu',
-  url: 'https://www.baidu.com/baidu?&ie=utf-8&wd=',
+  url: !isMobile() ? 'https://www.baidu.com/baidu?&ie=utf-8&wd=' : 'https://www.baidu.com/from=%E5%82%BB%E9%80%BC%E7%99%BE%E5%BA%A6%E4%BD%A0%E5%A6%88%E6%AD%BB%E4%BA%86/s?ts=0&t_kt=0&ie=utf-8&ms=1&word=',
   method: 'suggestBaidu'
 }, {
   name: 'Google',
   icon: '#icon-google',
-  url: 'https://google.com',
+  url: 'https://google.com/search?q=',
   method: 'suggestBaidu'
 }, {
   name: 'Bing',

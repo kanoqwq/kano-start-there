@@ -17,7 +17,7 @@ const makeObject = (res: Array<any>, titleProp: string = ""): Array<any> => {
 
 //baidu
 const suggestBaidu = async (searchContent: string) => {
-  let res = await jsonp("http://suggestion.baidu.com/su", {
+  let res = await jsonp("https://suggestion.baidu.com/su", {
     callbackName: "baidu_cb",
     wd: searchContent,
     cb: "baidu_cb",
