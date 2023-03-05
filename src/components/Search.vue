@@ -4,7 +4,7 @@
       <!-- <div class="search-engine flex overflow-hidden" ref="searchEngineElement"> -->
       <form action="#" method="get" class="search-engine flex overflow-hidden dark:hover:dark-shadow" ref="searchEngineElement">
         <div class="flex items-center" @click="switchEngine">
-          <svg class="icon kano-icon" aria-hidden="true">
+          <svg class="icon kano-icon dark:dark-icon" aria-hidden="true">
             <use :xlink:href="selectedEngine.icon"></use>
           </svg>
         </div>
