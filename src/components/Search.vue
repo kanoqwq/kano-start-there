@@ -8,9 +8,10 @@
             <use :xlink:href="selectedEngine.icon"></use>
           </svg>
         </div>
-        <input type="text" v-model="searchContent" @keyup.enter="enterEvent" @input="searchSuggestion"
-          @keydown="moveSuggestion" @mouseenter="eventMouse" @mouseleave="eventMouse"
-          class="input pl-3 box-border outline-none" :placeholder="`在${selectedEngine.name}上搜索`" />
+        <input type="text" v-model="searchContent" @keyup.enter="enterEvent"
+          @input="searchSuggestion(selectedEngine.method)" @keydown="moveSuggestion" @mouseenter="eventMouse"
+          @mouseleave="eventMouse" class="input pl-3 box-border outline-none"
+          :placeholder="`在${selectedEngine.name}上搜索`" />
         <div class="clear-input" @click="clearContent" v-show="searchContent">
           <svg class="icon close" aria-hidden="false">
             <use xlink:href="#icon-close"></use>
@@ -33,30 +34,32 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive, Ref } from 'vue'
-import { jsonp } from 'vue-jsonp'
-//@ts-ignore
+import { ref, reactive } from 'vue'
 import throttle from 'lodash/throttle'
 // import { globalKey } from '../symbols/'
-
+import { suggestAPI } from '../utils/searchSuggestions'
 interface SearchEngine {
   name: string,
   icon: string,
-  url: string
+  url: string,
+  method: 'suggestBaidu' | 'suggestBing'
 }
 
 let searchEngines: Array<SearchEngine> = [{
   name: 'Baidu',
   icon: '#icon-bxl-baidu',
-  url: 'https://www.baidu.com/baidu?&ie=utf-8&wd='
+  url: 'https://www.baidu.com/baidu?&ie=utf-8&wd=',
+  method: 'suggestBaidu'
 }, {
   name: 'Google',
   icon: '#icon-google',
-  url: 'https://google.com'
+  url: 'https://google.com',
+  method: 'suggestBaidu'
 }, {
   name: 'Bing',
   icon: '#icon-bing',
-  url: 'https://bing.com'
+  url: 'https://cn.bing.com/search?q=',
+  method: 'suggestBing'
 }]
 
 // const global = inject(globalKey)
@@ -71,6 +74,7 @@ const switchEngine = (): void => {
   selectedEngine.name = newEngine.name
   selectedEngine.url = newEngine.url
   selectedEngine.icon = newEngine.icon
+  selectedEngine.method = newEngine.method
 }
 
 const startSearch = (keyWord = ''): void => {
@@ -104,35 +108,20 @@ interface SuggestWords {
   title: string,
   isSelected: boolean
 }
+
 let suggestWords = ref<Array<SuggestWords>>([])
-//搜索建议
-//http://suggestion.baidu.com/su?wd=关键词&p=3&cb=callbackFunction&t=time
-const searchSuggestion = throttle(async (): Promise<void> => {
+
+//搜索建议(谷歌接口暂时无法支持跨域)
+const searchSuggestion = throttle(async (method: 'suggestBaidu' | 'suggestBing'): Promise<void> => {
   //清除阴影
   searchEngineElement.value?.classList.remove("shadow")
   //清除一下历史选择的index
   suggestionIndex = -1
-  if (searchContent.value) {
-    let res = await jsonp('http://suggestion.baidu.com/su', {
-      callbackName: 'kano_jsonp',
-      wd: searchContent.value,
-      cb: 'kano_jsonp',
-      t: Date.now(),
-      p: 3
-    })
-    // console.log(res.s);
-    suggestWords.value.length = 0
-    //构造res
-    let newRes = [...res.s]
-    newRes = newRes.map((item) => {
-      return {
-        title: item,
-        isSelected: false
-      }
-    })
-    console.log(newRes);
 
-    suggestWords.value.push(...newRes)
+  if (searchContent.value) {
+    let res = await suggestAPI[method](searchContent.value)
+    suggestWords.value.length = 0
+    suggestWords.value.push(...res)
   } else {
     suggestWords.value.length = 0
   }
