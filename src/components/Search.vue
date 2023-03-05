@@ -2,7 +2,7 @@
   <div class="container mx-auto">
     <div class="search relative flex flex-col">
       <!-- <div class="search-engine flex overflow-hidden" ref="searchEngineElement"> -->
-      <form action="#" method="get" class="search-engine flex overflow-hidden" ref="searchEngineElement">
+      <form action="#" method="get" class="search-engine flex overflow-hidden dark:hover:dark-shadow" ref="searchEngineElement">
         <div class="flex items-center" @click="switchEngine">
           <svg class="icon kano-icon" aria-hidden="true">
             <use :xlink:href="selectedEngine.icon"></use>
@@ -17,7 +17,7 @@
             <use xlink:href="#icon-close"></use>
           </svg>
         </div>
-        <button class="search-btn flex justify-center items-center dark:hover:dark-bg" @click="startSearch()">
+        <button class="search-btn flex justify-center items-center dark:hover:dark-hover-bg" @click="startSearch()">
           <svg class="icon" aria-hidden="false" height="30px">
             <use xlink:href="#icon-search"></use>
           </svg>

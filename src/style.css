@@ -12,4 +12,7 @@
     background-color: rgb(31 41 55 / 1) !important;
     color: #ccc;
   }
+  .dark-shadow {
+    box-shadow: 2px 8px 16px #000000bf !important;
+  }
 }
