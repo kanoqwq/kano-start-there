@@ -87,12 +87,12 @@ const switchEngine = (): void => {
 }
 
 const startSearch = (keyWord = ''): void => {
-  //添加搜索历史
-  addSearchHistory()
   if (keyWord) {
     searchContent.value = keyWord.trim()
   }
   let reqUrl = selectedEngine.url + searchContent.value.trim()
+  //添加搜索历史
+  addSearchHistory()
   //返回新标签页打开
   window.open(reqUrl, '_blank')
 }
@@ -185,7 +185,7 @@ const showHideSearchHistory = (e: Event) => {
   } else {
     //让子弹飞一会
     setTimeout(() => {
-      suggestWords.value.length = 0
+      // suggestWords.value.length = 0
     }, 200)
   }
 }
