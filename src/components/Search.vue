@@ -185,7 +185,7 @@ const showHideSearchHistory = (e: Event) => {
   } else {
     //让子弹飞一会
     setTimeout(() => {
-      // suggestWords.value.length = 0
+      suggestWords.value.length = 0
     }, 200)
   }
 }
