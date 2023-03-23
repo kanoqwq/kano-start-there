@@ -27,20 +27,24 @@
       </form>
       <div class="search-suggestion top-border absolute dark:dark-bg" v-show="suggestWords.length">
         <ul>
-          <li :class="{ active: item.isSelected }" v-for="(item, index) in suggestWords" :key="index"
-            @click="startSearch(item.title)">{{ item.title }}</li>
+          <li class="inner" :class="{ active: item.isSelected }" v-for="(item, index) in suggestWords" :key="index">
+            <span class="searchkey" @click="startSearch(item.title)">{{ item.title }}</span>
+            <svg class="close" aria-hidden="false" v-show="item.allowDel" @click="delHistory(index)">
+              <use xlink:href="#icon-close"></use>
+            </svg>
+          </li>
         </ul>
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive } from 'vue'
 import throttle from 'lodash/throttle'
-// import { globalKey } from '../symbols/'
 import { suggestAPI } from '../utils/searchSuggestions'
 import { isMobile } from '../utils/ua'
 import useStore from '../store'
+import { SuggestWords } from '../types/global'
 const historySearch = useStore.historySearch()
 interface SearchEngine {
   name: string,
@@ -111,11 +115,6 @@ const eventMouse = (e: MouseEvent): void => {
 const enterEvent = (): void => {
   startSearch()
 }
-interface SuggestWords {
-  title: string,
-  isSelected: boolean
-}
-
 
 //搜索建议(谷歌接口暂时无法支持跨域)
 const searchSuggestion = throttle(async (method: 'suggestBaidu' | 'suggestBing'): Promise<void> => {
@@ -174,7 +173,7 @@ const removeActive = (): void => {
   })
 }
 
-//TODO:搜索历史功能
+//搜索历史功能
 const addSearchHistory = () => {
   //添加搜索历史
   historySearch.addHistory(searchContent.value)
@@ -190,12 +189,12 @@ const showHideSearchHistory = (e: Event) => {
     }, 200)
   }
 }
-onMounted(() => {
-  console.log(historySearch.gethistorySearchList);
-  // suggestWords.value = historySearch.gethistorySearchList;
-  console.log(suggestWords.value);
 
-});
+//删除搜索历史
+const delHistory = (index: number) => {
+  suggestWords.value.splice(index, 1)
+  historySearch.deleteHistory(index)
+}
 </script>
 
 <style scoped lang="less">
@@ -211,9 +210,27 @@ onMounted(() => {
     border: 1px solid #ccc;
     border-radius: 6px;
 
+    .inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .searchkey {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
     li {
-      padding: 8px 15px;
+      padding: 10px 15px;
       transition: all .1s;
+
+      .close {
+        height: 14px;
+        width: 14px;
+        margin: 0 5px;
+      }
     }
 
     li:hover,

@@ -14,6 +14,7 @@ export const historySearch = defineStore("historySearch", {
         return {
           title: item,
           isSelected: false,
+          allowDel: true,
         };
       });
     },
@@ -29,6 +30,11 @@ export const historySearch = defineStore("historySearch", {
           setItem("historySearch", this.historySearchList);
         }
       }
+    },
+    //删除搜索历史（index
+    deleteHistory(index: number): void {
+      this.historySearchList.splice(index,1);
+      setItem("historySearch", this.historySearchList);
     },
   },
 });
