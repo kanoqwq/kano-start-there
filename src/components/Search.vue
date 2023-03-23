@@ -2,7 +2,8 @@
   <div class="container mx-auto">
     <div class="search relative flex flex-col">
       <!-- <div class="search-engine flex overflow-hidden" ref="searchEngineElement"> -->
-      <form action="#" method="get" class="search-engine flex overflow-hidden dark:hover:dark-shadow" ref="searchEngineElement">
+      <form action="#" method="get" class="search-engine flex overflow-hidden dark:hover:dark-shadow"
+        ref="searchEngineElement">
         <div class="flex items-center" @click="switchEngine">
           <svg class="icon kano-icon dark:dark-icon" aria-hidden="true">
             <use :xlink:href="selectedEngine.icon"></use>
@@ -10,8 +11,8 @@
         </div>
         <input type="text" v-model="searchContent" @keyup.enter="enterEvent"
           @input="searchSuggestion(selectedEngine.method)" @keydown="moveSuggestion" @mouseenter="eventMouse"
-          @mouseleave="eventMouse" class="input pl-3 box-border outline-none"
-          :placeholder="`在${selectedEngine.name}上搜索`" />
+          @focusin="showHideSearchHistory" @focusout="showHideSearchHistory" @mouseleave="eventMouse"
+          class="input pl-3 box-border outline-none" :placeholder="`在${selectedEngine.name}上搜索`" />
         <div class="clear-input" @click="clearContent" v-show="searchContent">
           <svg class="icon close" aria-hidden="false">
             <use xlink:href="#icon-close"></use>
@@ -34,18 +35,20 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import throttle from 'lodash/throttle'
 // import { globalKey } from '../symbols/'
 import { suggestAPI } from '../utils/searchSuggestions'
-import { isMobile } from '../utils/ua';
+import { isMobile } from '../utils/ua'
+import useStore from '../store'
+const historySearch = useStore.historySearch()
 interface SearchEngine {
   name: string,
   icon: string,
   url: string,
   method: 'suggestBaidu' | 'suggestBing'
 }
-console.log(isMobile());
+// console.log(isMobile());
 let searchEngines: Array<SearchEngine> = [{
   name: 'Baidu',
   icon: '#icon-bxl-baidu',
@@ -68,6 +71,7 @@ let searchContent = ref('')
 let selectedEngine = reactive<SearchEngine>({ ...searchEngines[0] })
 let engineIndex: number = 1
 let suggestionIndex = -1
+let suggestWords = ref<Array<SuggestWords>>([])
 
 //点击图标切换搜索引擎
 const switchEngine = (): void => {
@@ -79,17 +83,19 @@ const switchEngine = (): void => {
 }
 
 const startSearch = (keyWord = ''): void => {
+  //添加搜索历史
+  addSearchHistory()
   if (keyWord) {
     searchContent.value = keyWord.trim()
   }
   let reqUrl = selectedEngine.url + searchContent.value.trim()
-  //返回到搜索页面时刷新
+  //返回新标签页打开
   window.open(reqUrl, '_blank')
 }
 
 // 鼠标滑过改变阴影
 const searchEngineElement = ref<HTMLFormElement>()
-const eventMouse = (e: MouseEvent) => {
+const eventMouse = (e: MouseEvent): void => {
   if (e.type == 'mouseenter') {
     if (searchContent.value.length == 0) {
       searchEngineElement.value?.classList.add("shadow")
@@ -110,7 +116,6 @@ interface SuggestWords {
   isSelected: boolean
 }
 
-let suggestWords = ref<Array<SuggestWords>>([])
 
 //搜索建议(谷歌接口暂时无法支持跨域)
 const searchSuggestion = throttle(async (method: 'suggestBaidu' | 'suggestBing'): Promise<void> => {
@@ -168,12 +173,36 @@ const removeActive = (): void => {
     item.isSelected = false
   })
 }
+
+//TODO:搜索历史功能
+const addSearchHistory = () => {
+  //添加搜索历史
+  historySearch.addHistory(searchContent.value)
+}
+//展示/隐藏搜索历史
+const showHideSearchHistory = (e: Event) => {
+  if (e.type == 'focusin') {
+    suggestWords.value = [...historySearch.gethistorySearchList];
+  } else {
+    //让子弹飞一会
+    setTimeout(() => {
+      suggestWords.value.length = 0
+    }, 200)
+  }
+}
+onMounted(() => {
+  console.log(historySearch.gethistorySearchList);
+  // suggestWords.value = historySearch.gethistorySearchList;
+  console.log(suggestWords.value);
+
+});
 </script>
 
 <style scoped lang="less">
 .container {
   height: 100%;
   padding: 0 15px;
+
   // overflow: scroll;
   .search-suggestion {
     width: 100%;

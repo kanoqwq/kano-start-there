@@ -39,7 +39,7 @@ const suggestBing = async (searchContent: string) => {
   return makeObject(res?.AS?.Results[1]?.Suggests, "Txt");
 };
 
-//暂无实现
+//暂无实现(被墙)
 const suggestGoogle = async (searchContent: string) => {
   return [];
 };
