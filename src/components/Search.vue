@@ -183,9 +183,12 @@ const addSearchHistory = () => {
 }
 //展示/隐藏搜索历史
 const showHideSearchHistory = (e: Event) => {
+
   if (e.type == 'focusin') {
     suggestIsShow.value = true;
-    suggestWords.value = [...historySearch.gethistorySearchList];
+    if (suggestWords.value.length == 0) {
+      suggestWords.value = [...historySearch.gethistorySearchList];
+    }
   } else {
     //让子弹飞一会
     setTimeout(() => {
