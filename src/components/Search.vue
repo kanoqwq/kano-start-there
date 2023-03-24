@@ -9,7 +9,7 @@
             <use :xlink:href="selectedEngine.icon"></use>
           </svg>
         </div>
-        <input type="text" v-model="searchContent" @keyup.enter="enterEvent"
+        <input ref="searchBox" type="text" v-model="searchContent" @keyup.enter="enterEvent"
           @input="searchSuggestion(selectedEngine.method)" @keydown="moveSuggestion" @mouseenter="eventMouse"
           @focusin="showHideSearchHistory" @mouseleave="eventMouse" class="input pl-3 box-border outline-none"
           :placeholder="`在${selectedEngine.name}上搜索`" />
@@ -25,7 +25,7 @@
         </button>
         <!-- </div> -->
       </form>
-      <div class="search-suggestion top-border absolute dark:dark-bg" v-show="suggestWords.length">
+      <div class="search-suggestion top-border absolute dark:dark-bg" v-show="suggestWords.length && suggestIsShow">
         <ul>
           <li class="inner" :class="{ active: item.isSelected }" @click="startSearch(item.title)"
             v-for="(item, index) in suggestWords" :key="index">
@@ -77,7 +77,8 @@ let selectedEngine = reactive<SearchEngine>({ ...searchEngines[0] })
 let engineIndex: number = 1
 let suggestionIndex = -1
 let suggestWords = ref<Array<SuggestWords>>([])
-
+const searchBox = ref()
+const suggestIsShow = ref(false)
 //点击图标切换搜索引擎
 const switchEngine = (): void => {
   let newEngine = searchEngines[engineIndex++ % (searchEngines.length)]
@@ -129,7 +130,8 @@ const searchSuggestion = throttle(async (method: 'suggestBaidu' | 'suggestBing')
     suggestWords.value.length = 0
     suggestWords.value.push(...res)
   } else {
-    suggestWords.value.length = 0
+    suggestIsShow.value = false
+    // suggestWords.value.length = 0
   }
 }, 333)
 
@@ -182,11 +184,14 @@ const addSearchHistory = () => {
 //展示/隐藏搜索历史
 const showHideSearchHistory = (e: Event) => {
   if (e.type == 'focusin') {
+    suggestIsShow.value = true;
     suggestWords.value = [...historySearch.gethistorySearchList];
   } else {
     //让子弹飞一会
     setTimeout(() => {
-      suggestWords.value.length = 0
+      searchBox.value.blur()
+      suggestIsShow.value = false
+      // suggestWords.value.length = 0
     }, 200)
   }
 }
