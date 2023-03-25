@@ -45,14 +45,11 @@ import throttle from 'lodash/throttle'
 import { suggestAPI } from '../utils/searchSuggestions'
 import { isMobile } from '../utils/ua'
 import useStore from '../store'
-import { SuggestWords } from '../types/global'
+import { SearchEngine, SuggestWords } from '../types/global'
+
+//store
 const historySearch = useStore.historySearch()
-interface SearchEngine {
-  name: string,
-  icon: string,
-  url: string,
-  method: 'suggestBaidu' | 'suggestBing'
-}
+
 // console.log(isMobile());
 let searchEngines: Array<SearchEngine> = [{
   name: 'Baidu',
@@ -79,6 +76,7 @@ let suggestionIndex = -1
 let suggestWords = ref<Array<SuggestWords>>([])
 const searchBox = ref()
 const suggestIsShow = ref(false)
+
 //点击图标切换搜索引擎
 const switchEngine = (): void => {
   let newEngine = searchEngines[engineIndex++ % (searchEngines.length)]
@@ -88,6 +86,7 @@ const switchEngine = (): void => {
   selectedEngine.method = newEngine.method
 }
 
+//开始搜索
 const startSearch = (keyWord = ''): void => {
   if (keyWord) {
     searchContent.value = keyWord.trim()
@@ -124,21 +123,24 @@ const searchSuggestion = throttle(async (method: 'suggestBaidu' | 'suggestBing')
   searchEngineElement.value?.classList.remove("shadow")
   //清除一下历史选择的index
   suggestionIndex = -1
-
+  //搜索建议的trigger保持开启
+  suggestIsShow.value = true
   if (searchContent.value) {
     let res = await suggestAPI[method](searchContent.value)
     suggestWords.value.length = 0
     suggestWords.value.push(...res)
   } else {
-    suggestIsShow.value = false
-    // suggestWords.value.length = 0
+    //没有内容的时候，应该显示搜索历史
+    suggestWords.value = [...historySearch.gethistorySearchList]
   }
 }, 333)
 
+//清空搜索词列表和搜索框内容
 const clearContent = (): void => {
   suggestWords.value.length = 0
   searchContent.value = ''
 }
+
 //实现上下键选择候选词
 const moveSuggestion = (e: KeyboardEvent): void => {
   let key = e.key
@@ -169,6 +171,7 @@ const moveSuggestion = (e: KeyboardEvent): void => {
   }
 
 }
+
 //清除样式
 const removeActive = (): void => {
   suggestWords.value.forEach((item) => {
@@ -181,6 +184,7 @@ const addSearchHistory = () => {
   //添加搜索历史
   historySearch.addHistory(searchContent.value)
 }
+
 //展示/隐藏搜索历史
 const showHideSearchHistory = (e: Event) => {
 
@@ -190,11 +194,13 @@ const showHideSearchHistory = (e: Event) => {
       suggestWords.value = [...historySearch.gethistorySearchList];
     }
   } else {
-    //让子弹飞一会
+    //没有内容的时候，需要清空一下推荐词
+    if (searchContent.value.length == 0) {
+      suggestWords.value.length = 0
+    }
     setTimeout(() => {
       searchBox.value.blur()
       suggestIsShow.value = false
-      // suggestWords.value.length = 0
     }, 200)
   }
 }
@@ -204,6 +210,7 @@ const delHistory = (index: number) => {
   suggestWords.value.splice(index, 1)
   historySearch.deleteHistory(index)
 }
+
 </script>
 
 <style scoped lang="less">

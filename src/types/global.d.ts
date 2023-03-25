@@ -7,5 +7,12 @@ export interface Global {
 export interface SuggestWords {
   title: string;
   isSelected: boolean;
-  allowDel:boolean;
+  allowDel: boolean;
+}
+
+interface SearchEngine {
+  name: string;
+  icon: string;
+  url: string;
+  method: "suggestBaidu" | "suggestBing";
 }
