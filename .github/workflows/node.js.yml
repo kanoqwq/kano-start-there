@@ -47,3 +47,5 @@ jobs:
         files: |
           release.zip
           LICENSE
+      env:
+        GITHUB_REPOSITORY: kanoqwq/kano-start-there
