@@ -1,50 +1,39 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Auto Build
-
+name: Release
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy: 
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
-      - name: 'checkout'
-        uses: actions/checkout@v3
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2.4.2
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          node-version: '14'
+      - name: Install dependencies
+        run: npm install
+      - name: Build and test
+        run: npm run build && npm test
 
-      - name: CI
-        run: npm ci
-
-      - name: build
-        run: npm run build --if-present
-
-      - name: Zip the Build
-        run: zip -r release.zip ./dist/
-
-      - name: Release
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Create Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         with:
-          tag_name: ${{ github.ref }}
-          name: Release ${{ github.ref }}
-          body: TODO New Release.
-          token: ${{ secrets.MY_SECRET }}
-          draft: false
-          prerelease: false
           files: |
-            release.zip
-            LICENSE
+            dist/**
+          tag_name: v${{ github.ref }}
+          name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release:
+            - Add feature A
+            - Fix issue B
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
