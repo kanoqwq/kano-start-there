@@ -40,5 +40,5 @@ jobs:
             - Add feature A
             - Fix issue B
           prerelease: false
-        #env:
-          #GITHUB_TOKEN: ${{ secrets.githttps }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_SECRET }}
