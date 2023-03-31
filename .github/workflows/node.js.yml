@@ -5,7 +5,7 @@ on:
       - main
 
 jobs:
-  build:
+  build_release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,22 +17,15 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
-
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
+        
       - uses: actions/checkout@v2
-      #- name: ls
-      #  run: ls
-      #- name: Zip the Build
-      #  run: zip -r release.zip ./dist/
+      - name: Zip the Build
+        run: zip -r release.zip ./dist/
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            LICENSE
-          #  release.zip
+            release.zip
           tag_name: v${{ github.ref }}
           name: Release ${{ github.ref }}
           body: |
