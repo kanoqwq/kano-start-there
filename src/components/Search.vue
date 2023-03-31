@@ -1,7 +1,6 @@
 <template>
   <div class="container mx-auto">
-    <div class="search relative flex flex-col" @mouseleave="showHideSearchHistory">
-      <!-- <div class="search-engine flex overflow-hidden" ref="searchEngineElement"> -->
+    <div class="search relative flex flex-col">
       <form action="#" method="get" class="search-engine flex overflow-hidden dark:hover:dark-shadow"
         ref="searchEngineElement">
         <div class="flex items-center" @click="switchEngine">
@@ -11,8 +10,8 @@
         </div>
         <input ref="searchBox" type="text" v-model="searchContent" @keyup.enter="enterEvent"
           @input="searchSuggestion(selectedEngine.method)" @keydown="moveSuggestion" @mouseenter="eventMouse"
-          @focusin="showHideSearchHistory" @mouseleave="eventMouse" class="input pl-3 box-border outline-none"
-          :placeholder="`在${selectedEngine.name}上搜索`" />
+          @focusin="showHideSearchHistory" @focusout="showHideSearchHistory" @mouseleave="eventMouse"
+          class="input pl-3 box-border outline-none" :placeholder="`在${selectedEngine.name}上搜索`" />
         <div class="clear-input" @click="clearContent" v-show="searchContent">
           <svg class="icon close" aria-hidden="false">
             <use xlink:href="#icon-close"></use>
@@ -24,7 +23,8 @@
           </svg>
         </button>
       </form>
-      <div class="search-suggestion top-border absolute dark:dark-bg" v-show="suggestWords.length && suggestIsShow">
+      <div @mouseenter="suggestActiveControl" @mouseleave="suggestActiveControl"
+        class="search-suggestion top-border absolute dark:dark-bg" v-show="suggestWords.length && suggestIsShow">
         <ul>
           <li class="inner" :class="{ active: item.isSelected }" @click="startSearch(item.title)"
             v-for="(item, index) in suggestWords" :key="index">
@@ -57,7 +57,7 @@ let suggestionIndex = -1
 let suggestWords = ref<Array<SuggestWords>>([])
 const searchBox = ref()
 const suggestIsShow = ref(false)
-
+const suggestActive = ref(false)
 //点击图标切换搜索引擎
 const switchEngine = (): void => {
   //限制数字范围
@@ -181,15 +181,20 @@ const showHideSearchHistory = (e: Event) => {
       suggestWords.value = [...historySearch.gethistorySearchList];
     }
   } else {
-    //没有内容的时候，需要清空一下推荐词
-    if (searchContent.value.length == 0) {
-      suggestWords.value.length = 0
-    }
-    setTimeout(() => {
-      searchBox.value.blur()
+    if (!suggestActive.value) {
+
+      //没有内容的时候，需要清空一下推荐词
+      if (searchContent.value.length == 0) {
+        suggestWords.value.length = 0
+      }
       suggestIsShow.value = false
-    }, 200)
+    }
   }
+}
+
+//判定鼠标是否在搜索历史框内
+const suggestActiveControl = (e: Event) => {
+  suggestActive.value = e.type == 'mouseenter' ? true : false
 }
 
 //删除搜索历史
