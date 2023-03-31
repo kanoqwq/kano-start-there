@@ -21,10 +21,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    
     - run: npm ci
     - run: npm run build --if-present
+    
+    - name: deploy
+      uses: JamesIves/github-pages-deploy-action@4.4.1
+      with:
+        access_token: ${{ secrets.MY_SECRET }} 
+        branch: main
+        folder: dist/
