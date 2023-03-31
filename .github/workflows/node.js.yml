@@ -1,0 +1,40 @@
+name: Release
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Build
+        run: npm run build
+        
+      - name: Zip the Build
+        run: zip -r release.zip ./dist/
+        
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            release.zip
+            LICENSE
+            README.MD
+          tag_name: v${{ github.ref }}
+          name: Release
+          #body: |
+           # Changes in this Release:
+            #- Add feature A
+            #- Fix issue B
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_SECRET }}
