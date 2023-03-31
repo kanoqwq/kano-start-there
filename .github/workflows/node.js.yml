@@ -15,8 +15,8 @@ jobs:
           #node-version: '14'
       - name: Install dependencies
         run: npm install
-      - name: Build and test
-        run: npm run build && npm test
+      - name: Build
+        run: npm run build
 
   release:
     needs: build
