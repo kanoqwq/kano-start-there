@@ -34,7 +34,7 @@ jobs:
     - uses: peaceiris/actions-gh-pages@v3.7.3
       name: Auto Deploy
       with:
-        github_token: ${{ secrets.githttps }} 
+        github_token: ${{ secrets.GITHUB_TOKEN }} 
         publish_dir: ./dist/
         user_name: "kanoqwq"
         user_email: "kanoqwq@qq.com"
