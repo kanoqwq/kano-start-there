@@ -41,6 +41,7 @@ jobs:
         tag_name: ${{ github.ref }}
         name: Release ${{ github.ref }}
         body: TODO New Release.
+        token: ${{ secrets.MY_SECRET }}
         draft: false
         prerelease: false
         files: |
