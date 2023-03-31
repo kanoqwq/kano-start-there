@@ -30,7 +30,7 @@ jobs:
             LICENSE
             README.MD
           tag_name: v${{ github.ref }}
-          name: Release ${{ github.ref }}
+          name: Release
           #body: |
            # Changes in this Release:
             #- Add feature A
