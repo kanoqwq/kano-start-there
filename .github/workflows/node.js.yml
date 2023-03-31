@@ -12,14 +12,12 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
       - name: Install dependencies
-        run: npm install
-        
+        run: npm install && ls
       - name: Build
         run: npm run build
         
       - uses: actions/checkout@v2
-      - name: ls
-        run: ls
+
       - name: Zip the Build
         run: zip -r release.zip ./dist/
       - name: Create Release
