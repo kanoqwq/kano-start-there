@@ -20,32 +20,33 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        
-    - run: npm ci
-    - run: npm run build --if-present
-    
-    - name: Zip the Build
-      run: zip -r release.zip ./dist/
-      
-    - name: Release
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        tag_name: ${{ github.ref }}
-        name: Release ${{ github.ref }}
-        body: TODO New Release.
-        token: ${{ secrets.MY_SECRET }}
-        draft: false
-        prerelease: false
-        files: |
-          release.zip
-          LICENSE
-      env:
-        GITHUB_REPOSITORY: kanoqwq/kano-start-there
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: CI
+      - run: npm ci
+
+      - name: build
+      - run: npm run build --if-present
+
+      - name: Zip the Build
+        run: zip -r release.zip ./dist/
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          tag_name: ${{ github.ref }}
+          name: Release ${{ github.ref }}
+          body: TODO New Release.
+          token: ${{ secrets.MY_SECRET }}
+          draft: false
+          prerelease: false
+          files: |
+            release.zip
+            LICENSE
