@@ -34,6 +34,6 @@ jobs:
     - name: deploy
       uses: JamesIves/github-pages-deploy-action@v4
       with:
-        access_token: ${{ secrets.token }} 
+        access_token: ${{ secrets.githttps }} 
         branch: main
         folder: dist/
