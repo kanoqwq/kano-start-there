@@ -23,11 +23,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Zip the Build
+        run: zip -r release.zip ./dist/
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            dist/**
+            release.zip
           tag_name: v${{ github.ref }}
           name: Release ${{ github.ref }}
           body: |
@@ -36,4 +38,4 @@ jobs:
             - Fix issue B
           prerelease: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_SECRET }}
