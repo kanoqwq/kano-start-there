@@ -9,3 +9,7 @@ export const getItemArray = (key: string): Array<any> => {
     return JSON.parse(str);
   } else return [];
 };
+
+export const getItem = (key: string): string | null => {
+  return localStorage.getItem(key);
+};

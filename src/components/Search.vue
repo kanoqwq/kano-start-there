@@ -23,7 +23,6 @@
             <use xlink:href="#icon-search"></use>
           </svg>
         </button>
-        <!-- </div> -->
       </form>
       <div class="search-suggestion top-border absolute dark:dark-bg" v-show="suggestWords.length && suggestIsShow">
         <ul>
@@ -43,35 +42,17 @@
 import { ref, reactive } from 'vue'
 import throttle from 'lodash/throttle'
 import { suggestAPI } from '../utils/searchSuggestions'
-import { isMobile } from '../utils/ua'
 import useStore from '../store'
 import { SearchEngine, SuggestWords } from '../types/global'
 
 //store
 const historySearch = useStore.historySearch()
-
-// console.log(isMobile());
-let searchEngines: Array<SearchEngine> = [{
-  name: 'Baidu',
-  icon: '#icon-bxl-baidu',
-  url: !isMobile() ? 'https://www.baidu.com/baidu?&ie=utf-8&wd=' : 'https://www.baidu.com/from=%E5%82%BB%E9%80%BC%E7%99%BE%E5%BA%A6%E4%BD%A0%E5%A6%88%E6%AD%BB%E4%BA%86/s?ts=0&t_kt=0&ie=utf-8&ms=1&word=',
-  method: 'suggestBaidu'
-}, {
-  name: 'Google',
-  icon: '#icon-google',
-  url: 'https://google.com/search?q=',
-  method: 'suggestBaidu'
-}, {
-  name: 'Bing',
-  icon: '#icon-bing',
-  url: 'https://cn.bing.com/search?q=',
-  method: 'suggestBing'
-}]
+const searchEnginesStore = useStore.searchEngines()
 
 // const global = inject(globalKey)
 let searchContent = ref('')
-let selectedEngine = reactive<SearchEngine>({ ...searchEngines[0] })
-let engineIndex: number = 1
+let engineIndex: number = searchEnginesStore.selectedEngine;
+let selectedEngine = reactive<SearchEngine>({ ...searchEnginesStore.searchEngines[engineIndex] })
 let suggestionIndex = -1
 let suggestWords = ref<Array<SuggestWords>>([])
 const searchBox = ref()
@@ -79,7 +60,13 @@ const suggestIsShow = ref(false)
 
 //点击图标切换搜索引擎
 const switchEngine = (): void => {
-  let newEngine = searchEngines[engineIndex++ % (searchEngines.length)]
+  //限制数字范围
+  engineIndex = (engineIndex + 1) % (searchEnginesStore.searchEngines.length)
+  let newEngine = searchEnginesStore.searchEngines[engineIndex]
+
+  //保存选择历史
+  searchEnginesStore.setSelectedEngine(engineIndex);
+
   selectedEngine.name = newEngine.name
   selectedEngine.url = newEngine.url
   selectedEngine.icon = newEngine.icon
