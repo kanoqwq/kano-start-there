@@ -282,7 +282,7 @@ const delHistory = (index: number) => {
     }
 
     .input {
-      width: 500px;
+      width: 100%;
       color: #666;
       background: transparent;
     }
