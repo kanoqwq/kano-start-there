@@ -1,7 +1,13 @@
 <template>
   <div class="container mx-auto">
+    <div class="top-banner flex justify-end">
+      <svg class="icon kano-icon dark:dark-icon w-8 icon-hover" aria-hidden="false" @click="settingHandler">
+        <use xlink:href="#icon-settings" class="rotate"></use>
+      </svg>
+    </div>
     <div class="search relative flex flex-col">
-      <form action="#" method="get" class="search-engine flex overflow-hidden dark:hover:dark-shadow"
+      <form action="#" method="get"
+        class="search-engine flex overflow-hidden dark:dark-search-engine dark:hover:dark-shadow"
         ref="searchEngineElement">
         <div class="flex items-center" @click="switchEngine">
           <svg class="icon kano-icon dark:dark-icon" aria-hidden="true">
@@ -11,10 +17,10 @@
         <input ref="searchBox" type="text" v-model="searchContent" @keyup.enter="enterEvent"
           @input="searchSuggestion(selectedEngine.method)" @keydown="moveSuggestion" @mouseenter="eventMouse"
           @focusin="showHideSearchHistory" @focusout="showHideSearchHistory" @mouseleave="eventMouse"
-          class="input pl-3 box-border outline-none" :placeholder="`在${selectedEngine.name}上搜索`" />
+          class="input pl-3 box-border outline-none dark:input-dark" :placeholder="`在${selectedEngine.name}上搜索`" />
         <div class="clear-input" @click="clearContent" v-show="searchContent">
           <svg class="icon close" aria-hidden="false">
-            <use xlink:href="#icon-close"></use>
+            <use xlink:href="#icon-close" class="close-icon"></use>
           </svg>
         </div>
         <button class="search-btn flex justify-center items-center dark:hover:dark-hover-bg" @click="startSearch()">
@@ -37,9 +43,12 @@
       </div>
     </div>
   </div>
+  <!-- settings -->
+  <Settings :show="settingsIsShow" @close="settingsIsShow = false"></Settings>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch } from 'vue'
+import Settings from './Settings.vue'
 import throttle from 'lodash/throttle'
 import { suggestAPI } from '../utils/searchSuggestions'
 import useStore from '../store'
@@ -58,6 +67,17 @@ let suggestWords = ref<Array<SuggestWords>>([])
 const searchBox = ref()
 const suggestIsShow = ref(false)
 const suggestActive = ref(false)
+const settingsIsShow = ref(false);
+
+
+watch([suggestWords, suggestIsShow, searchContent, suggestActive], () => {
+  if (suggestWords.value.length && suggestIsShow.value || suggestActive.value) {
+    toggleSearchBorder(false)
+  } else {
+    toggleSearchBorder(true)
+  }
+})
+
 //点击图标切换搜索引擎
 const switchEngine = (): void => {
   //限制数字范围
@@ -116,6 +136,14 @@ const searchSuggestion = throttle(async (method: 'suggestBaidu' | 'suggestBing')
     let res = await suggestAPI[method](searchContent.value)
     suggestWords.value.length = 0
     suggestWords.value.push(...res)
+
+    //远端没有数据返回，下边框为圆角
+    if (suggestWords.value.length == 0) {
+      toggleSearchBorder(true);
+    } else {
+      toggleSearchBorder(false);
+    }
+
   } else {
     //没有内容的时候，应该显示搜索历史
     suggestWords.value = [...historySearch.gethistorySearchList]
@@ -174,13 +202,20 @@ const addSearchHistory = () => {
 
 //展示/隐藏搜索历史
 const showHideSearchHistory = (e: Event) => {
-
   if (e.type == 'focusin') {
     suggestIsShow.value = true;
     if (suggestWords.value.length == 0) {
       suggestWords.value = [...historySearch.gethistorySearchList];
+      // //关掉下半圆角
+      // if (suggestWords.value.length != 0) {
+      //   toggleSearchBorder(false);
+      // }
     }
   } else {
+    //恢复圆角
+    // if (!suggestActive.value) {
+    //   toggleSearchBorder(true);
+    // }
     if (!suggestActive.value) {
 
       //没有内容的时候，需要清空一下推荐词
@@ -194,15 +229,38 @@ const showHideSearchHistory = (e: Event) => {
 
 //判定鼠标是否在搜索历史框内
 const suggestActiveControl = (e: Event) => {
-  suggestActive.value = e.type == 'mouseenter' ? true : false
+  if (e.type == 'mouseenter') {
+    suggestActive.value = true
+    //鼠标在搜索历史框内，保持搜索边框直角
+    // toggleSearchBorder(false)
+  } else {
+    suggestActive.value = false
+  }
 }
 
 //删除搜索历史
 const delHistory = (index: number) => {
   suggestWords.value.splice(index, 1)
   historySearch.deleteHistory(index)
+  //删空了就设为圆角边框
+  if (suggestWords.value.length == 0) {
+    //suggest此时不活跃
+    suggestActive.value = false
+    toggleSearchBorder(true)
+  }
 }
 
+
+//TODO:添加设置按钮,需要弹出一个模态框
+const settingHandler = () => {
+  settingsIsShow.value = true;
+  console.log("okk");
+}
+
+//切换搜索的下边框
+const toggleSearchBorder = (active: boolean) => {
+  searchEngineElement.value?.classList[active ? 'remove' : 'add']('search-engine-active')
+}
 </script>
 
 <style scoped lang="less">
@@ -210,13 +268,32 @@ const delHistory = (index: number) => {
   height: 100%;
   padding: 0 15px;
 
+  .top-banner {
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    padding-right: 15px;
+    width: 100%;
+    height: 60px;
+    color: #ccc;
+  }
+
+  //旋转动画
+  .rotate {
+    transition: all .2s;
+    animation: rotate 2s infinite linear;
+  }
+
+  .icon-hover:hover .rotate {
+    fill: #666;
+  }
+
   // overflow: scroll;
   .search-suggestion {
     width: 100%;
-    top: 89%;
-    background: white;
-    border: 1px solid #ccc;
+    top: 100%;
     border-radius: 6px;
+    backdrop-filter: blur(10px);
 
     .inner {
       display: flex;
@@ -238,6 +315,10 @@ const delHistory = (index: number) => {
         height: 14px;
         width: 14px;
         margin: 0 5px;
+
+        .close-icon {
+          fill: #fff;
+        }
       }
     }
 
@@ -250,10 +331,10 @@ const delHistory = (index: number) => {
 
   .search-engine {
     height: 50px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
     transition: all .2s;
     transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+    backdrop-filter: blur(10px);
+    border-radius: 6px;
 
     .clear-input {
       display: flex;
@@ -276,14 +357,16 @@ const delHistory = (index: number) => {
     transform: translateX(-50%);
     max-width: 600px;
 
+
     .kano-icon {
       width: 40px;
       margin-left: 6px;
+      fill: #222;
     }
 
     .input {
       width: 100%;
-      color: #666;
+      color: #333;
       background: transparent;
     }
 
@@ -301,6 +384,11 @@ const delHistory = (index: number) => {
     border-top: none;
     border-top-right-radius: 0;
     border-top-left-radius: 0;
+  }
+
+  .search-engine-active {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
 }
 </style>
