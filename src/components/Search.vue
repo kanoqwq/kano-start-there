@@ -30,7 +30,7 @@
         </button>
       </form>
       <div @mouseenter="suggestActiveControl" @mouseleave="suggestActiveControl"
-        class="search-suggestion top-border absolute dark:dark-bg" v-show="suggestWords.length && suggestIsShow">
+        class="search-suggestion top-border absolute dark:dark-suggest-bg" v-show="suggestWords.length && suggestIsShow">
         <ul>
           <li class="inner" :class="{ active: item.isSelected }" @click="startSearch(item.title)"
             v-for="(item, index) in suggestWords" :key="index">

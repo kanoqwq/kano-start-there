@@ -12,7 +12,6 @@ let main = ref<HTMLDivElement>()
 onMounted(() => {
   if (main.value) {
     main.value.style.backgroundImage = `url(${background})`
-    console.log(background);
   }
 })
 </script>

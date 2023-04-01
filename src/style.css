@@ -22,9 +22,11 @@
     background-color: rgb(23 30 40) !important;
   }
   .dark-bg {
-    /* background-color: rgb(31 41 55 / 1) !important; */
-    background: rgba(0, 0, 0, 0.5) !important;
+    background-color: rgb(31 41 55 / 1) !important;
     color: #ccc;
+  }
+  .dark-suggest-bg{
+    background: rgba(0, 0, 0, 0.5) !important;
   }
   .dark-shadow {
     box-shadow: 2px 8px 16px #000000bf !important;
