@@ -1,8 +1,8 @@
 # 二次元轻量化起始页
 
-> 目前进度：只完成了基本的搜索引擎功能（咕咕咕
+> 目前进度：完成了搜索引擎功能与简单的壁纸设置功能
 
-![](https://kanokano.cn/wp-content/uploads/2023/03/QQ截图20230331121650.png)
+![](https://kanokano.cn/wp-content/uploads/2023/04/QQ截图20230401230246.png)
 
 ### 食用方法
 
@@ -25,6 +25,5 @@ npm run build
 
 待开发功能：
 
-* 壁纸功能
 * Live2d看板娘
 * .......
