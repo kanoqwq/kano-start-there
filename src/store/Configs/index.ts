@@ -16,11 +16,13 @@ export const Configs = defineStore("Configs", {
     //设置背景图片
     setBackgroundImage(image: string) {
       //去重
-      let index = this.backgroundImages.indexOf(image);
-      if (index == -1) {
+      //   let index = this.backgroundImages.indexOf(image);
+      //   if (index == -1) {
+      if (image) {
         this.backgroundImages.push(image);
         setItem("backgroundImages", this.backgroundImages);
       }
+      //   }
     },
     //获取背景图片
     getBackgroundImage(index: number): string {
@@ -31,6 +33,10 @@ export const Configs = defineStore("Configs", {
     },
     getBackgroundImages(): string[] {
       return this.backgroundImages;
+    },
+    //清空背景图片
+    resetBackground() {
+      localStorage.removeItem("backgroundImages");
     },
   },
 });

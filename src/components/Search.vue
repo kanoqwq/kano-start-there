@@ -53,7 +53,6 @@ import throttle from 'lodash/throttle'
 import { suggestAPI } from '../utils/searchSuggestions'
 import useStore from '../store'
 import { SearchEngine, SuggestWords } from '../types/global'
-
 //store
 const historySearch = useStore.historySearch()
 const searchEnginesStore = useStore.searchEngines()
