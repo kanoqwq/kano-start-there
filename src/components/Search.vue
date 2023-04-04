@@ -147,7 +147,7 @@ const searchSuggestion = throttle(async (method: 'suggestBaidu' | 'suggestBing')
     //没有内容的时候，应该显示搜索历史
     suggestWords.value = [...historySearch.gethistorySearchList]
   }
-}, 333)
+}, 50)
 
 //清空搜索词列表和搜索框内容
 const clearContent = (): void => {
