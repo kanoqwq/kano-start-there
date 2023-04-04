@@ -14,7 +14,7 @@
             <use :xlink:href="selectedEngine.icon"></use>
           </svg>
         </div>
-        <input ref="searchBox" type="text" v-model="searchContent" @keyup.enter="enterEvent"
+        <input ref="searchBox" type="text" autocomplete="off" v-model="searchContent" @keyup.enter="enterEvent"
           @input="searchSuggestion(selectedEngine.method)" @keydown="moveSuggestion" @mouseenter="eventMouse"
           @focusin="showHideSearchHistory" @focusout="showHideSearchHistory" @mouseleave="eventMouse"
           class="input pl-3 box-border outline-none dark:input-dark" :placeholder="`在${selectedEngine.name}上搜索`" />
@@ -125,29 +125,34 @@ const enterEvent = (): void => {
 
 //搜索建议(谷歌接口暂时无法支持跨域)
 const searchSuggestion = throttle(async (method: 'suggestBaidu' | 'suggestBing'): Promise<void> => {
-  //清除阴影
-  searchEngineElement.value?.classList.remove("shadow")
-  //清除一下历史选择的index
-  suggestionIndex = -1
-  //搜索建议的trigger保持开启
-  suggestIsShow.value = true
-  if (searchContent.value) {
-    let res = await suggestAPI[method](searchContent.value)
-    suggestWords.value.length = 0
-    suggestWords.value.push(...res)
+  try {
+    //清除阴影
+    searchEngineElement.value?.classList.remove("shadow")
+    //清除一下历史选择的index
+    suggestionIndex = -1
+    //搜索建议的trigger保持开启
+    suggestIsShow.value = true
+    if (searchContent.value) {
+      let res = await suggestAPI[method](searchContent.value)
+      suggestWords.value.length = 0
+      suggestWords.value.push(...res)
 
-    //远端没有数据返回，下边框为圆角
-    if (suggestWords.value.length == 0) {
-      toggleSearchBorder(true);
+      //远端没有数据返回，下边框为圆角
+      if (suggestWords.value.length == 0) {
+        toggleSearchBorder(true);
+      } else {
+        toggleSearchBorder(false);
+      }
+
     } else {
-      toggleSearchBorder(false);
+      //没有内容的时候，应该显示搜索历史
+      suggestWords.value = [...historySearch.gethistorySearchList]
     }
-
-  } else {
-    //没有内容的时候，应该显示搜索历史
-    suggestWords.value = [...historySearch.gethistorySearchList]
   }
-}, 50)
+  catch (e) {
+    
+  }
+}, 100)
 
 //清空搜索词列表和搜索框内容
 const clearContent = (): void => {
