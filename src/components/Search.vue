@@ -295,7 +295,9 @@ const toggleSearchBorder = (active: boolean) => {
   // overflow: scroll;
   .search-suggestion {
     width: 100%;
+    height: 360px;
     top: 100%;
+    overflow: auto;
     border-radius: 6px;
     backdrop-filter: blur(10px);
 

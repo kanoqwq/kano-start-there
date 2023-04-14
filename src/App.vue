@@ -25,6 +25,7 @@ onMounted(() => {
 .main {
   height: 100vh;
   width: 100%;
+  overflow-y: scroll;
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
