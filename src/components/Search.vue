@@ -210,10 +210,6 @@ const showHideSearchHistory = (e: Event) => {
     suggestIsShow.value = true;
     if (suggestWords.value.length == 0) {
       suggestWords.value = [...historySearch.gethistorySearchList];
-      // //关掉下半圆角
-      // if (suggestWords.value.length != 0) {
-      //   toggleSearchBorder(false);
-      // }
     }
   } else {
     //恢复圆角
@@ -292,10 +288,9 @@ const toggleSearchBorder = (active: boolean) => {
     fill: #666;
   }
 
-  // overflow: scroll;
   .search-suggestion {
     width: 100%;
-    height: 360px;
+    max-height: 360px;
     top: 100%;
     overflow: auto;
     border-radius: 6px;
