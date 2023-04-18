@@ -23,7 +23,7 @@ import { ref, reactive } from 'vue'
 import useStore from '../store'
 import { Toast } from './Toast/index'
 const Configs = useStore.Configs()
-//TODO:更多功能待开发
+
 defineProps<{
     show: boolean
 }>()
@@ -50,9 +50,9 @@ const modifyBg = () => {
             duration: 1000,
             background: "black",
         })
-        //https://pcsdata.baidu.com/thumbnail/af15eb675tc95c704e178fa88e7fb238?fid=926669427-16051585-1095763974604169&rt=pr&sign=FDTAER-yUdy3dSFZ0SVxtzShv1zcMqd-lXizq2xFMzb%2BfIRncd7eESj5cHY%3D&expires=48h&chkv=0&chkbd=0&chkpc=&dp-logid=9021405592947128857&dp-callid=0&time=1680339600&bus_no=26&size=c100000_u100000&quality=100&vuk=-&ft=video
     }
 }
+
 const resetBg = () => {
     Configs.resetBackground();
     Toast({

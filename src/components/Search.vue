@@ -47,12 +47,21 @@
   <Settings :show="settingsIsShow" @close="settingsIsShow = false"></Settings>
 </template>
 <script setup lang="ts">
+/*
+ * @Author: kanoqwq
+ * @Email: kanoqwq@qq.com
+ * @Date: 2023-04-17 14:47:15
+ * @Last Modified by: kanoqwq
+ * @Last Modified time: 2023-04-17 14:52:36
+ * @Description: Description
+ */
 import { ref, reactive, watch } from 'vue'
 import Settings from './Settings.vue'
 import throttle from 'lodash/throttle'
 import { suggestAPI } from '../utils/searchSuggestions'
 import useStore from '../store'
 import { SearchEngine, SuggestWords } from '../types/global'
+
 //store
 const historySearch = useStore.historySearch()
 const searchEnginesStore = useStore.searchEngines()
@@ -150,7 +159,7 @@ const searchSuggestion = throttle(async (method: 'suggestBaidu' | 'suggestBing')
     }
   }
   catch (e) {
-    
+
   }
 }, 100)
 
@@ -361,6 +370,7 @@ const toggleSearchBorder = (active: boolean) => {
 
     .kano-icon {
       width: 40px;
+      height: 100%;
       margin-left: 6px;
       fill: #222;
     }
