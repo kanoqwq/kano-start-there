@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import Search from './components/Search.vue'
 // iconfont
-import '../public/js/iconfont.js'
+import '@/assets/js/iconfont.js'
 import useStore from './store'
 const Configs = useStore.Configs();
 let background = Configs.getBackgroundImage(-1)

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getItemArray, setItem } from "../../utils/storage";
+import { getItemArray, setItem } from "@/utils/storage";
 export const Configs = defineStore("Configs", {
   state() {
     return {

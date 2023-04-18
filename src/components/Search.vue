@@ -50,9 +50,9 @@
 import { ref, reactive, watch } from 'vue'
 import Settings from './Settings.vue'
 import throttle from 'lodash/throttle'
-import { suggestAPI } from '../utils/searchSuggestions'
-import useStore from '../store'
-import { SearchEngine, SuggestWords } from '../types/global'
+import { suggestAPI } from '@/utils/searchSuggestions'
+import useStore from '@/store'
+import { SearchEngine, SuggestWords } from '@/types/global'
 //store
 const historySearch = useStore.historySearch()
 const searchEnginesStore = useStore.searchEngines()

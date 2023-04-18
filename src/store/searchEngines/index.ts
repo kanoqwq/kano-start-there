@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
-import { SearchEngine } from "../../types/global";
-import { setItem, getItem } from "../../utils/storage";
-import { isMobile } from "../../utils/ua";
+import { SearchEngine } from "@/types/global";
+import { setItem, getItem } from "@/utils/storage";
+import { isMobile } from "@/utils/ua";
 export const searchEngines = defineStore("searchEngines", {
   state() {
     return {

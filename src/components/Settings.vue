@@ -20,7 +20,7 @@
 
 <script setup lang='ts'>
 import { ref, reactive } from 'vue'
-import useStore from '../store'
+import useStore from '@/store'
 import { Toast } from './Toast/index'
 const Configs = useStore.Configs()
 //TODO:更多功能待开发
