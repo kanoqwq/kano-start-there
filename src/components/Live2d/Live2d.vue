@@ -4,10 +4,10 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2023-04-17 15:32:32
+ * @Last Modified time: 2023-04-18 14:41:01
  * @Description: Description
  */
-import '../../../public/assets/Live2d/autoload.js'
+// import '../../../public/assets/Live2d/autoload.js'
 </script>
 
 <template>
