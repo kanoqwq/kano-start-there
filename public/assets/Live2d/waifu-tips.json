@@ -74,12 +74,28 @@
       ]
     },
     {
-      "selector": ".search-engine",
+      "selector": "#searchBox",
       "text": ["找不到想看的内容？搜索看看吧！", "在找什么东西呢，需要帮忙吗？"]
+    },
+    {
+      "selector": "span[id^='key_']",
+      "text": ["要去看看 <span>{text}</span> 这个词条吗？"]
     },
     {
       "selector": ".inner",
       "text": ["要看看 <span>{text}</span> 这个词条吗？"]
+    },
+    {
+      "selector": "#engine_switch_btn",
+      "text": ["点击可以切换搜索引擎哦"]
+    },
+    {
+      "selector": ".top-banner",
+      "text": ["点击右上角齿轮可以进行背景设置等功能哦"]
+    },
+    {
+      "selector": "#app",
+      "text": [""]
     }
   ],
   "seasons": [
