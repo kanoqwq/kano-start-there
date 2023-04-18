@@ -10,7 +10,7 @@
 import { ref, onMounted } from 'vue';
 import Search from './components/Search.vue'
 // iconfont
-import '../public/js/iconfont.js'
+import '@/assets/js/iconfont.js'
 import useStore from './store'
 
 import Live2d from './components/Live2d/Live2d.vue';

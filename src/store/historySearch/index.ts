@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getItemArray, setItem } from "../../utils/storage";
+import { getItemArray, setItem } from "@/utils/storage";
 //搜索历史存储库
 export const historySearch = defineStore("historySearch", {
   state: () => {
