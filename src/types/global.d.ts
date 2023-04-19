@@ -16,3 +16,4 @@ interface SearchEngine {
   url: string;
   method: "suggestBaidu" | "suggestBing";
 }
+
