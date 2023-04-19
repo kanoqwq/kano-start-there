@@ -14,7 +14,6 @@
                             class="rounded p-2 ml-1 transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
                             @click="resetBg">重置</button>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -127,6 +126,8 @@ const resetBg = () => {
             margin: 10px 0;
 
             .input {
+                padding-left: .5em;
+                padding-right: .5em;
                 background-color: rgb(31 41 55 / .5);
                 outline: none;
             }
