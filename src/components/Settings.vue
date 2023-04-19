@@ -16,19 +16,6 @@
                     </div>
 
                 </div>
-                <div class="background-set flex">
-                    <span class="m-3">背景图片URL:</span>
-                    <input class="rounded mr-1 input" type="text" v-model="backgroundImage">
-                    <div class="options">
-                        <button
-                            class="rounded p-2  transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
-                            @click="modifyBg">修改</button>
-                        <button
-                            class="rounded p-2 ml-1 transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
-                            @click="resetBg">重置</button>
-                    </div>
-                </div>
-
             </div>
         </div>
     </Transition>
