@@ -37,6 +37,7 @@ defineProps<{
 .toast {
     position: fixed;
     display: flex;
+    z-index: 114514;
     justify-content: center;
     align-items: center;
     top: 20px;
