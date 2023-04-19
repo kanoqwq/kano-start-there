@@ -4,9 +4,11 @@
 import { ref, onMounted } from "vue"
 //load Live2d
 import '@/assets/Live2d/autoload.js'
-const scale = ref('.5')
+import { isMobile } from "@/utils/ua";
+const scale = ref('1')
 // hook
 onMounted(() => {
+    isMobile() ? scale.value = '.6' : scale.value = '1'
     let init = setInterval(() => {
         let waifu = document.querySelector("#waifu") as HTMLDivElement
         if (waifu) {
