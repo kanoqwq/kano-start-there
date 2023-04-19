@@ -89,6 +89,7 @@ const resetBg = () => {
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 9999;
     width: 100vw;
     height: 100vh;
     backdrop-filter: blur(10px);
