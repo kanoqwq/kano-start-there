@@ -363,6 +363,7 @@ const toggleSearchBorder = (active: boolean) => {
   .search {
     left: 50%;
     top: 40%;
+    z-index: 999;
     transform: translateX(-50%);
     max-width: 600px;
 
