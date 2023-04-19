@@ -6,12 +6,15 @@
                 <div class="background-set flex">
                     <span class="m-3">背景图片URL:</span>
                     <input class="rounded mr-1 input" type="text" v-model="backgroundImage">
-                    <button
-                        class="rounded p-2  transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
-                        @click="modifyBg">修改</button>
-                    <button
-                        class="rounded p-2 ml-1 transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
-                        @click="resetBg">重置</button>
+                    <div class="options">
+                        <button
+                            class="rounded p-2  transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
+                            @click="modifyBg">修改</button>
+                        <button
+                            class="rounded p-2 ml-1 transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
+                            @click="resetBg">重置</button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -23,7 +26,7 @@ import { ref, reactive } from 'vue'
 import useStore from '@/store'
 import { Toast } from './Toast/index'
 const Configs = useStore.Configs()
-//TODO:更多功能待开发
+
 defineProps<{
     show: boolean
 }>()
@@ -50,9 +53,9 @@ const modifyBg = () => {
             duration: 1000,
             background: "black",
         })
-        //https://pcsdata.baidu.com/thumbnail/af15eb675tc95c704e178fa88e7fb238?fid=926669427-16051585-1095763974604169&rt=pr&sign=FDTAER-yUdy3dSFZ0SVxtzShv1zcMqd-lXizq2xFMzb%2BfIRncd7eESj5cHY%3D&expires=48h&chkv=0&chkbd=0&chkpc=&dp-logid=9021405592947128857&dp-callid=0&time=1680339600&bus_no=26&size=c100000_u100000&quality=100&vuk=-&ft=video
     }
 }
+
 const resetBg = () => {
     Configs.resetBackground();
     Toast({
@@ -102,6 +105,10 @@ const resetBg = () => {
 
     .model {
         position: fixed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
         // min-width: 500px;
         left: 50%;
         top: 50%;
@@ -111,18 +118,21 @@ const resetBg = () => {
         background-color: rgba(255, 255, 255, .3);
         color: #000;
         border-radius: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+
         box-shadow: 0px 0px 15px #000;
 
         .background-set {
             height: 40px;
             overflow: hidden;
+            margin: 10px 0;
 
             .input {
                 background-color: rgb(31 41 55 / .5);
                 outline: none;
+            }
+
+            button {
+                height: 100%;
             }
         }
     }
