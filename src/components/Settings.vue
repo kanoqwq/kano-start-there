@@ -3,7 +3,7 @@
         <div class="settings" v-show="show">
             <div class="mask" @click.capture="close"></div>
             <div class="model dark:dark-settings-model">
-                <div class="background-set flex">
+                <div class="option flex">
                     <span class="m-3">背景图片URL:</span>
                     <input class="rounded mr-1 input" type="text" v-model="backgroundImage">
                     <div class="options">
@@ -14,6 +14,9 @@
                             class="rounded p-2 ml-1 transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
                             @click="resetBg">重置</button>
                     </div>
+                </div>
+                <div class="option ">
+                    <span>更多功能开发中</span>
                 </div>
             </div>
         </div>
@@ -68,7 +71,7 @@ const resetBg = () => {
 
 <style  lang="less" scoped>
 @media(max-width:650px) {
-    .background-set {
+    .option {
         height: 100% !important;
         justify-content: center;
         align-items: center;
@@ -86,6 +89,7 @@ const resetBg = () => {
 
     }
 }
+
 
 .settings {
     position: fixed;
@@ -113,14 +117,14 @@ const resetBg = () => {
         top: 50%;
         transform: translate(-50%, -60%);
         width: 70%;
-        height: 400px;
+        padding: 40px 0;
         background-color: rgba(255, 255, 255, .3);
         color: #000;
         border-radius: 10px;
 
         box-shadow: 0px 0px 15px #000;
 
-        .background-set {
+        .option {
             height: 40px;
             overflow: hidden;
             margin: 10px 0;
