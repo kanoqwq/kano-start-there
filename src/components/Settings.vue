@@ -6,17 +6,21 @@
                 <div class="option flex">
                     <span class="m-3">背景图片URL:</span>
                     <input class="rounded mr-1 input" type="text" v-model="backgroundImage">
-                    <div class="options">
-                        <button
-                            class="rounded p-2  transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
-                            @click="modifyBg">修改</button>
-                        <button
-                            class="rounded p-2 ml-1 transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
-                            @click="resetBg">重置</button>
+                </div>
+                <div class="option flex">
+                    <div>
+                        <span class=" mr-3 ">启用Live2D:</span>
+                        <!-- <button
+                        class="rounded p-2  transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
+                        >保存修改</button> -->
+                        <input class="inline-block w-5 h-5 align-sub  " type="checkbox" @click="toggleL2D"
+                            :checked="l2dEnabled">
                     </div>
                 </div>
-                <div class="option ">
-                    <span>更多功能开发中</span>
+                <div class="option flex">
+                    <button
+                        class="rounded p-2  transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
+                        @click="submit">保存修改</button>
                 </div>
             </div>
         </div>
@@ -28,15 +32,14 @@ import { ref, reactive } from 'vue'
 import useStore from '@/store'
 import { Toast } from './Toast/index'
 const Configs = useStore.Configs()
-
+const backgroundImage = ref(Configs.getBackgroundImage(-1));
+const l2dEnabled = ref(Configs.live2dEnabled);
 defineProps<{
     show: boolean
 }>()
 const emit = defineEmits<{
     (event: 'close'): void
 }>()
-
-const backgroundImage = ref(Configs.getBackgroundImage(-1));
 
 //关闭模态框
 const close = (e: Event) => {
@@ -45,27 +48,26 @@ const close = (e: Event) => {
     }
 }
 
-
-const modifyBg = () => {
-    if (backgroundImage.value && backgroundImage.value.trim()) {
-        Configs.setBackgroundImage(backgroundImage.value);
-        Toast({
-            value: '设置背景成功！，请手动刷新页面',
-            color: 'green',
-            duration: 1000,
-            background: "black",
-        })
-    }
+//开关live2d
+const toggleL2D = (e: Event) => {
+    let el = e.target as HTMLInputElement
+    l2dEnabled.value = el.checked
 }
 
-const resetBg = () => {
-    Configs.resetBackground();
+//提交修改
+const submit = () => {
+    backgroundImage.value && backgroundImage.value.trim() !== '' ?
+        Configs.setBackgroundImage(backgroundImage.value) : Configs.resetBackground()
+    l2dEnabled.value ? Configs.toggleLive2d(true) : Configs.toggleLive2d(false)
     Toast({
-        value: '清除背景成功！，请手动刷新页面',
+        value: `保存成功！1秒后自动刷新页面！`,
         color: 'green',
         duration: 1000,
         background: "black",
     })
+    setTimeout(() => {
+        location.reload()
+    }, 1500);
 }
 </script>
 
@@ -112,7 +114,7 @@ const resetBg = () => {
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        // min-width: 500px;
+        overflow: hidden;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -60%);
@@ -128,10 +130,10 @@ const resetBg = () => {
             height: 40px;
             overflow: hidden;
             margin: 10px 0;
+            align-items: center;
 
             .input {
-                padding-left: .5em;
-                padding-right: .5em;
+                padding: 10px;
                 background-color: rgb(31 41 55 / .5);
                 outline: none;
             }

@@ -1,3 +1,12 @@
+/*
+ * @Author: kanoqwq
+ * @Email: 1540508428@qq.com
+ * @Date: 2023-04-17 14:47:36
+ * @Last Modified by:   kanoqwq
+ * @Last Modified time: 2023-04-17 14:47:36
+ * @Description: Description
+ */
+
 import { createVNode, render } from "vue";
 import toastTemplate from "./index.vue";
 export interface Props {

@@ -38,6 +38,7 @@ defineProps<{
     position: fixed;
     z-index: 114514;
     display: flex;
+    z-index: 114514;
     justify-content: center;
     align-items: center;
     top: 20px;

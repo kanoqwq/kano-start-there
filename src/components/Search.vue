@@ -9,12 +9,12 @@
       <form action="#" method="get"
         class="search-engine flex overflow-hidden dark:dark-search-engine dark:hover:dark-shadow"
         ref="searchEngineElement">
-        <div class="flex items-center" @click="switchEngine">
+        <div class="flex items-center" id="engine_switch_btn" @click="switchEngine">
           <svg class="icon kano-icon dark:dark-icon" aria-hidden="true">
             <use :xlink:href="selectedEngine.icon"></use>
           </svg>
         </div>
-        <input ref="searchBox" type="text" autocomplete="off" v-model="searchContent" @keyup.enter="enterEvent"
+        <input ref="searchBox" id="searchBox" type="text" autocomplete="off" v-model="searchContent" @keyup.enter="enterEvent"
           @input="searchSuggestion(selectedEngine.method)" @keydown="moveSuggestion" @mouseenter="eventMouse"
           @focusin="showHideSearchHistory" @focusout="showHideSearchHistory" @mouseleave="eventMouse"
           class="input pl-3 box-border outline-none dark:input-dark" :placeholder="`在${selectedEngine.name}上搜索`" />
@@ -23,7 +23,7 @@
             <use xlink:href="#icon-close" class="close-icon"></use>
           </svg>
         </div>
-        <button class="search-btn flex justify-center items-center dark:hover:dark-hover-bg" @click="startSearch()">
+        <button id="searchbtn" class="search-btn flex justify-center items-center dark:hover:dark-hover-bg" @click="startSearch()">
           <svg class="icon" aria-hidden="false" height="30px">
             <use xlink:href="#icon-search"></use>
           </svg>
@@ -34,7 +34,7 @@
         <ul>
           <li class="inner" :class="{ active: item.isSelected }" @click="startSearch(item.title)"
             v-for="(item, index) in suggestWords" :key="index">
-            <span class="searchkey">{{ item.title }}</span>
+            <span class="searchkey" :id="`key_${index}_${Math.random()}`">{{ item.title }}</span>
             <svg class="close" aria-hidden="false" v-show="item.allowDel" @click.stop="delHistory(index)">
               <use xlink:href="#icon-close"></use>
             </svg>
@@ -47,6 +47,14 @@
   <Settings :show="settingsIsShow" @close="settingsIsShow = false"></Settings>
 </template>
 <script setup lang="ts">
+/*
+ * @Author: kanoqwq
+ * @Email: kanoqwq@qq.com
+ * @Date: 2023-04-17 14:47:15
+ * @Last Modified by: kanoqwq
+ * @Last Modified time: 2023-04-18 15:25:41
+ * @Description: Description
+ */
 import { ref, reactive, watch } from 'vue'
 import Settings from './Settings.vue'
 import throttle from 'lodash/throttle'
@@ -150,7 +158,7 @@ const searchSuggestion = throttle(async (method: 'suggestBaidu' | 'suggestBing')
     }
   }
   catch (e) {
-    
+
   }
 }, 100)
 
@@ -362,6 +370,7 @@ const toggleSearchBorder = (active: boolean) => {
 
     .kano-icon {
       width: 40px;
+      height: 100%;
       margin-left: 6px;
       fill: #222;
     }

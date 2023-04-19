@@ -10,7 +10,7 @@ export interface SuggestWords {
   allowDel: boolean;
 }
 
-interface SearchEngine {
+export interface SearchEngine {
   name: string;
   icon: string;
   url: string;

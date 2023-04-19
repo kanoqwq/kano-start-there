@@ -1,8 +1,17 @@
 <script setup lang="ts">
+/*
+ * @Author: kanoqwq
+ * @Email: kanoqwq@qq.com
+ * @Date: 2023-04-17 14:47:15
+ * @Last Modified by: kanoqwq
+ * @Last Modified time: 2023-04-19 17:48:30
+ * @Description: Description
+ */
 import { ref, onMounted } from 'vue';
 import Search from './components/Search.vue'
 // iconfont
 import '@/assets/js/iconfont.js'
+import Live2D from "@/components/Live2D/index.vue"
 import useStore from './store'
 const Configs = useStore.Configs();
 let background = Configs.getBackgroundImage(-1)
@@ -18,6 +27,7 @@ onMounted(() => {
 <template>
   <div class="main" ref="main">
     <Search />
+    <Live2D/>
   </div>
 </template>
 
