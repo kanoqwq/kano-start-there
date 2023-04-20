@@ -48,8 +48,9 @@ onMounted(() => {
                 // 配置选项的具体用法见 README.md
                 (window as any).initWidget({
                     waifuPath: live2d_path + "waifu-tips.json",
-                    //apiPath: "https://live2d.fghrsh.net/api/",
-                    cdnPath: "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/",
+                    // apiPath: "https://live2d.fghrsh.net/api/",
+                    // cdnPath: "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/",
+                    cdnPath: live2d_path,
                     //移动端无需工具栏
                     tools: !isMobile() ? [
                         "hitokoto",
