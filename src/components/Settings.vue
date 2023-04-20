@@ -8,16 +8,6 @@
                     <input class="rounded mr-1 input" type="text" v-model="backgroundImage">
                 </div>
                 <div class="option flex">
-                    <div>
-                        <span class=" mr-3 ">启用Live2D:</span>
-                        <!-- <button
-                        class="rounded p-2  transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
-                        >保存修改</button> -->
-                        <input class="inline-block w-5 h-5 align-sub  " type="checkbox" @click="toggleL2D"
-                            :checked="l2dEnabled">
-                    </div>
-                </div>
-                <div class="option flex">
                     <button
                         class="rounded p-2  transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
                         @click="submit">保存修改</button>
@@ -33,7 +23,6 @@ import useStore from '@/store'
 import { Toast } from './Toast/index'
 const Configs = useStore.Configs()
 const backgroundImage = ref(Configs.getBackgroundImage(-1));
-const l2dEnabled = ref(Configs.live2dEnabled);
 defineProps<{
     show: boolean
 }>()
@@ -48,17 +37,11 @@ const close = (e: Event) => {
     }
 }
 
-//开关live2d
-const toggleL2D = (e: Event) => {
-    let el = e.target as HTMLInputElement
-    l2dEnabled.value = el.checked
-}
 
 //提交修改
 const submit = () => {
     backgroundImage.value && backgroundImage.value.trim() !== '' ?
         Configs.setBackgroundImage(backgroundImage.value) : Configs.resetBackground()
-    l2dEnabled.value ? Configs.toggleLive2d(true) : Configs.toggleLive2d(false)
     Toast({
         value: `保存成功！1秒后自动刷新页面！`,
         color: 'green',
