@@ -4,7 +4,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2023-04-19 17:48:30
+ * @Last Modified time: 2023-04-20 11:40:04
  * @Description: Description
  */
 import { ref, onMounted } from 'vue';
@@ -31,7 +31,7 @@ onMounted(() => {
 
 <style scoped lang="less">
 .main {
-  height: 100vh;
+  height: 100%;
   width: 100%;
   overflow-y: auto;
   background-size: cover;
