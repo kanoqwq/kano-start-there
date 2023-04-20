@@ -1,15 +1,12 @@
 # 二次元轻量化起始页
 
-**目前进度：**
+> 此分支为纯净版分支，如想使用完整版请点击这里：[https://github.com/kanoqwq/kano-start-there/tree/main](https://github.com/kanoqwq/kano-start-there/tree/main)
+
+**功能：**
 
 * 完成了搜索引擎功能与简单的壁纸设置功能
-* 添加了live2d看板娘功能(后端服务未完成)
 
 ![](https://kanokano.cn/wp-content/uploads/2023/04/QQ截图20230401230246.png)
-
-### 关于看板娘
-
-> 如无需使用看板娘功能，请使用pure分支[https://github.com/kanoqwq/kano-start-there/tree/pure](https://github.com/kanoqwq/kano-start-there/tree/pure)
 
 ### 食用方法
 
@@ -29,8 +26,3 @@ npm run build
 ```
 
 *打包好的文件在`./dist`目录下*
-
-待开发功能：
-
-* Live2d看板娘
-* .......
