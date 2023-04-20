@@ -58,6 +58,10 @@ const save = () => {
     try {
         Configs.setFavLink(toRaw(link))
         dialogisDisplay.value = false
+        //清空并初始化
+        link.href = ""
+        link.imgUrl = ""
+        link.isBlank = true
     } catch (e: any) {
         Toast({
             value: e.message,
