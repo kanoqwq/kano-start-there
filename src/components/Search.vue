@@ -14,16 +14,18 @@
             <use :xlink:href="selectedEngine.icon"></use>
           </svg>
         </div>
-        <input ref="searchBox" id="searchBox" type="text" autocomplete="off" v-model="searchContent" @keyup.enter="enterEvent"
-          @input="searchSuggestion(selectedEngine.method)" @keydown="moveSuggestion" @mouseenter="eventMouse"
-          @focusin="showHideSearchHistory" @focusout="showHideSearchHistory" @mouseleave="eventMouse"
-          class="input pl-3 box-border outline-none dark:input-dark" :placeholder="`在${selectedEngine.name}上搜索`" />
+        <input ref="searchBox" id="searchBox" type="text" autocomplete="off" v-model="searchContent"
+          @keyup.enter="enterEvent" @input="searchSuggestion(selectedEngine.method)" @keydown="moveSuggestion"
+          @mouseenter="eventMouse" @focusin="showHideSearchHistory" @focusout="showHideSearchHistory"
+          @mouseleave="eventMouse" class="input pl-3 box-border outline-none dark:input-dark"
+          :placeholder="`在${selectedEngine.name}上搜索`" />
         <div class="clear-input" @click="clearContent" v-show="searchContent">
           <svg class="icon close" aria-hidden="false">
             <use xlink:href="#icon-close" class="close-icon"></use>
           </svg>
         </div>
-        <button id="searchbtn" class="search-btn flex justify-center items-center dark:hover:dark-hover-bg" @click="startSearch()">
+        <button id="searchbtn" class="search-btn flex justify-center items-center dark:hover:dark-hover-bg"
+          @click="startSearch()">
           <svg class="icon" aria-hidden="false" height="30px">
             <use xlink:href="#icon-search"></use>
           </svg>
@@ -41,6 +43,7 @@
           </li>
         </ul>
       </div>
+      <Favorites />
     </div>
   </div>
   <!-- settings -->
@@ -52,7 +55,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2023-04-20 11:37:35
+ * @Last Modified time: 2023-04-20 22:25:53
  * @Description: Description
  */
 import { ref, reactive, watch } from 'vue'
@@ -61,6 +64,7 @@ import throttle from 'lodash/throttle'
 import { suggestAPI } from '@/utils/searchSuggestions'
 import useStore from '@/store'
 import { SearchEngine, SuggestWords } from '@/types/global'
+import Favorites from './Favorites/Favorites.vue'
 //store
 const historySearch = useStore.historySearch()
 const searchEnginesStore = useStore.searchEngines()
@@ -299,6 +303,7 @@ const toggleSearchBorder = (active: boolean) => {
   .search-suggestion {
     width: 100%;
     max-height: 360px;
+    z-index: 9999;
     top: 100%;
     overflow: auto;
     border-radius: 6px;
