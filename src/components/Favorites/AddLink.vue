@@ -12,12 +12,12 @@
                 <div class="mask" @click="dialogisDisplay = false"></div>
                 <div class="model dark:dark-settings-model">
                     <div class="option flex">
-                        <div v-if="dialogisDisplay" class=" flex flex-col">
-                            <div class="flex mt-3 mb-3 items-center">
+                        <div class="flex flex-col">
+                            <div class="item flex mt-3 mb-3 items-center">
                                 <span>收藏链接：</span>
                                 <input class="rounded mr-1 input" type="text" v-model="link.href">
                             </div>
-                            <div class="flex mt-3 mb-3 items-center">
+                            <div class="item flex mt-3 mb-3 items-center">
                                 <span>图标地址：</span>
                                 <input class="rounded mr-1 input" type="text" v-model="link.imgUrl">
                             </div>
@@ -88,6 +88,10 @@ const save = () => {
 }
 
 @media(max-width:650px) {
+    .item {
+        flex-direction: column;
+    }
+
     .option {
         height: 100% !important;
         justify-content: center;
