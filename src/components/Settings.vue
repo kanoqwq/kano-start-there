@@ -114,6 +114,7 @@ const submit = () => {
         justify-content: center;
         align-items: center;
         flex-direction: column;
+        max-width: 600px;
         overflow: hidden;
         left: 50%;
         top: 50%;
