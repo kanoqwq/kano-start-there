@@ -16,3 +16,10 @@ export interface SearchEngine {
   url: string;
   method: "suggestBaidu" | "suggestBing";
 }
+
+
+interface LinkObj {
+  href: string,
+  imgUrl: string,
+  isBlank?: boolean,
+}

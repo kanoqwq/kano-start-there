@@ -28,6 +28,12 @@
   .dark-suggest-bg{
     background: rgba(0, 0, 0, 0.5) !important;
   }
+  .dark-add-btn{
+    background-color: rgba(0, 0, 0, 0.2) !important;
+  }
+  .dark-add-btn-hover{
+    background-color: rgba(0, 0, 0, 0.4) !important;
+  }
   .dark-shadow {
     box-shadow: 2px 8px 16px #000000bf !important;
   }
@@ -44,4 +50,5 @@
     background-color: rgba(0, 0, 0, .5) !important;
     color: #eee !important;
   }
+  
 }
