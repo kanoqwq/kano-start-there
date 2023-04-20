@@ -9,7 +9,7 @@
 
 ### 关于看板娘
 
-> 如无需使用看板娘功能，请使用pure分支
+> 如无需使用看板娘功能，请使用pure分支[https://github.com/kanoqwq/kano-start-there/tree/pure](https://github.com/kanoqwq/kano-start-there/tree/pure)
 
 ### 食用方法
 
