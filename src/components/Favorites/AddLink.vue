@@ -2,7 +2,9 @@
     <!-- 添加链接按钮 -->
     <div @click="addLink" class="addlink flex justify-center items-center dark:dark-add-btn dark:hover:dark-add-btn-hover">
         <div class="">
-            +
+            <svg class="add-icon" aria-hidden="false">
+                <use xlink:href="#icon-add-bold"></use>
+            </svg>
         </div>
     </div>
     <!-- 添加链接对话框 -->
@@ -67,7 +69,7 @@ const save = () => {
             value: e.message,
             color: 'red',
             duration: 1000,
-            background: "black",
+            background: "#00000099",
         })
     }
 }
@@ -81,6 +83,12 @@ const save = () => {
     background-color: rgba(0, 0, 0, .2);
     backdrop-filter: blur(10px);
     transition: all .3s;
+
+    .add-icon {
+        fill: red !important;
+        width: 25px;
+        height: 25px;
+    }
 }
 
 .addlink:hover {
