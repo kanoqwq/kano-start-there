@@ -72,6 +72,11 @@ export const Configs = defineStore("Configs", {
           setItem("favLinks", this.favLinks)
         }
       }
+    },
+    //清空常用链接
+    clearFavLink(){
+      this.favLinks = [];
+      setItem("favLinks", this.favLinks)
     }
   },
 });
