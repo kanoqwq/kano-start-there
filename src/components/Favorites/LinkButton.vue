@@ -1,14 +1,13 @@
 <template>
     <!-- 收藏夹链接 -->
     <div class="linkbutton">
-        <a :href="href" :target="isBlank ? '_blank' : ''">
+        <a :href="href" :target="isBlank ? '_blank' : ''" rel="noreferrer noopener nofollow">
             <img class="topimg" :src="imgUrl" :alt="imgUrl">
         </a>
     </div>
 </template>
 <!-- https://img1.baidu.com/it/u=3587286575,3300833299&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500 -->
 <script lang="ts" setup>
-import { ref } from "vue"
 defineProps<{
     href: string,
     imgUrl: string,
