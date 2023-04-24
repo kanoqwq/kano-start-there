@@ -26,7 +26,7 @@ export const historySearch = defineStore("historySearch", {
         // 去重
         const index = this.historySearchList.indexOf(item);
         if (index == -1) {
-          this.historySearchList.push(item);
+          this.historySearchList.unshift(item);
           setItem("historySearch", this.historySearchList);
         }
       }
