@@ -55,7 +55,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2023-04-27 13:42:08
+ * @Last Modified time: 2023-04-27 15:00:52
  * @Description: Description
  */
 import { ref, reactive, watch } from 'vue'
@@ -201,6 +201,7 @@ const moveSuggestion = (e: KeyboardEvent): void => {
     searchContent.value = suggestWords.value[suggestionIndex].title
   }
 
+  //test
   //del按下可以快速删除历史
   if (key == 'Delete') {
     if (suggestWords.value.length != 0) {
