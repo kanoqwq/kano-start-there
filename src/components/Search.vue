@@ -55,7 +55,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2023-04-27 13:40:25
+ * @Last Modified time: 2023-04-27 13:42:08
  * @Description: Description
  */
 import { ref, reactive, watch } from 'vue'
@@ -210,6 +210,8 @@ const moveSuggestion = (e: KeyboardEvent): void => {
       if (suggestWords.value.length) {
         suggestionIndex - 1 >= 0 ? suggestionIndex-- : suggestionIndex
         suggestWords.value[suggestionIndex].isSelected = true
+      } else {
+        toggleSearchBorder(true);
       }
     }
   }
