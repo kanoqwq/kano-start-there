@@ -55,7 +55,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2023-04-20 22:25:53
+ * @Last Modified time: 2023-04-27 13:40:25
  * @Description: Description
  */
 import { ref, reactive, watch } from 'vue'
@@ -162,7 +162,7 @@ const searchSuggestion = throttle(async (method: 'suggestBaidu' | 'suggestBing')
     }
   }
   catch (e) {
-
+    console.log("搜索建议获取失败");
   }
 }, 100)
 
@@ -201,6 +201,18 @@ const moveSuggestion = (e: KeyboardEvent): void => {
     searchContent.value = suggestWords.value[suggestionIndex].title
   }
 
+  //del按下可以快速删除历史
+  if (key == 'Delete') {
+    if (suggestWords.value.length != 0) {
+      historySearch.deleteHistory(suggestionIndex)
+      suggestWords.value.splice(suggestionIndex, 1)
+
+      if (suggestWords.value.length) {
+        suggestionIndex - 1 >= 0 ? suggestionIndex-- : suggestionIndex
+        suggestWords.value[suggestionIndex].isSelected = true
+      }
+    }
+  }
 }
 
 //清除样式
