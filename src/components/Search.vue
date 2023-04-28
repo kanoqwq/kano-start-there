@@ -78,8 +78,9 @@ let suggestWords = ref<Array<SuggestWords>>([])
 const searchBox = ref()
 const suggestIsShow = ref(false)
 const suggestActive = ref(false)
-const settingsIsShow = ref(false);
-
+const settingsIsShow = ref(false)
+//设置搜索建议模式的标识
+let isSuggestMode = false
 
 watch([suggestWords, suggestIsShow, searchContent, suggestActive], () => {
   if (suggestWords.value.length && suggestIsShow.value || suggestActive.value) {
@@ -148,6 +149,7 @@ const searchSuggestion = throttle(async (method: 'suggestBaidu' | 'suggestBing')
       let res = await suggestAPI[method](searchContent.value)
       suggestWords.value.length = 0
       suggestWords.value.push(...res)
+      isSuggestMode = true
 
       //远端没有数据返回，下边框为圆角
       if (suggestWords.value.length == 0) {
@@ -158,6 +160,7 @@ const searchSuggestion = throttle(async (method: 'suggestBaidu' | 'suggestBing')
 
     } else {
       //没有内容的时候，应该显示搜索历史
+      isSuggestMode = false
       suggestWords.value = [...historySearch.gethistorySearchList]
     }
   }
@@ -175,39 +178,40 @@ const clearContent = (): void => {
 //实现上下键选择候选词
 const moveSuggestion = (e: KeyboardEvent): void => {
   let key = e.key
-  if (key == 'ArrowUp') {
-    //阻止上下按键操作光标
-    e.preventDefault()
-    if (suggestionIndex == 0 || suggestionIndex == -1) {
-      suggestionIndex = suggestWords.value.length - 1
+  //候选词列表不为空
+  if (suggestWords.value.length != 0) {
+    if (key == 'ArrowUp') {
+      //阻止上下按键操作光标
+      e.preventDefault()
+      if (suggestionIndex == 0 || suggestionIndex == -1) {
+        suggestionIndex = suggestWords.value.length - 1
+      }
+      else {
+        suggestionIndex = (suggestionIndex - 1) % suggestWords.value.length;
+      }
+      removeActive();
+      suggestWords.value[suggestionIndex].isSelected = true
+      searchContent.value = suggestWords.value[suggestionIndex].title
     }
-    else {
-      suggestionIndex = (suggestionIndex - 1) % suggestWords.value.length;
+    else if (key == 'ArrowDown') {
+      e.preventDefault()
+      if (suggestWords.value.length - 1 == suggestionIndex) {
+        suggestionIndex = 0
+      }
+      else {
+        suggestionIndex = (suggestionIndex + 1) % suggestWords.value.length;
+      }
+      removeActive();
+      suggestWords.value[suggestionIndex].isSelected = true
+      searchContent.value = suggestWords.value[suggestionIndex].title
     }
-    removeActive();
-    suggestWords.value[suggestionIndex].isSelected = true
-    searchContent.value = suggestWords.value[suggestionIndex].title
   }
-  else if (key == 'ArrowDown') {
-    e.preventDefault()
-    if (suggestWords.value.length - 1 == suggestionIndex) {
-      suggestionIndex = 0
-    }
-    else {
-      suggestionIndex = (suggestionIndex + 1) % suggestWords.value.length;
-    }
-    removeActive();
-    suggestWords.value[suggestionIndex].isSelected = true
-    searchContent.value = suggestWords.value[suggestionIndex].title
-  }
-
-  //test
   //del按下可以快速删除历史
   if (key == 'Delete') {
-    if (suggestWords.value.length != 0) {
+    //防止误删搜索建议中的内容
+    if (suggestWords.value.length != 0 && !isSuggestMode) {
       historySearch.deleteHistory(suggestionIndex)
       suggestWords.value.splice(suggestionIndex, 1)
-
       if (suggestWords.value.length) {
         suggestionIndex - 1 >= 0 ? suggestionIndex-- : suggestionIndex
         suggestWords.value[suggestionIndex].isSelected = true
@@ -239,12 +243,7 @@ const showHideSearchHistory = (e: Event) => {
       suggestWords.value = [...historySearch.gethistorySearchList];
     }
   } else {
-    //恢复圆角
-    // if (!suggestActive.value) {
-    //   toggleSearchBorder(true);
-    // }
     if (!suggestActive.value) {
-
       //没有内容的时候，需要清空一下推荐词
       if (searchContent.value.length == 0) {
         suggestWords.value.length = 0
@@ -258,8 +257,6 @@ const showHideSearchHistory = (e: Event) => {
 const suggestActiveControl = (e: Event) => {
   if (e.type == 'mouseenter') {
     suggestActive.value = true
-    //鼠标在搜索历史框内，保持搜索边框直角
-    // toggleSearchBorder(false)
   } else {
     suggestActive.value = false
   }
@@ -269,7 +266,7 @@ const suggestActiveControl = (e: Event) => {
 const delHistory = (index: number) => {
   suggestWords.value.splice(index, 1)
   historySearch.deleteHistory(index)
-  //删空了就设为圆角边框
+  //删空后将搜索框设为圆角边框
   if (suggestWords.value.length == 0) {
     //suggest此时不活跃
     suggestActive.value = false
