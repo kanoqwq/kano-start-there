@@ -55,7 +55,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2023-04-27 15:00:52
+ * @Last Modified time: 2023-04-28 17:01:52
  * @Description: Description
  */
 import { ref, reactive, watch } from 'vue'
@@ -171,6 +171,7 @@ const searchSuggestion = throttle(async (method: 'suggestBaidu' | 'suggestBing')
 
 //清空搜索词列表和搜索框内容
 const clearContent = (): void => {
+  isSuggestMode = false
   suggestWords.value.length = 0
   searchContent.value = ''
 }
