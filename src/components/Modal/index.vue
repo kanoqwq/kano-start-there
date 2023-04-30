@@ -86,7 +86,6 @@ const close = (e: Event) => {
         .tab {
             width: 100%;
             height: 30px;
-            background-color: #00000033;
             margin-bottom: 10px;
 
             .tab-content {
