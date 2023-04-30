@@ -31,6 +31,10 @@ const close = (e: Event) => {
 
 <style lang="less">
 @media(max-width:650px) {
+    .item {
+        flex-direction: column;
+    }
+
     .option {
         height: 100% !important;
         justify-content: center;
