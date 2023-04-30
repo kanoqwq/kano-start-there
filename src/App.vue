@@ -4,7 +4,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2023-04-20 11:37:43
+ * @Last Modified time: 2023-04-30 21:14:59
  * @Description: Description
  */
 import { ref, onMounted } from 'vue';
@@ -13,6 +13,7 @@ import Search from './components/Search.vue'
 import '@/assets/js/iconfont.js'
 import Live2D from "@/components/Live2D/index.vue"
 import useStore from './store'
+
 const Configs = useStore.Configs();
 let background = Configs.getBackgroundImage(-1)
 let main = ref<HTMLDivElement>()
@@ -27,7 +28,7 @@ onMounted(() => {
 <template>
   <div class="main" ref="main">
     <Search />
-    <Live2D/>
+    <Live2D />
   </div>
 </template>
 

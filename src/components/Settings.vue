@@ -1,15 +1,14 @@
 <template>
-    <Transition name="fade">
-        <div class="settings" v-show="show">
-            <div class="mask" @click.capture="close"></div>
-            <div class="model dark:dark-settings-model">
-                <div class="tab flex justify-start">
-                    <div @click="selectedTabItem = index" v-for="(item, index) in Tabs" :key="index"
-                        :class="selectedTabItem == index ? 'tab-active' : ''"
-                        class="tab-content flex justify-center items-center">
-                        <span>{{ item }}</span>
-                    </div>
+    <Modal :show="isShow" @close="closeSettings">
+        <template #default>
+            <div class="tab flex justify-start">
+                <div @click="selectedTabItem = index" v-for="(item, index) in Tabs" :key="index"
+                    :class="selectedTabItem == index ? 'tab-active' : ''"
+                    class="tab-content flex justify-center items-center">
+                    <span>{{ item }}</span>
                 </div>
+            </div>
+            <div class="mb-2">
                 <div class="option flex" v-if="selectedTabItem == 0">
                     <span class="m-3">背景图片URL:</span>
                     <input class="rounded mr-1 input" type="text" v-model="backgroundImage">
@@ -42,32 +41,42 @@
                         @click="clearFavorite">清空收藏夹</button>
                 </div>
             </div>
-        </div>
-    </Transition>
+        </template>
+    </Modal>
 </template>
 
 <script setup lang='ts'>
-import { ref, reactive } from 'vue'
+import Modal from '@/components/Modal/index.vue'
+import { ref, watch } from 'vue'
 import useStore from '@/store'
 import { Toast } from './Toast/index'
+
 const Configs = useStore.Configs()
 const backgroundImage = ref(Configs.getBackgroundImage(-1));
 const l2dEnabled = ref(Configs.live2dEnabled);
 const Tabs = ref(["背景", "Live2d", "收藏夹"])
 //tab栏当前选择的项目编号（从0开始）
 const selectedTabItem = ref(0);
-defineProps<{
+const isShow = ref(false);
+
+const props = defineProps<{
     show: boolean
 }>()
+
 const emit = defineEmits<{
     (event: 'close'): void
 }>()
 
-//关闭模态框
-const close = (e: Event) => {
-    if (e.cancelable) {
-        emit('close')
-    }
+
+//侦听prop
+watch(() => props.show, () => {
+    isShow.value = props.show
+})
+
+//关闭settings
+const closeSettings = () => {
+    isShow.value = false
+    emit('close')
 }
 
 //开关live2d
@@ -92,11 +101,7 @@ const submit = () => {
     }, 1500);
 }
 
-//点击切换tab
-const selectTab = (item: number) => {
-    selectedTabItem.value = item
 
-}
 //清空收藏夹
 const clearFavorite = () => {
     Configs.clearFavLink()
@@ -110,112 +115,4 @@ const clearFavorite = () => {
 }
 </script>
 
-<style  lang="less" scoped>
-@media(max-width:650px) {
-    .option {
-        height: 100% !important;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-
-        span,
-        input,
-        button {
-            margin: 5px;
-        }
-
-        .input {
-            height: 30px;
-        }
-
-    }
-}
-
-
-.settings {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 9999;
-    width: 100vw;
-    height: 100vh;
-    backdrop-filter: blur(10px);
-
-    .mask {
-        width: 100vw;
-        height: 100vh;
-        background-color: rgba(0, 0, 0, .3);
-    }
-
-    .model {
-        position: fixed;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        max-width: 600px;
-        overflow: hidden;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -60%);
-        width: 70%;
-        padding: 40px 0;
-        padding-bottom: 20px;
-        background-color: rgba(255, 255, 255, .3);
-        color: #000;
-        border-radius: 10px;
-
-        box-shadow: 0px 0px 15px #000;
-
-        .tab {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 30px;
-            background-color: #00000033;
-
-            .tab-content {
-                width: 20%;
-                height: 100%;
-                margin: 0 10px;
-                overflow: hidden;
-                white-space: nowrap;
-                word-wrap: none;
-            }
-
-            .tab-active {
-                border-bottom: 2px solid #ccc;
-            }
-        }
-
-        .option {
-            height: 40px;
-            overflow: hidden;
-            margin: 10px 0;
-            align-items: center;
-
-            .input {
-                padding: 10px;
-                background-color: rgb(31 41 55 / .5);
-                outline: none;
-            }
-
-            button {
-                height: 100%;
-            }
-        }
-    }
-}
-
-
-.fade-enter-active,
-.fade-leave-active {
-    transition: all 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-}
-</style>
+<style  lang="less" scoped></style>
