@@ -55,7 +55,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2023-05-17 15:58:28
+ * @Last Modified time: 2023-05-17 15:59:56
  * @Description: Description
  */
 import { ref, reactive, watch } from 'vue'
@@ -111,8 +111,10 @@ const switchEngine = (): void => {
 const startSearch = (keyWord = searchContent.value.trim()): void => {
   let URLReg = /^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$/
   let reqUrl = selectedEngine.url + encodeURIComponent(keyWord)
+
   //添加搜索历史
   addSearchHistory()
+  
   //If keyWord is an URL
   if (URLReg.exec(keyWord)) {
     window.open(keyWord, '_blank')
