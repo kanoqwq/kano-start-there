@@ -55,7 +55,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2023-04-28 17:11:22
+ * @Last Modified time: 2023-05-17 15:58:28
  * @Description: Description
  */
 import { ref, reactive, watch } from 'vue'
@@ -106,15 +106,20 @@ const switchEngine = (): void => {
 }
 
 //开始搜索
-const startSearch = (keyWord = ''): void => {
-  if (keyWord) {
-    searchContent.value = keyWord.trim()
-  }
-  let reqUrl = selectedEngine.url + searchContent.value.trim()
+//FIX:fixed problem when search string has spacial character
+//feat:Support for directly entering URL addresses in the search box  
+const startSearch = (keyWord = searchContent.value.trim()): void => {
+  let URLReg = /^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$/
+  let reqUrl = selectedEngine.url + encodeURIComponent(keyWord)
   //添加搜索历史
   addSearchHistory()
-  //返回新标签页打开
-  window.open(reqUrl, '_blank')
+  //If keyWord is an URL
+  if (URLReg.exec(keyWord)) {
+    window.open(keyWord, '_blank')
+  } else {
+    //新标签页打开
+    window.open(reqUrl, '_blank')
+  }
 }
 
 // 鼠标滑过改变阴影
