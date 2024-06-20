@@ -7,6 +7,7 @@
 </template>
 <script lang="ts" setup>
     import useStore from '@/store'
+    import { Toast } from '../Toast';
 
     defineProps<{
         href: string,
@@ -14,14 +15,19 @@
         isBlank?: boolean,
     }>()
     const Configs = useStore.Configs();
-    const onClose = (e, href: string) => {
+    const onClose = (e: any, href: string) => {
         if (e.altKey) {
             e.preventDefault()
             if (href) {
                 Configs.removeFavLinkByUrl(href)
+                Toast({
+                    value: "删除成功~",
+                    color: 'green',
+                    duration: 1000,
+                    background: "#00000099",
+                })
             }
         }
-
     }
 </script>
 

@@ -5,7 +5,6 @@
 </template>
 
 <script setup lang='ts'>
-import { ref, reactive } from 'vue'
 defineProps<{
     background: string,
     color: string,
