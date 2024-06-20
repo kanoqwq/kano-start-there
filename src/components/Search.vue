@@ -55,7 +55,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2023-05-17 15:59:56
+ * @Last Modified time: 2024-06-20 23:57:32
  * @Description: Description
  */
 import { ref, reactive, watch } from 'vue'
@@ -144,7 +144,7 @@ const enterEvent = (): void => {
 }
 
 //搜索建议(谷歌接口暂时无法支持跨域)
-const searchSuggestion = throttle(async (method: 'suggestBaidu' | 'suggestBing'): Promise<void> => {
+const searchSuggestion = throttle(async (method: 'suggestBaidu' | 'suggestBing' | 'suggestDuckDuckGo'): Promise<void> => {
   try {
     //清除阴影
     searchEngineElement.value?.classList.remove("shadow")

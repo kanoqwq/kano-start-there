@@ -39,6 +39,17 @@ const suggestBing = async (searchContent: string) => {
   return makeObject(res?.AS?.Results[1]?.Suggests, "Txt");
 };
 
+// Duck Duck Go(很遗憾，不支持JSONP)
+const suggestDuckDuckGo = async (searchContent: string) => {
+  return await suggestBaidu(searchContent)
+  // let res = await jsonp(`https://start.duckduckgo.com/ac/`, {
+  //   dataType: "jsonp",
+  //   callback: "jsonCallback",
+  //   q: searchContent,
+  // });
+  // console.log(res);
+}
+
 //暂无实现(被墙)
 const suggestGoogle = async (searchContent: string) => {
   return [];
@@ -47,6 +58,7 @@ const suggestGoogle = async (searchContent: string) => {
 export const suggestAPI = {
   suggestBaidu,
   suggestBing,
+  suggestDuckDuckGo
 };
 
 // export type SuggestAPI = {

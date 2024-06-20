@@ -27,6 +27,12 @@ export const searchEngines = defineStore("searchEngines", {
           url: "https://cn.bing.com/search?q=",
           method: "suggestBing",
         },
+        {
+          name: "Duck Duck Go",
+          icon: "#icon-icons-duckduckgo",
+          url: "https://duckduckgo.com/?t=h_&hps=1&start=1&ia=web&q=",
+          method: "suggestDuckDuckGo",
+        },
       ] as Array<SearchEngine>,
       //上一次选中的搜索引擎index
       lastSelectedEngine: Number(getItem("selectedEngine")) || 0,
