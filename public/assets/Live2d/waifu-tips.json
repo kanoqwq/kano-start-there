@@ -18,7 +18,10 @@
     },
     {
       "selector": "#waifu-tool-hitokoto",
-      "text": ["猜猜我要说些什么？", "我从青蛙王子那里听到了不少人生经验。"]
+      "text": [
+        "猜猜我要说些什么？",
+        "我从青蛙王子那里听到了不少人生经验。"
+      ]
     },
     {
       "selector": "#waifu-tool-asteroids",
@@ -74,27 +77,46 @@
     },
     {
       "selector": "#searchBox",
-      "text": ["找不到想看的内容？搜索看看吧！", "在找什么东西呢，需要帮忙吗？"]
+      "text": [
+        "找不到想看的内容？搜索看看吧！",
+        "在找什么东西呢，需要帮忙吗？"
+      ]
+    },
+    {
+      "selector": ".linkbutton",
+      "text": [
+        "按住Alt再点击即可删除图标哦~"
+      ]
     },
     {
       "selector": "span[id^='key_']",
-      "text": ["要去看看 <span>{text}</span> 这个词条吗？"]
+      "text": [
+        "要去看看 <span>{text}</span> 这个词条吗？"
+      ]
     },
     {
       "selector": ".inner",
-      "text": ["要看看 <span>{text}</span> 这个词条吗？"]
+      "text": [
+        "要看看 <span>{text}</span> 这个词条吗？"
+      ]
     },
     {
       "selector": "#engine_switch_btn",
-      "text": ["点击可以切换搜索引擎哦"]
+      "text": [
+        "点击可以切换搜索引擎哦"
+      ]
     },
     {
       "selector": ".top-banner",
-      "text": ["点击右上角齿轮可以进行背景设置等功能哦"]
+      "text": [
+        "点击右上角齿轮可以进行背景设置等功能哦"
+      ]
     },
     {
       "selector": "#app",
-      "text": [""]
+      "text": [
+        ""
+      ]
     }
   ],
   "seasons": [
@@ -174,7 +196,10 @@
     },
     {
       "hour": "22-23",
-      "text": ["已经这么晚了呀，早点休息吧，晚安～", "深夜时要爱护眼睛呀！"]
+      "text": [
+        "已经这么晚了呀，早点休息吧，晚安～",
+        "深夜时要爱护眼睛呀！"
+      ]
     },
     {
       "hour": "0-5",

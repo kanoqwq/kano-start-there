@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { getItemArray, setItem, getItem } from "@/utils/storage";
 import { LinkObj } from "@/types/global";
+
+
 export const Configs = defineStore("Configs", {
   state() {
     return {
@@ -26,9 +28,6 @@ export const Configs = defineStore("Configs", {
   actions: {
     //设置背景图片
     setBackgroundImage(image: string) {
-      //去重
-      //   let index = this.backgroundImages.indexOf(image); 
-      //   if (index == -1) {
       if (image) {
         this.backgroundImages.push(image);
         setItem("backgroundImages", this.backgroundImages);
@@ -48,6 +47,7 @@ export const Configs = defineStore("Configs", {
     //清空背景图片
     resetBackground() {
       localStorage.removeItem("backgroundImages");
+      this.backgroundImages = []
     },
     //开关live2d功能
     toggleLive2d(flag: boolean) {
@@ -73,9 +73,15 @@ export const Configs = defineStore("Configs", {
         }
       }
     },
+    //删除指定链接
+    removeFavLinkByUrl(href: string) {
+      const newFavLinks = this.favLinks.filter(item => item.href != href)
+      this.favLinks = newFavLinks
+      setItem("favLinks", newFavLinks)
+    },
     //清空常用链接
-    clearFavLink(){
-      this.favLinks = [];
+    clearFavLink() {
+      this.favLinks.length = 0;
       setItem("favLinks", this.favLinks)
     }
   },
