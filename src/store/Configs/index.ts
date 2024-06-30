@@ -12,6 +12,8 @@ export const Configs = defineStore("Configs", {
       live2dIsEnabled: getItem("live2dEnabled") == 'true' ? true : false,
       //常用链接列表
       favLinks: getItemArray("favLinks") || [],
+      //过滤词列表
+      filterWords: getItemArray("filterWords") || [],
     };
   },
   getters: {
@@ -23,9 +25,35 @@ export const Configs = defineStore("Configs", {
     },
     links(state) {
       return state.favLinks
+    },
+    //格式化后的过滤词（可以直接附加在url的keyword后面）
+    formattedFilterWords(state) {
+      return state.filterWords.length ? '-' + state.filterWords.join(' -') : ''
     }
   },
   actions: {
+    //设置过滤词
+    setFilterWord(word: string) {
+      if (this.filterWords.findIndex(item => item.toLowerCase() === word.toLowerCase()) == -1) {
+        const newFilterWords = [...new Set([...this.filterWords].concat(word))]
+        this.filterWords = newFilterWords
+        setItem("filterWords", newFilterWords);
+        return true;
+      } else {
+        return false
+      }
+    },
+    //删除指定过滤词
+    removeFilterWord(word: string) {
+      const newFilterWords = this.filterWords.filter(wd => wd != word)
+      this.filterWords = newFilterWords
+      setItem("filterWords", newFilterWords);
+    },
+    //清空过滤词
+    clearFilterWord() {
+      this.filterWords.length = 0
+      setItem("filterWords", this.filterWords);
+    },
     //设置背景图片
     setBackgroundImage(image: string) {
       if (image) {
