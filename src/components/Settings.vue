@@ -1,7 +1,7 @@
 <template>
 <Modal :show="isShow" @close="closeSettings">
     <template #default>
-        <div class="tab flex justify-start">
+        <div class="tab flex justify-around ">
             <div @click="selectedTabItem = index" v-for="(item, index) in Tabs" :key="index"
                 :class="selectedTabItem == index ? 'tab-active' : ''"
                 class="tab-content flex justify-center items-center">
