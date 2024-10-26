@@ -20,9 +20,7 @@
         @mouseleave="eventMouse" class="input pl-3 box-border outline-none dark:input-dark"
         :placeholder="`在${selectedEngine.name}上搜索`" />
       <div class="clear-input" @click="clearContent" v-show="searchContent">
-        <svg class="icon close" aria-hidden="false">
-          <use xlink:href="#icon-close" class="close-icon"></use>
-        </svg>
+        <i class="iconfont dark:dark:dark-text icon-close icon close"></i>
       </div>
       <button id="searchbtn" class="search-btn flex justify-center items-center dark:hover:dark-hover-bg"
         @click="startSearch()">
@@ -34,12 +32,10 @@
     <div @mouseenter="suggestActiveControl" @mouseleave="suggestActiveControl"
       class="search-suggestion top-border absolute dark:dark-suggest-bg" v-show="suggestWords.length && suggestIsShow">
       <ul>
-        <li class="inner" :class="{ active: item.isSelected }" @click="startSearch(item.title)"
+        <li class="inner dark:dark-text" :class="{ active: item.isSelected }" @click="startSearch(item.title)"
           v-for="(item, index) in suggestWords" :key="index">
           <span class="searchkey" :id="`key_${index}_${Math.random()}`">{{ item.title }}</span>
-          <svg class="close" aria-hidden="false" v-show="item.allowDel" @click.stop="delHistory(index)">
-            <use xlink:href="#icon-close"></use>
-          </svg>
+          <i v-show="item.allowDel" @click.stop="delHistory(index)" class="iconfont icon-close icon close"></i>
         </li>
       </ul>
     </div>
@@ -55,7 +51,7 @@
    * @Email: kanoqwq@qq.com
    * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-06-30 19:09:02
+ * @Last Modified time: 2024-10-27 00:16:46
    * @Description: Description
    */
   import { ref, reactive, watch, computed } from 'vue'
@@ -379,7 +375,8 @@
         align-items: center;
 
         .close {
-          width: 14px;
+          font-size: 14px;
+          color: #333;
         }
       }
     }

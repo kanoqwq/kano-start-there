@@ -2,7 +2,7 @@
 <div>
 	<label>
 		<div :class="{ active: modelValue }"
-			class="text-center switch rounded transition-all bg-gray-600 hover:bg-gray-500 ">
+			class="switch text-center rounded dark:dark-btn p-2 bg-stone-300 transition-all hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50">
 			{{ text }}</div>
 		<input class="inline-block w-5 h-5 align-sub" type="checkbox" :checked="modelValue ? true : false"
 			@click="toggle" />

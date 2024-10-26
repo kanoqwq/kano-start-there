@@ -1,31 +1,28 @@
 <template>
 <Modal :show="isShow" @close="closeSettings">
     <template #default>
-        <div class="tab flex justify-around ">
+        <div class="tab flex justify-around">
             <div @click="selectedTabItem = index" v-for="(item, index) in Tabs" :key="index"
                 :class="selectedTabItem == index ? 'tab-active' : ''"
                 class="tab-content flex justify-center items-center">
-                <span>{{ item }}</span>
+                <span class="dark:dark-text">{{ item }}</span>
             </div>
+            <div class="tab-indicator"></div>
         </div>
         <div class="mb-2" style="width: 100%;">
-            <div class="option flex justify-center" v-if="selectedTabItem == 0">
-                <span class="m-3">背景图片URL:</span>
+            <div class="option flex justify-center dark:dark-text" v-if="selectedTabItem == 0">
+                <span class="m-3 dark:dark-text">背景图片URL:</span>
                 <input class="rounded mr-1 input" type="text" v-model="backgroundImage">
-                <button
-                    class="rounded p-2  transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
-                    @click="submit">保存修改</button>
+                <Button @click="submit">保存修改</Button>
             </div>
-            <div class="option flex justify-center" v-if="selectedTabItem == 1">
+            <div class="option flex justify-center dark:dark-text" v-if="selectedTabItem == 1">
                 <div>
-                    <span class=" mr-3 ">启用Live2D:</span>
-                    <input class="inline-block w-5 h-5 align-sub  " type="checkbox" @click="toggleL2D"
+                    <span class="mr-3 dark:dark-text">启用Live2D:</span>
+                    <input class="inline-block w-5 h-5 align-sub mr-2" type="checkbox" @click="toggleL2D"
                         :checked="l2dEnabled">
 
                 </div>
-                <button
-                    class="rounded p-2 m-3 transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
-                    @click="submit">保存修改</button>
+                <Button @click="submit">保存修改</Button>
             </div>
             <div class="option flex justify-center" v-if="selectedTabItem == 2">
                 <!-- 收藏夹管理 -->
@@ -36,15 +33,13 @@
                             <img :src="item.imgUrl" />
                         </div>
                     </div> -->
-                <button
-                    class="rounded p-2 m-3 transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
-                    @click="clearFavorite">清空收藏夹</button>
+                <Button @click="clearFavorite">清空收藏夹</Button>
             </div>
             <div class="option flex-col justify-center" v-if="selectedTabItem == 3">
-                <div style="max-width: 140px;margin:0 auto">
+                <div style="max-width: 140px;margin:0 auto ">
                     <Switch text='不要CSDN' v-model="noCSDN" />
                 </div>
-                <div>
+                <div class="dark:dark-text">
                     <h2 class="mt-5 mb-3 text-center" style="font-size: 22px; font-weight:bold">过滤词列表</h2>
                     <ul style="max-height:500px;margin:0 auto" v-if="filterWords.length"
                         class="rounded filterList border-dashed border-2 p-2 pt-1 pb-1 border-pink-200">
@@ -58,11 +53,9 @@
                     <p v-else class="text-center text-gray-500">
                         暂无数据捏~
                     </p>
-                    <div class="mt-3 flex justify-center items-center">
-                        <input class="rounded mr-1 input" type="text" v-model.trim="filterWord">
-                        <button
-                            class="rounded p-2 transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
-                            @click="addFilterWord">添加</button>
+                    <div class="mt-3 flex justify-center flex-wrap items-center">
+                        <input class="dark:dark-bg rounded mr-1 input" type="text" v-model.trim="filterWord">
+                        <Button @click="addFilterWord">添加</Button>
                     </div>
                 </div>
             </div>
@@ -77,11 +70,12 @@
     import useStore from '@/store'
     import { Toast } from './Toast/index'
     import Switch from './Switsh/Switch.vue'
+    import Button from './Button/Button.vue'
 
     const Configs = useStore.Configs()
     const backgroundImage = ref(Configs.getBackgroundImage(-1));
     const l2dEnabled = ref(Configs.live2dEnabled);
-    const Tabs = ref(["背景", "Live2d", "收藏夹", "过滤词"])
+    const Tabs = ref(["背景", "L2d", "收藏", "滤词"])
     //tab栏当前选择的项目编号（从0开始）
     const selectedTabItem = ref(0);
     const isShow = ref(false);
@@ -117,7 +111,7 @@
         Configs.removeFilterWord("CSDN")
         if (nValue) {
             Configs.setFilterWord("CSDN")
-        } 
+        }
     })
     //删除过滤词
     const removeWord = (word: string) => {
@@ -164,10 +158,10 @@
             color: 'green',
             duration: 1000,
             background: "#00000099",
+            success() {
+                location.reload()
+            },
         })
-        setTimeout(() => {
-            location.reload()
-        }, 1500);
     }
 
 
@@ -185,6 +179,15 @@
 </script>
 
 <style lang="less" scoped>
+    .tab {
+        user-select: none;
+    }
+
+    .tab-active {
+        transition: all .2s;
+        opacity: 1;
+    }
+
     .filterList {
         max-width: 400px;
 

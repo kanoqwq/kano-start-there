@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import "./style.css";
 import "./assets/css/reset.css";
+import './assets/css/iconfont.css'
 import App from "./App.vue";
 import axios from "./utils/request";
 import { globalKey } from "./symbols";

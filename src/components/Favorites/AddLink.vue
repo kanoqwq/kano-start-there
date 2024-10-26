@@ -11,7 +11,7 @@
     <template #default>
         <div class=" p-5 pt-3 ">
             <div class="option flex">
-                <div class="flex flex-col">
+                <div class="flex flex-col dark:dark-text ">
                     <div class="item flex mt-3 mb-3 items-center">
                         <span>收藏链接：</span>
                         <input class="rounded mr-1 input" type="text" v-model="link.href">
@@ -24,8 +24,7 @@
                         <span>以新标签页打开：</span>
                         <input class="rounded mr-1 input w-5 h-5" type="checkbox" v-model="link.isBlank">
                     </div>
-                    <button @click="save"
-                        class="rounded p-2 transition-all bg-gray-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50">保存</button>
+                    <Button @click="save">保存</Button>
                 </div>
             </div>
         </div>
@@ -39,6 +38,7 @@
     import { LinkObj } from "@/types/global";
     import { Toast } from "../Toast";
     import Modal from "@/components/Modal/index.vue"
+    import Button from "../Button/Button.vue";
     const Configs = useStore.Configs();
     const dialogisDisplay = ref(false)
     const link = reactive<LinkObj>({
@@ -83,7 +83,7 @@
         width: 60px;
         height: 100%;
         border-radius: 20px;
-        background-color: rgba(0, 0, 0, .2);
+        background-color: rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(10px);
         transition: all .3s;
 
