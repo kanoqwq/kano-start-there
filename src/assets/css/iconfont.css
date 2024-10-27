@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4031152 */
-  src: url('iconfont.woff2?t=1729952119238') format('woff2'),
-       url('iconfont.woff?t=1729952119238') format('woff'),
-       url('iconfont.ttf?t=1729952119238') format('truetype');
+  src: url('iconfont.woff2?t=1730039894111') format('woff2'),
+       url('iconfont.woff?t=1730039894111') format('woff'),
+       url('iconfont.ttf?t=1730039894111') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-16trash:before {
+  content: "\e652";
 }
 
 .icon-icons-duckduckgo:before {

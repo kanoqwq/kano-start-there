@@ -86,7 +86,7 @@ const close = (e: Event) => {
     flex-direction: column;
     max-width: 600px;
     max-height: 80vh;
-    overflow-y: auto;
+    overflow: hidden;
     width: 70%;
     margin-top: 40px;
     background-color: rgba(255, 255, 255, 0.3);

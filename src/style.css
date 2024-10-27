@@ -41,7 +41,7 @@
 
   .dark-btn {
     color: #ccc !important;
-    background-color: rgb(75 85 99 / 1);
+    background-color: rgb(75 85 99 / .5) !important;
   }
 
   .dark-suggest-bg {

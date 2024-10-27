@@ -82,6 +82,21 @@ export const Configs = defineStore("Configs", {
       this.live2dIsEnabled = flag
       setItem("live2dEnabled", flag);
     },
+    //修改常用链接
+    updateFavLink(linkObj: LinkObj) {
+      let curLinksIndex: number = this.favLinks.findIndex(item => item.href.trim() == linkObj.href.trim())
+      //如在现有列表重找到url一致的标签，则进行替换
+      if (curLinksIndex !== -1) {
+        if (linkObj) {
+          this.favLinks[curLinksIndex] = {
+            href: linkObj.href.trim(),
+            imgUrl: linkObj.imgUrl.trim(),
+            isBlank: linkObj.isBlank
+          }
+          setItem("favLinks", this.favLinks)
+        }
+      }
+    },
     // 设置常用链接
     setFavLink(linkObj: LinkObj) {
       if (linkObj.href.trim() == '') {

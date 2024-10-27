@@ -39,13 +39,13 @@ const tabClick = (e: any) => {
 };
 
 const autoResize = () => {
-  if (selectedItem.value.target) {
+  if (selectedItem.value.target && tabIndicator.value) {
     const selectRect = selectedItem.value.target.getBoundingClientRect();
     tabIndicator.value.style.width = selectRect.width + 'px';
     tabIndicator.value.style.height = selectRect.height + 'px';
     selectedItem.value.target.click();
   } else {
-    if (tab.value) {
+    if (tab.value && tabIndicator.value) {
       const firstEle = tab.value.children[0];
       const firstEleRect = firstEle.getBoundingClientRect();
       tabIndicator.value.style.width = firstEleRect.width + 'px';

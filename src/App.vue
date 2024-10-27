@@ -4,26 +4,32 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2023-04-30 21:14:59
+ * @Last Modified time: 2024-10-27 22:44:32
  * @Description: Description
  */
-import { ref, onMounted } from 'vue';
-import Search from './components/Search.vue'
+import { ref, onMounted, watch, computed } from 'vue';
+import Search from './components/Search.vue';
 // iconfont
-import '@/assets/js/iconfont.js'
-import Live2D from "@/components/Live2D/index.vue"
-import useStore from './store'
+import '@/assets/js/iconfont.js';
+import Live2D from '@/components/Live2D/index.vue';
+import useStore from './store';
 
 const Configs = useStore.Configs();
-let background = Configs.getBackgroundImage(-1)
-let main = ref<HTMLDivElement>()
+let main = ref<HTMLDivElement>();
+const background = computed(() => Configs.getBackgroundImage(-1));
+
+watch(background, () => {
+  if (main.value) {
+    main.value.style.backgroundImage = `url(${background.value})`;
+  }
+});
 
 //挂载完毕后添加背景
 onMounted(() => {
   if (main.value) {
-    main.value.style.backgroundImage = `url(${background})`
+    main.value.style.backgroundImage = `url(${background.value})`;
   }
-})
+});
 </script>
 <template>
   <div class="main" ref="main">

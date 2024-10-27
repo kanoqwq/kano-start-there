@@ -5,62 +5,54 @@
       </Tab>
       <div class="mb-2" style="width: 100%">
         <div
-          class="option flex justify-center dark:dark-text"
-          v-if="selectedTabItem == 0">
-          <span class="m-3 dark:dark-text">背景图片URL:</span>
-          <input
-            class="rounded mr-1 input dark:dark-input"
-            type="text"
-            v-model="backgroundImage" />
-          <Button @click="submit">保存修改</Button>
+            class="option dark:dark-text"
+            v-if="selectedTabItem == 0">
+          <UploadImage @success="closeSettings()"></UploadImage>
         </div>
         <div
-          class="option flex justify-center dark:dark-text"
-          v-if="selectedTabItem == 1">
+            class="option flex justify-center dark:dark-text"
+            v-if="selectedTabItem == 1">
           <div>
             <span class="mr-3 dark:dark-text">启用Live2D:</span>
             <input
-              class="inline-block w-5 h-5 align-sub mr-2 dark:dark-input"
-              type="checkbox"
-              @click="toggleL2D"
-              :checked="l2dEnabled" />
+                class="inline-block w-5 h-5 align-sub mr-2 dark:dark-input"
+                type="checkbox"
+                @click="toggleL2D"
+                :checked="l2dEnabled"/>
           </div>
           <Button @click="submit">保存修改</Button>
         </div>
-        <div class="option flex justify-center" v-if="selectedTabItem == 2">
+        <div class="option dark:dark-text text-center" v-if="selectedTabItem == 2">
           <!-- 收藏夹管理 -->
           <!-- TODO:详细管理收藏夹 -->
-          <!-- <div>
-                        <span>收藏列表：</span>
-                        <div v-for="(item, index) in Configs.favLinks" class=" w-10 h-10 ">
-                            <img :src="item.imgUrl" />
-                        </div>
-                    </div> -->
-          <Button @click="clearFavorite">清空收藏夹</Button>
+          <div class="relative mt-2" style="height: 100px">
+            <Favorites :style="{top:0}" :edit-mode="true"></Favorites>
+          </div>
+          <Button @click="clearFavorite">{{ clearBtnText }}</Button>
         </div>
         <div class="option flex-col justify-center" v-if="selectedTabItem == 3">
           <div style="max-width: 140px; margin: 0 auto">
-            <Switch text="不要CSDN" v-model="noCSDN" />
+            <Switch text="不要CSDN" v-model="noCSDN"/>
           </div>
           <div class="dark:dark-text ml-2 mr-2">
             <h2
-              class="mt-5 mb-3 text-center"
-              style="font-size: 22px; font-weight: bold">
+                class="mt-5 mb-3 text-center"
+                style="font-size: 22px; font-weight: bold">
               过滤词列表
             </h2>
             <ul
-              style="max-height: 500px; margin: 0 auto"
-              v-if="filterWords.length"
-              class="rounded filterList border-dashed border-2 p-2 pt-1 pb-1 border-pink-200">
+                style="max-height: 500px; margin: 0 auto"
+                v-if="filterWords.length"
+                class="rounded filterList border-dashed border-2 p-2 pt-1 pb-1 border-pink-200">
               <li
-                v-for="item in filterWords"
-                :key="item"
-                class="m-1 ml-0 filter-item">
+                  v-for="item in filterWords"
+                  :key="item"
+                  class="m-1 ml-0 filter-item">
                 <span>{{ item }}</span>
                 <svg
-                  class="close"
-                  aria-hidden="false"
-                  @click="removeWord(item)">
+                    class="close"
+                    aria-hidden="false"
+                    @click="removeWord(item)">
                   <use xlink:href="#icon-close"></use>
                 </svg>
               </li>
@@ -68,9 +60,9 @@
             <p v-else class="text-center text-gray-500">暂无数据捏~</p>
             <div class="mt-3 flex justify-center flex-wrap items-center">
               <input
-                class="dark:dark-bg rounded mr-1 input dark:dark-input"
-                type="text"
-                v-model.trim="filterWord" />
+                  class="dark:dark-bg rounded mr-1 input dark:dark-input"
+                  type="text"
+                  v-model.trim="filterWord"/>
               <Button @click="addFilterWord">添加</Button>
             </div>
           </div>
@@ -82,12 +74,14 @@
 
 <script setup lang="ts">
 import Modal from '@/components/Modal/index.vue';
-import { computed, ref, watch } from 'vue';
+import {computed, ref, watch} from 'vue';
 import useStore from '@/store';
-import { Toast } from './Toast/index';
+import {Toast} from './Toast/index';
 import Switch from './Switsh/Switch.vue';
 import Button from './Button/Button.vue';
 import Tab from './Tab/Tab.vue';
+import Favorites from "@/components/Favorites/Favorites.vue";
+import UploadImage from "@/components/UploadImage/UploadImage.vue";
 
 const Configs = useStore.Configs();
 const backgroundImage = ref(Configs.getBackgroundImage(-1));
@@ -110,10 +104,10 @@ const emit = defineEmits<{
 
 //侦听prop
 watch(
-  () => props.show,
-  () => {
-    isShow.value = props.show;
-  }
+    () => props.show,
+    () => {
+      isShow.value = props.show;
+    }
 );
 
 watch(filterWords, (words) => {
@@ -168,8 +162,8 @@ const toggleL2D = (e: Event) => {
 //提交修改
 const submit = () => {
   backgroundImage.value && backgroundImage.value.trim() !== ''
-    ? Configs.setBackgroundImage(backgroundImage.value)
-    : Configs.resetBackground();
+      ? Configs.setBackgroundImage(backgroundImage.value)
+      : Configs.resetBackground();
   l2dEnabled.value ? Configs.toggleLive2d(true) : Configs.toggleLive2d(false);
   Toast({
     value: `保存成功！1秒后自动刷新页面！`,
@@ -182,16 +176,24 @@ const submit = () => {
   });
 };
 
+const clearBtnText = ref('清空收藏夹');
+const clearable = ref(false);
 //清空收藏夹
 const clearFavorite = () => {
-  Configs.clearFavLink();
-  emit('close');
-  Toast({
-    value: `操作成功！`,
-    color: 'green',
-    duration: 1000,
-    background: '#00000099',
-  });
+  clearBtnText.value = '确认清空？'
+  if (clearable.value) {
+    Configs.clearFavLink();
+    emit('close');
+    Toast({
+      value: `操作成功！`,
+      color: 'green',
+      duration: 1000,
+      background: '#00000099',
+    });
+    clearable.value = false;
+    clearBtnText.value = '清空收藏夹'
+  }
+  clearable.value = true
 };
 </script>
 
