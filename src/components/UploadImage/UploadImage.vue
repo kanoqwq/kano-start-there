@@ -2,13 +2,13 @@
   <div
     class="uploadImage scroll-auto dark:dark-text text-center"
     :style="{ height: '200px' }">
-    <div class="icon dark:dark-btn m-10" @click="addPicClick">
+    <div class="icon dark:dark-btn m-5" @click="addPicClick">
       <i class="iconfont icon-add-bold"></i>
       <p class="text">设置<br />图片</p>
     </div>
     <div
       v-if="Configs.getBackgroundImages().length !== 0"
-      class="icon dark:dark-btn"
+      class="icon dark:dark-btn m-5"
       @click="isShowConfrim = true">
       <i class="iconfont icon-16trash"></i>
       <p class="text">删除<br />图片</p>
