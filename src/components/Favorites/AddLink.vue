@@ -14,15 +14,15 @@
                 <div class="flex flex-col dark:dark-text ">
                     <div class="item flex mt-3 mb-3 items-center">
                         <span>收藏链接：</span>
-                        <input class="rounded mr-1 input" type="text" v-model="link.href">
+                        <input class="rounded mr-1 input dark:dark-input" type="text" v-model="link.href">
                     </div>
                     <div class="item flex mt-3 mb-3 items-center">
                         <span>图标地址：</span>
-                        <input class="rounded mr-1 input" type="text" v-model="link.imgUrl">
+                        <input class="rounded mr-1 input dark:dark-input" type="text" v-model="link.imgUrl">
                     </div>
                     <div class="flex mt-3 mb-3 items-center">
                         <span>以新标签页打开：</span>
-                        <input class="rounded mr-1 input w-5 h-5" type="checkbox" v-model="link.isBlank">
+                        <input class="rounded mr-1 input w-5 h-5 dark:dark-input" type="checkbox" v-model="link.isBlank">
                     </div>
                     <Button @click="save">保存</Button>
                 </div>

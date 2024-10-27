@@ -1,5 +1,5 @@
 <template><!-- 收藏夹链接 -->
-<div class="linkbutton" @mouseenter="isshowCloseBtn = true" @mouseleave="isshowCloseBtn = false">
+<div class="linkbutton" @touchstart="isshowCloseBtn = true"  @touchend="isshowCloseBtn = false" @mouseenter="isshowCloseBtn = true" @mouseleave="isshowCloseBtn = false">
     <a :href="href" :target="isBlank ? '_blank' : ''" rel="noreferrer noopener nofollow">
         <img class="topimg" :src="imgUrl" :alt="imgUrl">
         <i v-if="isshowCloseBtn" @click.prevent="isShowConfrim = true"

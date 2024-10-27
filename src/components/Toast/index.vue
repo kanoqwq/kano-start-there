@@ -1,5 +1,5 @@
 <template>
-<div class="toast" :style="{ background: background}">
+<div class="toast" :style="{ background: background }">
     <span :style="{ 'font-weight': fontWeight as any, color: color + ' !important' }">{{ value }}</span>
 </div>
 </template>
@@ -25,7 +25,7 @@
 
         100% {
             opacity: 0;
-            top: -20px;
+            top: -120px;
             font-size: 0;
         }
     }
@@ -39,8 +39,9 @@
     }
 
     .toast {
+        max-width: 400px;
+        overflow: hidden;
         position: fixed;
-        z-index: 114514;
         display: flex;
         z-index: 114514;
         justify-content: center;
@@ -53,5 +54,11 @@
         border-radius: 10px;
         background-color: #fff;
         opacity: .85;
+        span{
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
     }
 </style>
