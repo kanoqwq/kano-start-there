@@ -1,15 +1,24 @@
-# 二次元轻量化起始页
+# 轻量化起始页
+
+**功能**
+
+* 自定义背景
+* 自定义收藏链接与图标（目前最大支持4个）
+* 搜索引擎切换（点击搜索引擎图标即可切换）
+* 搜索建议
+* 搜索历史
+* Live2D看板娘
+* 自定义屏蔽词
 
 **目前进度：**
 
-* 完成了搜索引擎功能与简单的壁纸设置功能
-* 添加了live2d看板娘功能(后端服务未完成)
+* 功能基本完善
 
-![](https://kanokano.cn/wp-content/uploads/2023/04/QQ截图20230401230246.png)
+![](https://kanokano.cn/wp-content/uploads/2024/10/QQ20241028-155103.webp)
 
 ### 关于看板娘
 
-> 如无需使用看板娘功能，请使用pure分支[https://github.com/kanoqwq/kano-start-there/tree/pure](https://github.com/kanoqwq/kano-start-there/tree/pure)
+> ~~如无需使用看板娘功能，请使用pure分支[https://github.com/kanoqwq/kano-start-there/tree/pure](https://github.com/kanoqwq/kano-start-there/tree/pure)~~
 
 ### 食用方法
 
@@ -32,5 +41,4 @@ npm run build
 
 待开发功能：
 
-* Live2d看板娘
-* .......
+* 暂无
