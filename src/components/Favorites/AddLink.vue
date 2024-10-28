@@ -29,6 +29,15 @@
                 class="rounded mr-1 input dark:dark-input"
                 type="text"
                 v-model="link.imgUrl" />
+              <Button @click="onUpload"
+                ><i class="iconfont icon-upload"></i>
+                <input
+                  class="hidden"
+                  @change="fileChange"
+                  ref="fileInput"
+                  type="file"
+                  accept="image/*" />
+              </Button>
             </div>
             <div class="flex mt-3 mb-3 items-center">
               <span>以新标签页打开：</span>
@@ -46,12 +55,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, toRaw, onMounted, watch } from 'vue';
+import { ref, reactive, toRaw, watch } from 'vue';
 import useStore from '@/store';
 import { LinkObj } from '@/types/global';
 import { Toast } from '../Toast';
 import Modal from '@/components/Modal/index.vue';
 import Button from '../Button/Button.vue';
+import { useUploadImage } from '../UploadImage/useUploadImage';
 
 const props = defineProps<{
   hideBtn?: boolean;
@@ -61,6 +71,7 @@ const props = defineProps<{
 const emit = defineEmits(['onclose']);
 const Configs = useStore.Configs();
 const dialogisDisplay = ref(false);
+const { change } = useUploadImage({ emit, maxUploadSize: 2 });
 
 const link = reactive<LinkObj>({
   imgUrl: '',
@@ -88,6 +99,32 @@ watch(
 
 const addLink = () => {
   dialogisDisplay.value = true;
+};
+
+const fileInput = ref();
+
+const onUpload = () => {
+  fileInput.value && fileInput.value.click();
+  console.log('upload');
+};
+
+const fileChange = async (e: Event) => {
+  try {
+    let res = await change(e);
+    if (res.data && res.msg == 'ok') {
+      link.imgUrl = res.data;
+      Toast({
+        value: '上传成功！',
+        color: 'green',
+        duration: 1000,
+      });
+    }
+  } catch (e: any) {
+    Toast({
+      value: e.msg,
+      color: 'red',
+    });
+  }
 };
 
 //保存

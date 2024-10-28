@@ -2,13 +2,13 @@
   <div
     class="uploadImage scroll-auto dark:dark-text text-center"
     :style="{ height: '200px' }">
-    <div class="icon dark:dark-btn m-5" @click="addPicClick">
+    <div class="icon dark:dark-add-btn m-5" @click="addPicClick">
       <i class="iconfont icon-add-bold"></i>
       <p class="text">设置<br />图片</p>
     </div>
     <div
       v-if="Configs.getBackgroundImages().length !== 0"
-      class="icon dark:dark-btn m-5"
+      class="icon dark:dark-add-btn m-5"
       @click="isShowConfrim = true">
       <i class="iconfont icon-16trash"></i>
       <p class="text">删除<br />图片</p>
@@ -35,15 +35,17 @@ import { ref } from 'vue';
 import { Toast } from '@/components/Toast/index';
 import useStore from '@/store';
 import Modal from '@/components/Modal/index.vue';
+import { useUploadImage } from './useUploadImage';
 
 const emit = defineEmits(['success']);
+
 let btnClass =
   'rounded dark:dark-btn p-2 bg-stone-300 transition-all hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50';
 
 const Configs = useStore.Configs();
 const isShowConfrim = ref();
-
 const fileInput = ref();
+const { change } = useUploadImage({ emit });
 
 const addPicClick = () => {
   if (fileInput.value) {
@@ -60,32 +62,22 @@ const removePicClick = () => {
   emit('success');
 };
 
-const fileChange = (event: any) => {
-  const file = event.target.files[0];
-  if (file) {
-    // 检查文件大小
-    if (file.size > 3 * 1024 * 1024) {
-      // 3MB
-      Toast({
-        value: '文件大小不能超过3MB！',
-        color: 'red',
-      });
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.readAsDataURL(file); // 将文件读取为Data URL
-    reader.onload = function (e: any) {
-      const base64String = e.target.result;
-      console.log(base64String); // 输出Base64字符串
+const fileChange = async (event: any) => {
+  try {
+    let res = await change(event);
+    if (res.data && res.msg == 'ok') {
       Configs.resetBackground();
-      Configs.setBackgroundImage(base64String);
+      Configs.setBackgroundImage(res.data);
       Toast({
         value: '保存成功！',
         color: 'green',
       });
-      emit('success');
-    };
+    }
+  } catch (e: any) {
+    Toast({
+      value: e.msg,
+      color: 'red',
+    });
   }
 };
 </script>

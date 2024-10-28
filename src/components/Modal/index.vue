@@ -113,8 +113,7 @@ const close = (e: Event) => {
     }
 
     .option {
-      overflow: hidden;
-      margin: 10px 0;
+      margin: 15px 0;
       align-items: center;
 
       .input {
