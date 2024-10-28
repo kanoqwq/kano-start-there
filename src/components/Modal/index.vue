@@ -12,9 +12,12 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  show: boolean;
-}>();
+defineProps({
+  show: {
+    type: Boolean,
+    default: false,
+  },
+});
 const emit = defineEmits<{
   (event: 'close'): void;
 }>();

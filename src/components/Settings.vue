@@ -69,7 +69,7 @@
 
 <script setup lang="ts">
 import Modal from '@/components/Modal/index.vue';
-import { computed, ref, watch } from 'vue';
+import { computed, onDeactivated, onUnmounted, ref, watch } from 'vue';
 import useStore from '@/store';
 import { Toast } from './Toast/index';
 import Switch from './Switsh/Switch.vue';
@@ -89,9 +89,12 @@ const noCSDN = ref(Configs.filterWords.indexOf('site:csdn.net') !== -1);
 const filterWords = computed(() => Configs.filterWords);
 const filterWord = ref('');
 
-const props = defineProps<{
-  show: boolean;
-}>();
+const props = defineProps({
+  show: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 const emit = defineEmits<{
   (event: 'close'): void;
@@ -167,9 +170,11 @@ const submit = () => {
 
 const clearBtnText = ref('清空收藏夹');
 const clearable = ref(false);
+let timer: any = null;
 //清空收藏夹
 const clearFavorite = () => {
   clearBtnText.value = '确认清空？';
+  timer && clearTimeout(timer);
   if (clearable.value) {
     Configs.clearFavLink();
     emit('close');
@@ -182,6 +187,10 @@ const clearFavorite = () => {
     clearable.value = false;
     clearBtnText.value = '清空收藏夹';
   }
+  timer = setTimeout(() => {
+    clearBtnText.value = '清空收藏夹';
+    clearable.value = false;
+  }, 3000);
   clearable.value = true;
 };
 </script>
