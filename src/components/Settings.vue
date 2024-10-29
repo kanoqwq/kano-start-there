@@ -8,16 +8,8 @@
           <UploadImage @success="closeSettings()"></UploadImage>
         </div>
         <div
-          class="option flex flex-col justify-center dark:dark-text"
-          v-if="selectedTabItem == 1">
-          <div class="m-4">
-            <Switch text="启用Live2D：" v-model="l2dEnabled" />
-          </div>
-          <Button @click="submit">保存修改</Button>
-        </div>
-        <div
           class="option dark:dark-text text-center"
-          v-if="selectedTabItem == 2">
+          v-if="selectedTabItem == 1">
           <!-- 收藏夹管理 -->
           <!-- TODO:详细管理收藏夹 -->
           <div class="relative mt-2" style="height: 100px">
@@ -25,7 +17,7 @@
           </div>
           <Button @click="clearFavorite">{{ clearBtnText }}</Button>
         </div>
-        <div class="option flex-col justify-center" v-if="selectedTabItem == 3">
+        <div class="option flex-col justify-center" v-if="selectedTabItem == 2">
           <div style="max-width: 200px; margin: 0 auto">
             <Switch text="不要CSDN:" v-model="noCSDN" />
           </div>
@@ -62,14 +54,49 @@
             </div>
           </div>
         </div>
+        <div
+          class="option flex flex-col justify-center dark:dark-text"
+          v-if="selectedTabItem == 3">
+          <div class="flex flex-col m-4 mt-0">
+            <div class="m-2">
+              <Switch text="启用Live2D：" v-model="l2dEnabled" />
+            </div>
+            <div class="m-2">
+              <Switch text="搜索框动效：" v-model="searchTransitonEnabled" />
+            </div>
+            <div class="m-2">
+              <Button style="width: 100%" @click="isShowConfrim = true"
+                >清空并初始化</Button
+              >
+            </div>
+          </div>
+          <Button @click="submit">保存修改</Button>
+        </div>
       </div>
     </template>
+  </Modal>
+  <Modal :show="isShowConfrim" @close="isShowConfrim = false" animation="scale">
+    <div class="confirm">
+      <h1 class="dark:dark-text">确认移除壁纸?</h1>
+      <div class="options">
+        <button
+          class="rounded dark:dark-btn p-2 bg-stone-300 transition-all hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
+          @click="reset()">
+          确认
+        </button>
+        <button
+          class="rounded dark:dark-btn p-2 bg-stone-300 transition-all hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
+          @click="isShowConfrim = false">
+          取消
+        </button>
+      </div>
+    </div>
   </Modal>
 </template>
 
 <script setup lang="ts">
 import Modal from '@/components/Modal/index.vue';
-import { computed, onDeactivated, onUnmounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import useStore from '@/store';
 import { Toast } from './Toast/index';
 import Switch from './Switsh/Switch.vue';
@@ -79,9 +106,9 @@ import Favorites from '@/components/Favorites/Favorites.vue';
 import UploadImage from '@/components/UploadImage/UploadImage.vue';
 
 const Configs = useStore.Configs();
-const backgroundImage = ref(Configs.getBackgroundImage(-1));
 const l2dEnabled = ref(Configs.live2dEnabled);
-const Tabs = ref(['背景', 'L2D', '收藏', '滤词']);
+const searchTransitonEnabled = ref(Configs.searchTransitonEnabled);
+const Tabs = ref(['背景', '收藏', '滤词', '杂项']);
 //tab栏当前选择的项目编号（从0开始）
 const selectedTabItem = ref(0);
 const isShow = ref(false);
@@ -151,9 +178,28 @@ const closeSettings = () => {
   emit('close');
 };
 
+//初始化
+const reset = () => {
+  isShowConfrim.value = false;
+  Configs.reset();
+  Toast({
+    value: `保存成功！1秒后自动刷新页面！`,
+    color: 'green',
+    duration: 1000,
+    background: '#00000099',
+    success() {
+      location.reload();
+    },
+  });
+};
+
+const isShowConfrim = ref(false);
 //提交修改
 const submit = () => {
   l2dEnabled.value ? Configs.toggleLive2d(true) : Configs.toggleLive2d(false);
+  searchTransitonEnabled.value
+    ? Configs.toggleSearchTransiton(true)
+    : Configs.toggleSearchTransiton(false);
   Toast({
     value: `保存成功！1秒后自动刷新页面！`,
     color: 'green',

@@ -7,7 +7,10 @@
       <p class="text">设置<br />图片</p>
     </div>
     <div
-      v-if="Configs.getBackgroundImages().length !== 0"
+      v-if="
+        Configs.getBackgroundImages() &&
+        Configs.getBackgroundImages().length !== 0
+      "
       class="icon dark:dark-add-btn m-5"
       @click="isShowConfrim = true">
       <i class="iconfont icon-16trash"></i>
@@ -20,7 +23,7 @@
       type="file"
       accept="image/*" />
   </div>
-  <Modal :show="isShowConfrim" @close="isShowConfrim = false"  animation="scale">
+  <Modal :show="isShowConfrim" @close="isShowConfrim = false" animation="scale">
     <div class="confirm">
       <h1 class="dark:dark-text">确认移除壁纸?</h1>
       <div class="options">
@@ -47,13 +50,17 @@ const isShowConfrim = ref();
 const fileInput = ref();
 const { change } = useUploadImage({ emit });
 
+console.log(Configs.bgs.length);
+
 const addPicClick = () => {
   if (fileInput.value) {
     fileInput.value.click();
   }
 };
 const removePicClick = () => {
-  Configs.resetBackground();
+  setTimeout(() => {
+    Configs.resetBackground();
+  }, 300);
   Toast({
     value: '删除成功！',
     color: 'green',
@@ -82,24 +89,6 @@ const fileChange = async (event: any) => {
 };
 </script>
 <style lang="less" scoped>
-.confirm {
-  width: 100%;
-
-  h1 {
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    margin: 20px;
-  }
-
-  .options {
-    text-align: center;
-
-    button {
-      margin: 10px;
-    }
-  }
-}
 .uploadImage {
   display: flex;
   justify-content: center;

@@ -15,6 +15,26 @@
     }
   }
 
+
+  .confirm {
+    width: 100%;
+  
+    h1 {
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      margin: 20px;
+    }
+  
+    .options {
+      text-align: center;
+  
+      button {
+        margin: 10px;
+      }
+    }
+  }
+
   body,
   html {
     height: 100%;

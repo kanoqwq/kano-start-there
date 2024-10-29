@@ -89,7 +89,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-10-29 22:33:41
+ * @Last Modified time: 2024-10-30 00:23:04
  * @Description: Description
  */
 import { ref, reactive, watch, computed, onMounted } from 'vue';
@@ -109,6 +109,9 @@ onMounted(() => {
       } else {
         searchBox.value.focus();
       }
+    }
+    if (e.key == 'Escape') {
+      searchBox.value.blur();
     }
   };
 });
@@ -247,10 +250,12 @@ const enterEvent = (): void => {
 };
 
 const searchBlur = () => {
-  searchEle.value.style.top = '';
+  if (Configs.searchTransitonEnabled) {
+    searchEle.value.style.top = '';
+    emit('blur');
+  }
   isSearchFocused.value = false;
   searchBox.value.blur();
-  emit('blur');
   if (!suggestActive.value) {
     suggestIsShow.value = false;
   }
@@ -259,11 +264,13 @@ const searchBlur = () => {
 const searchEle = ref();
 
 const focus = () => {
-  searchEle.value.style.top = '33%';
+  if (Configs.searchTransitonEnabled) {
+    searchEle.value.style.top = '33%';
+    emit('focus');
+  }
   toggleShadow(false);
   suggestIsShow.value = true;
   isSearchFocused.value = true;
-  emit('focus');
   if (suggestWords.value.length == 0) {
     suggestWords.value = [...historySearch.gethistorySearchList];
   }

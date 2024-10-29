@@ -2,14 +2,19 @@ import { defineStore } from "pinia";
 import { getItemArray, setItem, getItem } from "@/utils/storage";
 import { LinkObj } from "@/types/global";
 
+let images = getItem("backgroundImages")
+let live2dEnabled = getItem("live2dEnabled")
+let searchTransitonIsEnabled = getItem("searchTransitonIsEnabled")
 
 export const Configs = defineStore("Configs", {
   state() {
     return {
       //背景图片（多图）
-      backgroundImages: getItemArray("backgroundImages") || [],
+      backgroundImages: (images ? (JSON.parse(images).length ? JSON.parse(images) : []) : ['/assets/bg.webp']) as Array<string>,
       //是否启用live2d
-      live2dIsEnabled: getItem("live2dEnabled") == 'true' ? true : false,
+      live2dIsEnabled: live2dEnabled ? live2dEnabled == 'true' ? true : false : true,
+      //是否启用搜索框动画
+      searchTransitonIsEnabled: searchTransitonIsEnabled ? searchTransitonIsEnabled == 'true' ? true : false : true,
       //常用链接列表
       favLinks: getItemArray("favLinks") || [],
       //过滤词列表
@@ -22,6 +27,9 @@ export const Configs = defineStore("Configs", {
     },
     live2dEnabled(state) {
       return state.live2dIsEnabled
+    },
+    searchTransitonEnabled(state) {
+      return state.searchTransitonIsEnabled
     },
     links(state) {
       return state.favLinks
@@ -73,13 +81,18 @@ export const Configs = defineStore("Configs", {
     },
     //清空背景图片
     resetBackground() {
-      localStorage.removeItem("backgroundImages");
+      setItem("backgroundImages", []);
       this.backgroundImages = []
     },
     //开关live2d功能
     toggleLive2d(flag: boolean) {
       this.live2dIsEnabled = flag
       setItem("live2dEnabled", flag);
+    },
+    //开关搜索框动画
+    toggleSearchTransiton(flag: boolean) {
+      this.searchTransitonIsEnabled = flag
+      setItem("searchTransitonIsEnabled", flag);
     },
     //修改常用链接
     updateFavLink(linkObj: LinkObj) {
@@ -125,6 +138,10 @@ export const Configs = defineStore("Configs", {
     clearFavLink() {
       this.favLinks.length = 0;
       setItem("favLinks", this.favLinks)
+    },
+    //初始化一切
+    reset() {
+      localStorage.clear()
     }
   },
 });

@@ -153,8 +153,10 @@ const save = () => {
       background: '#00000099',
     });
   } finally {
-    dialogisDisplay.value = false;
-    emit('onclose');
+    setTimeout(() => {
+      dialogisDisplay.value = false;
+      emit('onclose');
+    }, 300);
   }
 };
 const onClose = () => {

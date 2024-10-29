@@ -1,18 +1,38 @@
-<template><!-- 收藏夹链接 -->
-  <div class="linkbutton" @touchstart="isshowCloseBtn = true" @touchend="isshowCloseBtn = false"
-       @mouseenter="isshowCloseBtn = true" @mouseleave="isshowCloseBtn = false">
-    <a v-if="clickable === false" @click.prevent :href="href" :target="isBlank ? '_blank' : ''"
-       rel="noreferrer noopener nofollow">
-      <img class="topimg" :src="imgUrl" :alt="imgUrl">
-      <i v-if="isshowCloseBtn || showOpt" @click.prevent.stop="isShowConfrim = true"
-         class="dark:dark-close-btn close iconfont icon-close"></i>
+<template>
+  <!-- 收藏夹链接 -->
+  <div
+    class="linkbutton"
+    @touchstart="isshowCloseBtn = true"
+    @touchend="isshowCloseBtn = false"
+    @mouseenter="isshowCloseBtn = true"
+    @mouseleave="isshowCloseBtn = false">
+    <a
+      v-if="clickable === false"
+      @click.prevent
+      :href="href"
+      :target="isBlank ? '_blank' : ''"
+      rel="noreferrer noopener nofollow">
+      <img class="topimg" :src="imgUrl" :alt="imgUrl" />
+      <i
+        v-if="isshowCloseBtn || showOpt"
+        @click.prevent.stop="isShowConfrim = true"
+        class="dark:dark-close-btn close iconfont icon-close"></i>
     </a>
-    <a v-else :href="href" :target="isBlank ? '_blank' : ''" rel="noreferrer noopener nofollow">
-      <img class="topimg" :src="imgUrl" :alt="imgUrl">
-      <i v-if="isshowCloseBtn || showOpt" @click.prevent="isShowConfrim = true"
-         class="dark:dark-close-btn close iconfont icon-close"></i>
+    <a
+      v-else
+      :href="href"
+      :target="isBlank ? '_blank' : ''"
+      rel="noreferrer noopener nofollow">
+      <img class="topimg" :src="imgUrl" :alt="imgUrl" />
+      <i
+        v-if="isshowCloseBtn || showOpt"
+        @click.prevent="isShowConfrim = true"
+        class="dark:dark-close-btn close iconfont icon-close"></i>
     </a>
-    <Modal :show="isShowConfrim" @close="isShowConfrim = false"  animation="scale">
+    <Modal
+      :show="isShowConfrim"
+      @close="isShowConfrim = false"
+      animation="scale">
       <div class="confirm">
         <h1 class="dark:dark-text">确认删除这个标签?</h1>
         <div class="options">
@@ -24,62 +44,45 @@
   </div>
 </template>
 <script lang="ts" setup>
-import useStore from '@/store'
-import {Toast} from '../Toast';
-import {ref} from 'vue';
-import Modal from '@/components/Modal/index.vue'
-import AddLink from "@/components/Favorites/AddLink.vue";
+import useStore from '@/store';
+import { Toast } from '../Toast';
+import { ref } from 'vue';
+import Modal from '@/components/Modal/index.vue';
 
 const props = defineProps<{
-  href: string,
-  imgUrl: string,
-  isBlank?: boolean,
-  showOpt?: boolean,
-  clickable?: boolean
-}>()
+  href: string;
+  imgUrl: string;
+  isBlank?: boolean;
+  showOpt?: boolean;
+  clickable?: boolean;
+}>();
 
 const Configs = useStore.Configs();
 
-const isShowConfrim = ref(false)
+const isShowConfrim = ref(false);
 
-const isshowCloseBtn = ref(false)
+const isshowCloseBtn = ref(false);
 
-let btnClass = "rounded dark:dark-btn p-2 bg-stone-300 transition-all hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
-
+let btnClass =
+  'rounded dark:dark-btn p-2 bg-stone-300 transition-all hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50';
 
 const close = () => {
   if (props.href) {
-    Configs.removeFavLinkByUrl(props.href)
+    isShowConfrim.value = false;
+    setTimeout(() => {
+      Configs.removeFavLinkByUrl(props.href);
+    }, 300);
     Toast({
-      value: "删除成功~",
+      value: '删除成功~',
       color: 'green',
       duration: 1000,
-      background: "#00000099",
-    })
+      background: '#00000099',
+    });
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
-.confirm {
-  width: 100%;
-
-  h1 {
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    margin: 20px;
-  }
-
-  .options {
-    text-align: center;
-
-    button {
-      margin: 10px;
-    }
-  }
-}
-
 .linkbutton {
   width: 60px;
   position: relative;
@@ -94,7 +97,7 @@ const close = () => {
     transform: translate(20%, -20%);
     font-weight: bolder;
     border-radius: 50%;
-    transition: all .2s;
+    transition: all 0.2s;
     background-color: #eeeeeeb4;
     opacity: 1;
     padding: 2px;
@@ -103,7 +106,7 @@ const close = () => {
   }
 
   .close:hover {
-    opacity: .5;
+    opacity: 0.5;
   }
 
   .topimg {
@@ -111,7 +114,7 @@ const close = () => {
     height: 60px;
     border-radius: 20px;
     margin-bottom: 5px;
-    transition: all .2s;
+    transition: all 0.2s;
     box-shadow: transparent;
   }
 

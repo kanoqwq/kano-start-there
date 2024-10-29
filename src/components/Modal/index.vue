@@ -149,6 +149,7 @@ const close = (e: Event) => {
   transition: all 0.3s cubic-bezier(0.5, 0.59, 0, 1);
   opacity: 0;
   .modal {
+    transition: all 0.3s cubic-bezier(0.5, 0.59, 0, 1);
     transform: translateY(-100%);
   }
 }
@@ -158,6 +159,8 @@ const close = (e: Event) => {
   transition: all 0.3s cubic-bezier(0.5, 0.59, 0, 1);
   .modal {
     transition: all 0.3s cubic-bezier(0.5, 0.59, 0, 1);
+    transform: scale(1);
+    transform-origin: top;
   }
 }
 
@@ -166,6 +169,7 @@ const close = (e: Event) => {
   transition: all 0.3s cubic-bezier(0.5, 0.59, 0, 1);
   opacity: 0;
   .modal {
+    transition: all 0.3s cubic-bezier(0.5, 0.59, 0, 1);
     transform: scale(0);
     transform-origin: top;
   }
