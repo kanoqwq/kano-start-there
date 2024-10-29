@@ -5,7 +5,7 @@ export const historySearch = defineStore("historySearch", {
   state: () => {
     return {
       //搜索历史列表
-      historySearchList: getItemArray("historySearch") ?? <Array<any>>[],
+      historySearchList: getItemArray("historySearchList") ?? <Array<any>>[],
     };
   },
   getters: {
@@ -26,13 +26,13 @@ export const historySearch = defineStore("historySearch", {
         // 去重
         this.historySearchList.unshift(item);
         this.historySearchList = [...new Set(this.historySearchList)]
-        setItem("historySearch", this.historySearchList);
+        setItem("historySearchList", this.historySearchList);
       }
     },
     //删除搜索历史（index
     deleteHistory(index: number): void {
       this.historySearchList.splice(index, 1);
-      setItem("historySearch", this.historySearchList);
+      setItem("historySearchList", this.historySearchList);
     },
     //导入设置
     importSettings(settings: typeof this.$state) {
