@@ -1,4 +1,5 @@
 #waifu-toggle {
+	z-index: 114;
 	background-color: #fa0;
 	border-radius: 5px;
 	bottom: 66px;
@@ -23,6 +24,7 @@
 }
 
 #waifu {
+	z-index: 514;
 	bottom: -1000px;
 	left: 0;
 	line-height: 0;
