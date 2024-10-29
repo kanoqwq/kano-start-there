@@ -142,6 +142,28 @@ export const Configs = defineStore("Configs", {
     //初始化一切
     reset() {
       localStorage.clear()
+    },
+    //导入设置
+    importSettings(settings: typeof this.$state) {
+      if (settings) {
+        let state = this.$state
+        state.backgroundImages = settings.backgroundImages
+        setItem('backgroundImages', settings.backgroundImages)
+        state.favLinks = settings.favLinks
+        setItem('favLinks', settings.favLinks)
+
+        state.filterWords = settings.filterWords
+        setItem('filterWords', settings.filterWords)
+
+        state.live2dIsEnabled = settings.live2dIsEnabled
+        setItem('live2dIsEnabled', settings.live2dIsEnabled)
+
+        state.searchTransitonIsEnabled = settings.searchTransitonIsEnabled
+        setItem('searchTransitonIsEnabled', settings.searchTransitonIsEnabled)
+      }
+      // Object.keys(settings).forEach((key: any) => {
+      //   state[key] = settings[key]
+      // })
     }
   },
 });

@@ -34,5 +34,16 @@ export const historySearch = defineStore("historySearch", {
       this.historySearchList.splice(index, 1);
       setItem("historySearch", this.historySearchList);
     },
+    //导入设置
+    importSettings(settings: typeof this.$state) {
+      if (settings) {
+        let state = this.$state
+        state.historySearchList = settings.historySearchList
+        setItem('historySearchList', settings.historySearchList)
+        // Object.keys(settings).forEach((key: any) => {
+        //   state[key] = settings[key]
+        // })
+      }
+    }
   },
 });

@@ -64,20 +64,35 @@
             <div class="m-2">
               <Switch text="搜索框动效：" v-model="searchTransitonEnabled" />
             </div>
-            <div class="m-2">
-              <Button style="width: 100%" @click="isShowConfrim = true"
+            <Button @click="submit" style="width: 100%">保存修改</Button>
+            <div class="mt-2">
+              <Button @click="isShowConfrim = true" style="width: 100%"
                 >清空并初始化</Button
               >
             </div>
+            <div class="flex">
+              <div class="m-2 ml-0">
+                <Button @click="importSettings">导入设置</Button>
+                <input
+                  @change="fileInputChange"
+                  ref="fileInput"
+                  type="file"
+                  name=""
+                  id=""
+                  class="hidden" />
+              </div>
+              <div class="m-2 mr-0">
+                <Button @click="exportSettings">导出设置</Button>
+              </div>
+            </div>
           </div>
-          <Button @click="submit">保存修改</Button>
         </div>
       </div>
     </template>
   </Modal>
   <Modal :show="isShowConfrim" @close="isShowConfrim = false" animation="scale">
     <div class="confirm">
-      <h1 class="dark:dark-text">确认移除壁纸?</h1>
+      <h1 class="dark:dark-text">确认清空所有设置?</h1>
       <div class="options">
         <button
           class="rounded dark:dark-btn p-2 bg-stone-300 transition-all hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50"
@@ -96,7 +111,7 @@
 
 <script setup lang="ts">
 import Modal from '@/components/Modal/index.vue';
-import { computed, ref, watch } from 'vue';
+import { computed, ref, toRaw, watch } from 'vue';
 import useStore from '@/store';
 import { Toast } from './Toast/index';
 import Switch from './Switsh/Switch.vue';
@@ -104,8 +119,10 @@ import Button from './Button/Button.vue';
 import Tab from './Tab/Tab.vue';
 import Favorites from '@/components/Favorites/Favorites.vue';
 import UploadImage from '@/components/UploadImage/UploadImage.vue';
+import { useImportConfigs } from '@/hooks/useImportConfigs';
 
 const Configs = useStore.Configs();
+const HistorySearch = useStore.historySearch();
 const l2dEnabled = ref(Configs.live2dEnabled);
 const searchTransitonEnabled = ref(Configs.searchTransitonEnabled);
 const Tabs = ref(['背景', '收藏', '滤词', '杂项']);
@@ -183,7 +200,7 @@ const reset = () => {
   isShowConfrim.value = false;
   Configs.reset();
   Toast({
-    value: `保存成功！1秒后自动刷新页面！`,
+    value: `重置成功！1秒后自动刷新页面！`,
     color: 'green',
     duration: 1000,
     background: '#00000099',
@@ -235,6 +252,64 @@ const clearFavorite = () => {
     clearable.value = false;
   }, 3000);
   clearable.value = true;
+};
+
+//导入和导出
+
+//导出
+const exportSettings = () => {
+  const url = window.URL || window.webkitURL || window;
+  const blob = new Blob([
+    JSON.stringify({
+      Configs: toRaw(Configs.$state),
+      HistorySearch: toRaw(HistorySearch.$state),
+    }),
+  ]);
+  const saveLink: any = document.createElementNS(
+    'http://www.w3.org/1999/xhtml',
+    'a'
+  );
+  saveLink.href = url.createObjectURL(blob);
+  saveLink.download = 'kano-start-there-configs.json';
+  saveLink.click();
+  Toast({
+    value: `操作成功！`,
+    color: 'green',
+    duration: 1000,
+    background: '#00000099',
+  });
+};
+//导入
+const fileInput = ref();
+const { change } = useImportConfigs({ maxUploadSize: 4 });
+const importSettings = () => {
+  fileInput.value.click();
+};
+
+const fileInputChange = async (e: Event) => {
+  try {
+    const res = await change(e);
+    let { Configs: config, HistorySearch: hisSearch } = JSON.parse(res.data);
+    if (!config && !hisSearch) throw new Error();
+    Configs.importSettings(config);
+    HistorySearch.importSettings(hisSearch);
+    Toast({
+      value: `导入成功,一秒后刷新页面`,
+      color: 'green',
+      duration: 1000,
+      background: '#00000099',
+      success: () => {
+        location.reload();
+      },
+    });
+  } catch (e) {
+    Toast({
+      value: `导入出错，请检查文件格式！`,
+      color: 'red',
+      duration: 2000,
+      background: '#00000099',
+    });
+  }
 };
 </script>
 
