@@ -89,7 +89,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-10-29 21:45:20
+ * @Last Modified time: 2024-10-29 22:26:02
  * @Description: Description
  */
 import { ref, reactive, watch, computed, onMounted } from 'vue';
@@ -101,9 +101,17 @@ import { SearchEngine, SuggestWords } from '@/types/global';
 import Favorites from './Favorites/Favorites.vue';
 
 onMounted(() => {
+  let flag = false;
   window.onkeyup = (e: KeyboardEvent) => {
-    if (e.key == 'Tab') {
-      searchBox.value.focus();
+    e.preventDefault();
+    if (e.key == 'Alt' || e.key == 'Control') {
+      if (flag) {
+        searchBox.value.blur();
+        flag = !flag;
+      } else {
+        searchBox.value.focus();
+        flag = !flag;
+      }
     }
   };
 });
@@ -309,8 +317,6 @@ const clearContent = (): void => {
 
 //实现上下键选择候选词
 const moveSuggestion = (e: KeyboardEvent): void => {
-  console.log(e.key);
-
   let key = e.key;
   //候选词列表不为空
   if (suggestWords.value.length != 0) {
