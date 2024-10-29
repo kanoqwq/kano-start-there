@@ -20,7 +20,6 @@
     height: 100%;
     overflow: hidden;
   }
-
   .dark-hover-bg {
     background-color: rgb(23 30 40) !important;
   }
@@ -62,6 +61,10 @@
 
   .dark-add-btn-hover {
     background-color: rgba(0, 0, 0, 0.4) !important;
+  }
+
+  .dark-kano-icon {
+    color: #ccc !important;
   }
 
   .dark-shadow {

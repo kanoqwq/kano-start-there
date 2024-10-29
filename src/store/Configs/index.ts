@@ -60,7 +60,6 @@ export const Configs = defineStore("Configs", {
         this.backgroundImages.push(image);
         setItem("backgroundImages", this.backgroundImages);
       }
-      //   }
     },
     //获取背景图片
     getBackgroundImage(index: number): string {

@@ -20,7 +20,7 @@
       type="file"
       accept="image/*" />
   </div>
-  <Modal :show="isShowConfrim" @close="isShowConfrim = false">
+  <Modal :show="isShowConfrim" @close="isShowConfrim = false"  animation="scale">
     <div class="confirm">
       <h1 class="dark:dark-text">确认移除壁纸?</h1>
       <div class="options">

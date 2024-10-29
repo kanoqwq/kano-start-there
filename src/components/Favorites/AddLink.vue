@@ -11,7 +11,7 @@
     </div>
   </div>
   <!-- 添加链接对话框 -->
-  <Modal :show="dialogisDisplay" @close="onClose">
+  <Modal :show="dialogisDisplay" @close="onClose" animation="scale">
     <template #default>
       <div class="p-5 pt-3">
         <div class="option flex">

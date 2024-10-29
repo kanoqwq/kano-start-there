@@ -1,6 +1,6 @@
 <template>
   <Teleport to="body">
-    <Transition name="fade">
+    <Transition :name="animation">
       <div class="modal-box" v-if="show">
         <div class="modal dark:dark-modal">
           <slot name="default"> template </slot>
@@ -16,6 +16,10 @@ defineProps({
   show: {
     type: Boolean,
     default: false,
+  },
+  animation: {
+    type: String,
+    default: 'move',
   },
 });
 const emit = defineEmits<{
@@ -132,15 +136,38 @@ const close = (e: Event) => {
   }
 }
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: all 0.3s ease;
-  transform: scale(1);
+.move-enter-active,
+.move-leave-active {
+  transition: all 0.3s cubic-bezier(0.5, 0.59, 0, 1);
+  .modal {
+    transition: all 0.3s cubic-bezier(0.5, 0.59, 0, 1);
+  }
 }
 
-.fade-enter-from,
-.fade-leave-to {
+.move-enter-from,
+.move-leave-to {
+  transition: all 0.3s cubic-bezier(0.5, 0.59, 0, 1);
   opacity: 0;
-  transform: scale(1.2);
+  .modal {
+    transform: translateY(-100%);
+  }
+}
+
+.scale-enter-active,
+.scale-leave-active {
+  transition: all 0.3s cubic-bezier(0.5, 0.59, 0, 1);
+  .modal {
+    transition: all 0.3s cubic-bezier(0.5, 0.59, 0, 1);
+  }
+}
+
+.scale-enter-from,
+.scale-leave-to {
+  transition: all 0.3s cubic-bezier(0.5, 0.59, 0, 1);
+  opacity: 0;
+  .modal {
+    transform: scale(0);
+    transform-origin: top;
+  }
 }
 </style>

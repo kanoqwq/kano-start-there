@@ -24,16 +24,14 @@ export const historySearch = defineStore("historySearch", {
     addHistory(item: string): void {
       if (item && item.trim() != "") {
         // 去重
-        const index = this.historySearchList.indexOf(item);
-        if (index == -1) {
-          this.historySearchList.unshift(item);
-          setItem("historySearch", this.historySearchList);
-        }
+        this.historySearchList.unshift(item);
+        this.historySearchList = [...new Set(this.historySearchList)]
+        setItem("historySearch", this.historySearchList);
       }
     },
     //删除搜索历史（index
     deleteHistory(index: number): void {
-      this.historySearchList.splice(index,1);
+      this.historySearchList.splice(index, 1);
       setItem("historySearch", this.historySearchList);
     },
   },

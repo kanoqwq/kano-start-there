@@ -12,7 +12,7 @@
       <i v-if="isshowCloseBtn || showOpt" @click.prevent="isShowConfrim = true"
          class="dark:dark-close-btn close iconfont icon-close"></i>
     </a>
-    <Modal :show="isShowConfrim" @close="isShowConfrim = false">
+    <Modal :show="isShowConfrim" @close="isShowConfrim = false"  animation="scale">
       <div class="confirm">
         <h1 class="dark:dark-text">确认删除这个标签?</h1>
         <div class="options">

@@ -153,9 +153,6 @@ const closeSettings = () => {
 
 //提交修改
 const submit = () => {
-  backgroundImage.value && backgroundImage.value.trim() !== ''
-    ? Configs.setBackgroundImage(backgroundImage.value)
-    : Configs.resetBackground();
   l2dEnabled.value ? Configs.toggleLive2d(true) : Configs.toggleLive2d(false);
   Toast({
     value: `保存成功！1秒后自动刷新页面！`,

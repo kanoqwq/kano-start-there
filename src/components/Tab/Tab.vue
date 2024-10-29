@@ -83,8 +83,9 @@ onMounted(() => {
     background-color: #fff;
     width: 20px;
     top: 0;
-    transition: all 0.3s;
-    left: 0;
+    /*初始化位置可能有bug*/
+    transition: left 0.3s;
+    /*left: 0;*/
     opacity: 0.6;
     border-radius: 10px;
   }

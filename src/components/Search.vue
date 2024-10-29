@@ -1,26 +1,23 @@
 <template>
-  <div class="container mx-auto">
+  <div class="container mx-auto" @click="containerClick" ref="container">
     <div class="top-banner flex justify-end">
       <svg
         class="icon kano-icon dark:dark-icon w-8 icon-hover"
         aria-hidden="false"
-        @click="settingHandler">
+        @click.stop="settingHandler">
         <use xlink:href="#icon-settings" class="rotate"></use>
       </svg>
     </div>
-    <div class="search relative flex flex-col">
-      <form
-        action="#"
-        method="get"
-        class="search-engine flex overflow-hidden dark:dark-search-engine dark:hover:dark-shadow"
+    <div ref="searchEle" class="search relative flex flex-col">
+      <div
+        class="search-engine flex overflow-hidden dark:dark-search-engine"
         ref="searchEngineElement">
         <div
           class="flex items-center"
           id="engine_switch_btn"
-          @click="switchEngine">
-          <svg class="icon kano-icon dark:dark-icon" aria-hidden="true">
-            <use :xlink:href="selectedEngine.icon"></use>
-          </svg>
+          @click.stop="switchEngine">
+          <i
+            :class="`icon kano-icon dark:dark-kano-icon iconfont dark:dark-icon ${selectedEngine.icon}`"></i>
         </div>
         <input
           ref="searchBox"
@@ -29,48 +26,57 @@
           autocomplete="off"
           v-model="searchContent"
           @keyup.enter="enterEvent"
-          @input="searchSuggestion(selectedEngine.method)"
-          @keydown="moveSuggestion"
-          @mouseenter="eventMouse"
-          @focusin="showHideSearchHistory"
-          @focusout="showHideSearchHistory"
-          @mouseleave="eventMouse"
+          @input.stop="searchSuggestion(selectedEngine.method)"
+          @keydown.stop="moveSuggestion"
+          @mouseenter.stop="eventMouse"
+          @focusin.stop="showHideSearchHistory"
+          @focusout.stop="showHideSearchHistory"
+          @mouseleave.stop="eventMouse"
           class="input pl-3 box-border outline-none dark:input-dark"
           :placeholder="`在${selectedEngine.name}上搜索`" />
-        <div class="clear-input" @click="clearContent" v-show="searchContent">
+        <div
+          class="clear-input"
+          @click.stop="clearContent"
+          v-show="searchContent">
           <i class="iconfont dark:dark:dark-text icon-close icon close"></i>
         </div>
         <button
           id="searchbtn"
           class="search-btn flex justify-center items-center dark:hover:dark-hover-bg"
-          @click="startSearch()">
+          @click.stop="startSearch(undefined, true)">
           <svg class="icon" aria-hidden="false" height="30px">
             <use xlink:href="#icon-search"></use>
           </svg>
         </button>
-      </form>
-      <div
-        @mouseenter="suggestActiveControl"
-        @mouseleave="suggestActiveControl"
-        class="search-suggestion top-border absolute dark:dark-suggest-bg"
-        v-show="suggestWords.length && suggestIsShow">
-        <ul>
-          <li
-            class="inner dark:dark-text"
-            :class="{ active: item.isSelected }"
-            @click="startSearch(item.title)"
-            v-for="(item, index) in suggestWords"
-            :key="index">
-            <span class="searchkey" :id="`key_${index}_${Math.random()}`">{{
-              item.title
-            }}</span>
-            <i
-              v-show="item.allowDel"
-              @click.stop="delHistory(index)"
-              class="iconfont icon-close icon close"></i>
-          </li>
-        </ul>
       </div>
+      <Transition name="suggestion">
+        <div
+          @mouseenter.stop="suggestActiveControl"
+          @mouseleave.stop="suggestActiveControl"
+          class="search-suggestion top-border absolute dark:dark-suggest-bg"
+          v-show="suggestWords.length && suggestIsShow">
+          <ul>
+            <li
+              class="inner dark:dark-text"
+              :class="{ active: item.isSelected }"
+              @click.stop="
+                () => {
+                  startSearch(item.title);
+                }
+              "
+              v-for="(item, index) in suggestWords"
+              :key="index">
+              <span class="searchkey" :id="`key_${index}_${Math.random()}`">{{
+                item.title
+              }}</span>
+              <i
+                v-show="item.allowDel"
+                @click.stop="delHistory(index)"
+                class="iconfont icon-close icon close"></i>
+            </li>
+          </ul>
+        </div>
+      </Transition>
       <Favorites />
     </div>
   </div>
@@ -83,16 +89,27 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-10-28 15:30:14
+ * @Last Modified time: 2024-10-29 21:45:20
  * @Description: Description
  */
-import { ref, reactive, watch, computed } from 'vue';
+import { ref, reactive, watch, computed, onMounted } from 'vue';
 import Settings from './Settings.vue';
 import throttle from 'lodash/throttle';
 import { suggestAPI } from '@/utils/searchSuggestions';
 import useStore from '@/store';
 import { SearchEngine, SuggestWords } from '@/types/global';
 import Favorites from './Favorites/Favorites.vue';
+
+onMounted(() => {
+  window.onkeyup = (e: KeyboardEvent) => {
+    if (e.key == 'Tab') {
+      searchBox.value.focus();
+    }
+  };
+});
+
+const emit = defineEmits(['blur', 'focus']);
+
 //store
 const historySearch = useStore.historySearch();
 const searchEnginesStore = useStore.searchEngines();
@@ -111,8 +128,26 @@ const suggestIsShow = ref(false);
 const suggestActive = ref(false);
 const settingsIsShow = ref(false);
 const filterWords = computed(() => Configs.formattedFilterWords);
+const isSearchFocused = ref(false);
 //设置搜索建议模式的标识
 let isSuggestMode = false;
+
+const container = ref();
+
+const uncheckSuggestWords = () => {
+  suggestWords.value = [...historySearch.gethistorySearchList].map((item) => ({
+    ...item,
+    isSelected: false,
+  }));
+};
+//点击container隐藏搜索历史框
+const containerClick = (e: Event) => {
+  if (e.target == container.value) {
+    showHideSearchHistory(e);
+    uncheckSuggestWords();
+    isSearchFocused.value = false;
+  }
+};
 
 watch([suggestWords, suggestIsShow, searchContent, suggestActive], () => {
   if (
@@ -143,15 +178,28 @@ const switchEngine = (): void => {
 //开始搜索
 //FIX:fixed problem when search string has spacial character
 //feat:Support for directly entering URL addresses in the search box
-const startSearch = (keyWord = searchContent.value.trim()): void => {
+const startSearch = (
+  keyWord = searchContent.value.trim(),
+  needClear = false
+): void => {
   let URLReg =
     /^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$/;
 
   let reqUrl =
     selectedEngine.url + encodeURIComponent(keyWord) + ' ' + filterWords.value;
 
+  if (keyWord.trim() !== searchContent.value.trim()) {
+    searchContent.value = keyWord.trim();
+  }
   //添加搜索历史
-  addSearchHistory();
+  addSearchHistory(keyWord);
+
+  uncheckSuggestWords();
+
+  suggestionIndex = 0;
+
+  // 隐藏搜索建议框
+  suggestIsShow.value = false;
 
   //If keyWord is an URL
   if (URLReg.exec(keyWord)) {
@@ -160,25 +208,60 @@ const startSearch = (keyWord = searchContent.value.trim()): void => {
     //新标签页打开
     window.open(reqUrl, '_blank');
   }
+  if (needClear) {
+    clearContent();
+  }
+};
+
+const searchEngineElement = ref<HTMLFormElement>();
+const toggleShadow = (flag: boolean) => {
+  searchEngineElement.value?.classList?.[flag ? 'add' : 'remove']('shadow');
+  searchEngineElement.value?.classList?.[flag ? 'add' : 'remove'](
+    'dark:dark-shadow'
+  );
 };
 
 // 鼠标滑过改变阴影
-const searchEngineElement = ref<HTMLFormElement>();
+
 const eventMouse = (e: MouseEvent): void => {
-  if (e.type == 'mouseenter') {
+  if (e.type == 'mouseenter' && !isSearchFocused.value) {
     if (searchContent.value.length == 0) {
-      searchEngineElement.value?.classList.add('shadow');
+      toggleShadow(true);
     }
   } else {
     if (searchContent.value.length == 0) {
-      searchEngineElement.value?.classList.remove('shadow');
+      toggleShadow(false);
     }
   }
 };
 
 //回车搜索
 const enterEvent = (): void => {
-  startSearch();
+  searchBlur();
+  startSearch(undefined, true);
+};
+
+const searchBlur = () => {
+  searchEle.value.style.top = '';
+  isSearchFocused.value = false;
+  searchBox.value.blur();
+  emit('blur');
+  if (!suggestActive.value) {
+    suggestIsShow.value = false;
+  }
+};
+
+const searchEle = ref();
+
+const focus = () => {
+  searchEle.value.style.top = '33%';
+  toggleShadow(false);
+  suggestIsShow.value = true;
+  isSearchFocused.value = true;
+  emit('focus');
+  if (suggestWords.value.length == 0) {
+    suggestWords.value = [...historySearch.gethistorySearchList];
+  }
 };
 
 //搜索建议(谷歌接口暂时无法支持跨域)
@@ -188,7 +271,7 @@ const searchSuggestion = throttle(
   ): Promise<void> => {
     try {
       //清除阴影
-      searchEngineElement.value?.classList.remove('shadow');
+      toggleShadow(false);
       //清除一下历史选择的index
       suggestionIndex = -1;
       //搜索建议的trigger保持开启
@@ -226,6 +309,8 @@ const clearContent = (): void => {
 
 //实现上下键选择候选词
 const moveSuggestion = (e: KeyboardEvent): void => {
+  console.log(e.key);
+
   let key = e.key;
   //候选词列表不为空
   if (suggestWords.value.length != 0) {
@@ -276,26 +361,17 @@ const removeActive = (): void => {
 };
 
 //搜索历史功能
-const addSearchHistory = () => {
+const addSearchHistory = (keyword: string) => {
   //添加搜索历史
-  historySearch.addHistory(searchContent.value);
+  historySearch.addHistory(keyword ? keyword : searchContent.value);
 };
 
 //展示/隐藏搜索历史
 const showHideSearchHistory = (e: Event) => {
   if (e.type == 'focusin') {
-    suggestIsShow.value = true;
-    if (suggestWords.value.length == 0) {
-      suggestWords.value = [...historySearch.gethistorySearchList];
-    }
+    focus();
   } else {
-    if (!suggestActive.value) {
-      //没有内容的时候，需要清空一下推荐词
-      if (searchContent.value.length == 0) {
-        suggestWords.value.length = 0;
-      }
-      suggestIsShow.value = false;
-    }
+    searchBlur();
   }
 };
 
@@ -334,134 +410,5 @@ const toggleSearchBorder = (active: boolean) => {
 </script>
 
 <style scoped lang="less">
-.container {
-  height: 100%;
-  padding: 0 15px;
-
-  .top-banner {
-    position: fixed;
-    right: 0px;
-    top: 0px;
-    padding-right: 15px;
-    width: 100%;
-    height: 60px;
-    color: #ccc;
-  }
-
-  //旋转动画
-  .rotate {
-    transition: all 0.2s;
-    animation: rotate 2s infinite linear;
-  }
-
-  .icon-hover:hover .rotate {
-    fill: #666;
-  }
-
-  .search-suggestion {
-    width: 100%;
-    max-height: 360px;
-    z-index: 9999;
-    top: 100%;
-    overflow: auto;
-    border-radius: 6px;
-    backdrop-filter: blur(10px);
-
-    .inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      .searchkey {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-    }
-
-    li {
-      padding: 10px 15px;
-      transition: all 0.1s;
-
-      .close {
-        height: 14px;
-        width: 14px;
-        margin: 0 5px;
-
-        .close-icon {
-          fill: #fff;
-        }
-      }
-    }
-
-    li:hover,
-    .active {
-      background-color: rgb(0 0 0 / 0.1);
-    }
-  }
-
-  .search-engine {
-    height: 50px;
-    transition: all 0.2s;
-    transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
-    backdrop-filter: blur(10px);
-    border-radius: 6px;
-
-    .clear-input {
-      display: flex;
-      padding: 0 10px;
-      align-items: center;
-
-      .close {
-        font-size: 14px;
-        color: #333;
-      }
-    }
-  }
-
-  .shadow {
-    box-shadow: 2px 8px 16px #999;
-  }
-
-  .search {
-    left: 50%;
-    top: 40%;
-    z-index: 999;
-    transform: translateX(-50%);
-    max-width: 600px;
-
-    .kano-icon {
-      width: 40px;
-      height: 100%;
-      margin-left: 6px;
-      fill: #222;
-    }
-
-    .input {
-      width: 100%;
-      color: #333;
-      background: transparent;
-    }
-
-    &-btn {
-      width: 60px;
-      transition: all 0.2s;
-    }
-
-    &-btn:hover {
-      background-color: #eee;
-    }
-  }
-
-  .top-border {
-    border-top: none;
-    border-top-right-radius: 0;
-    border-top-left-radius: 0;
-  }
-
-  .search-engine-active {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-}
+@import url('./Search.less');
 </style>
