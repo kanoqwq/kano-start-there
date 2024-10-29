@@ -89,7 +89,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-10-29 22:26:02
+ * @Last Modified time: 2024-10-29 22:33:41
  * @Description: Description
  */
 import { ref, reactive, watch, computed, onMounted } from 'vue';
@@ -101,16 +101,13 @@ import { SearchEngine, SuggestWords } from '@/types/global';
 import Favorites from './Favorites/Favorites.vue';
 
 onMounted(() => {
-  let flag = false;
   window.onkeyup = (e: KeyboardEvent) => {
     e.preventDefault();
     if (e.key == 'Alt' || e.key == 'Control') {
-      if (flag) {
+      if (isSearchFocused.value) {
         searchBox.value.blur();
-        flag = !flag;
       } else {
         searchBox.value.focus();
-        flag = !flag;
       }
     }
   };
