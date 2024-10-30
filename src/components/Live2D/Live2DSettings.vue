@@ -26,15 +26,24 @@ const selectedIndex = ref<number>(0);
 const Configs = useStore.Configs();
 const scrollList = ref();
 const getL2DList = async () => {
-  let { messages } = await (
-    await fetch('./assets/Live2d/model_list.json')
-  ).json();
+  try {
+    let { messages } = await (
+      await fetch('./assets/Live2d/model_list.json')
+    ).json();
 
-  l2DList.value = messages.map((item: any) => ({
-    message: item,
-    active: false,
-  }));
-  l2DList.value[Configs.modId].active = true;
+    l2DList.value = messages.map((item: any) => ({
+      message: item,
+      active: false,
+    }));
+    l2DList.value[Configs.modId].active = true;
+  } catch {
+    Toast({
+      value: '获取Live2d列表失败',
+      color: 'yellow',
+      duration: 2000,
+      background: '#00000099',
+    });
+  }
 };
 
 const init = () => {

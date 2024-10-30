@@ -85,7 +85,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-10-30 20:27:38
+ * @Last Modified time: 2024-10-30 21:15:22
  * @Description: Description
  */
 import { ref, reactive, watch, computed, onMounted } from 'vue';
@@ -205,10 +205,12 @@ const startSearch = (
   }
   //搜索历史滚动到最顶部
   isScrollingToTop.value = true;
-  scrollUl.value.children[0].scrollIntoView({
-    top: 0,
-    behavior: 'instant',
-  });
+  try {
+    scrollUl.value.children[0].scrollIntoView({
+      top: 0,
+      behavior: 'instant',
+    });
+  } catch {}
 
   //添加搜索历史
   addSearchHistory(keyWord);
@@ -340,11 +342,13 @@ const isScrollingToTop = ref(false);
 watch(suggestionIndex, () => {
   //滚动
   if (isScrollingToTop.value) return;
-  scrollUl.value.children[suggestionIndex.value].scrollIntoView({
-    behavior: 'smooth',
-    block: 'start',
-    inline: 'nearest',
-  });
+  try {
+    scrollUl.value.children[suggestionIndex.value].scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+      inline: 'nearest',
+    });
+  } catch {}
 });
 
 //实现上下键选择候选词
@@ -355,6 +359,9 @@ let removeandInit = () => {
 };
 const moveSuggestion = (e: KeyboardEvent): void => {
   let key = e.key;
+  //跳过组合键
+  if (e.shiftKey || e.ctrlKey) return;
+
   //候选词列表不为空
   if (suggestWords.value.length != 0) {
     if (key == 'ArrowUp') {
