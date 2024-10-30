@@ -52,12 +52,6 @@ const close = (e: Event) => {
       align-items: center;
       flex-direction: column;
 
-      span,
-      input,
-      button {
-        margin: 5px;
-      }
-
       .input {
         height: 30px;
       }

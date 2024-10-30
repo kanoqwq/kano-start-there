@@ -3,76 +3,97 @@
     <template #default>
       <Tab @select="(index:number)=>selectedTabItem = index" :tabs="Tabs">
       </Tab>
-      <div class="mb-2" style="width: 100%">
-        <div class="option dark:dark-text" v-if="selectedTabItem == 0">
-          <UploadImage @success="closeSettings()"></UploadImage>
-        </div>
-        <div
-          class="option dark:dark-text text-center"
-          v-if="selectedTabItem == 1">
-          <!-- 收藏夹管理 -->
-          <!-- TODO:详细管理收藏夹 -->
-          <div class="relative mt-2" style="height: 100px">
-            <Favorites :style="{ top: 0 }" :edit-mode="true"></Favorites>
+      <div class="mb-2 setting-content" style="width: 100%">
+        <Transition name="swipe">
+          <div class="option dark:dark-text" v-if="selectedTabItem == 0">
+            <UploadImage @success="closeSettings()"></UploadImage>
           </div>
-          <Button @click="clearFavorite">{{ clearBtnText }}</Button>
-        </div>
-        <div class="option flex-col justify-center" v-if="selectedTabItem == 2">
-          <div style="max-width: 200px; margin: 0 auto">
-            <Switch text="不要CSDN:" v-model="noCSDN" />
+        </Transition>
+        <Transition name="swipe">
+          <div
+            class="option dark:dark-text text-center"
+            v-if="selectedTabItem == 1">
+            <!-- 收藏夹管理 -->
+            <!-- TODO:详细管理收藏夹 -->
+            <div class="relative mt-2" style="height: 100px">
+              <Favorites :style="{ top: 0 }" :edit-mode="true"></Favorites>
+            </div>
+            <Button @click="clearFavorite">{{ clearBtnText }}</Button>
           </div>
-          <div class="dark:dark-text ml-2 mr-2">
-            <h2
-              class="mt-5 mb-3 text-center"
-              style="font-size: 22px; font-weight: bold">
-              过滤词列表
-            </h2>
-            <ul
-              style="max-height: 500px; margin: 0 auto"
-              v-if="filterWords.length"
-              class="rounded filterList border-dashed border-2 p-2 pt-1 pb-1 border-pink-200">
-              <li
-                v-for="item in filterWords"
-                :key="item"
-                class="m-1 ml-0 filter-item">
-                <span>{{ item }}</span>
-                <svg
-                  class="close"
-                  aria-hidden="false"
-                  @click="removeWord(item)">
-                  <use xlink:href="#icon-close"></use>
-                </svg>
-              </li>
-            </ul>
-            <p v-else class="text-center text-gray-500">暂无数据捏~</p>
-            <div class="mt-3 flex justify-center flex-wrap items-center">
-              <input
-                class="dark:dark-bg rounded mr-1 input dark:dark-input"
-                type="text"
-                v-model.trim="filterWord" />
-              <Button @click="addFilterWord">添加</Button>
+        </Transition>
+        <Transition name="swipe">
+          <div
+            class="option flex-col justify-center"
+            v-if="selectedTabItem == 2">
+            <div class="text-center">
+              <Switch text="过滤CSDN:" v-model="noCSDN" />
+            </div>
+            <div class="dark:dark-text ml-2 mr-2">
+              <h2
+                class="mt-5 mb-3 text-center"
+                style="font-size: 22px; font-weight: bold">
+                过滤词列表
+              </h2>
+              <ul
+                style="max-height: 500px; margin: 0 auto"
+                v-if="filterWords.length"
+                class="rounded filterList border-dashed border-2 p-2 pt-1 pb-1 border-pink-200">
+                <li
+                  v-for="item in filterWords"
+                  :key="item"
+                  class="m-1 ml-0 filter-item">
+                  <span>{{ item }}</span>
+                  <svg
+                    class="close"
+                    aria-hidden="false"
+                    @click="removeWord(item)">
+                    <use xlink:href="#icon-close"></use>
+                  </svg>
+                </li>
+              </ul>
+              <p v-else class="text-center text-gray-500">暂无数据捏~</p>
+              <div class="mt-3 flex justify-center flex-wrap items-center">
+                <input
+                  class="dark:dark-bg rounded mr-1 input dark:dark-input"
+                  type="text"
+                  v-model.trim="filterWord" />
+                <Button @click="addFilterWord">添加</Button>
+              </div>
             </div>
           </div>
-        </div>
-        <div
-          class="option flex flex-col justify-center dark:dark-text"
-          v-if="selectedTabItem == 3">
-          <div class="flex flex-col m-4 mt-0">
-            <div class="m-2">
-              <Switch text="启用Live2D：" v-model="l2dEnabled" />
+        </Transition>
+        <Transition name="swipe">
+          <div class="option dark:dark-text" v-if="selectedTabItem == 3">
+            <div class="box">
+              <h1 class="title">动画设置</h1>
+              <div class="content">
+                <div class="m-2">
+                  <Switch text="启用Live2D：" v-model="l2dEnabled" />
+                </div>
+                <div class="m-2">
+                  <Switch
+                    text="搜索框动效："
+                    v-model="searchTransitonEnabled" />
+                </div>
+                <div class="flex justify-end">
+                  <div class="m-2">
+                    <Button @click="submit">保存修改</Button>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="m-2">
-              <Switch text="搜索框动效：" v-model="searchTransitonEnabled" />
+            <div class="box">
+              <h1 class="title">Live2D模型列表</h1>
+              <div class="content">
+                <div class="m-2"><Live2DSettings></Live2DSettings></div>
+              </div>
             </div>
-            <Button @click="submit" style="width: 100%">保存修改</Button>
-            <div class="mt-2">
-              <Button @click="isShowConfrim = true" style="width: 100%"
-                >清空并初始化</Button
-              >
-            </div>
-            <div class="flex">
-              <div class="m-2 ml-0">
-                <Button @click="importSettings">导入设置</Button>
+            <div class="box">
+              <h1 class="title">备份与恢复</h1>
+              <div class="content">
+                <div class="m-2 inline-block">
+                  <Button @click="importSettings">导入设置</Button>
+                </div>
                 <input
                   @change="fileInputChange"
                   ref="fileInput"
@@ -80,13 +101,16 @@
                   name=""
                   id=""
                   class="hidden" />
-              </div>
-              <div class="m-2 mr-0">
-                <Button @click="exportSettings">导出设置</Button>
+                <div class="m-2 inline-block">
+                  <Button @click="exportSettings">导出设置</Button>
+                </div>
+                <div class="m-2 inline-block">
+                  <Button @click="isShowConfrim = true">清空并初始化</Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </Transition>
       </div>
     </template>
   </Modal>
@@ -120,6 +144,7 @@ import Tab from './Tab/Tab.vue';
 import Favorites from '@/components/Favorites/Favorites.vue';
 import UploadImage from '@/components/UploadImage/UploadImage.vue';
 import { useImportConfigs } from '@/hooks/useImportConfigs';
+import Live2DSettings from '@/components/Live2D/Live2DSettings.vue';
 
 const Configs = useStore.Configs();
 const HistorySearch = useStore.historySearch();
@@ -314,6 +339,40 @@ const fileInputChange = async (e: Event) => {
 </script>
 
 <style lang="less" scoped>
+.swipe-enter-active {
+  transition: all 0.3s cubic-bezier(0.5, 0.59, 0, 1);
+  transform: scale(1);
+  transform-origin: right top;
+  opacity: 1;
+}
+
+.swipe-enter-from {
+  transition: all 0.3s cubic-bezier(0.5, 0.59, 0, 1);
+  position: absolute;
+  transform: scale(0);
+  transform-origin: left top;
+  opacity: 0;
+}
+
+.setting-content {
+  overflow-y: auto;
+}
+
+.option {
+  .box {
+    border: 2px dashed pink;
+    margin: 10px;
+    border-radius: 6px;
+
+    .title {
+      font-size: 20px;
+      margin: 8px;
+      margin-bottom: 14px;
+      font-weight: bold;
+    }
+  }
+}
+
 .filterList {
   max-width: 400px;
 

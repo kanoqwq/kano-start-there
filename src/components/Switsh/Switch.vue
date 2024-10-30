@@ -1,6 +1,6 @@
 <template>
   <div class="Switch">
-    <label class="outer dark:dark-text">
+    <label class="outer dark:dark-text" :class="class">
       <span class="text">{{ text }}</span>
       <div
         :class="{ active: modelValue }"
@@ -22,6 +22,7 @@
 defineProps<{
   text: string;
   modelValue: Boolean;
+  class?: string;
 }>();
 
 const emit = defineEmits(['update:modelValue']);
@@ -34,19 +35,20 @@ const toggle = (e: any) => {
 <style lang="less" scoped>
 .Switch {
   width: 100%;
+  display: inline-block;
   .outer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    overflow: hidden;
     user-select: none;
     .text {
+      display: inline-block;
       overflow: hidden;
-      word-wrap: none;
       white-space: nowrap;
       text-overflow: ellipsis;
-	  padding-right: 4px;
+      padding-right: 4px;
+      line-height: 24px;
     }
     .switch {
+      display: inline-block;
       position: relative;
       user-select: none;
       height: 24px;
