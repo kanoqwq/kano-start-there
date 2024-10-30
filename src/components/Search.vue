@@ -55,15 +55,11 @@
           @mouseleave.stop="suggestActiveControl"
           class="search-suggestion top-border absolute dark:dark-suggest-bg"
           v-show="suggestWords.length && suggestIsShow">
-          <ul>
+          <ul ref="scrollUl">
             <li
               class="inner dark:dark-text"
               :class="{ active: item.isSelected }"
-              @click.stop="
-                () => {
-                  startSearch(item.title);
-                }
-              "
+              @click.stop="startSearch(item.title)"
               v-for="(item, index) in suggestWords"
               :key="index">
               <span class="searchkey" :id="`key_${index}_${Math.random()}`">{{
@@ -71,7 +67,7 @@
               }}</span>
               <i
                 v-show="item.allowDel"
-                @click.stop="delHistory(index)"
+                @click.stop.prevent="delHistory(index)"
                 class="iconfont icon-close icon close"></i>
             </li>
           </ul>
@@ -89,7 +85,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-10-30 00:23:04
+ * @Last Modified time: 2024-10-30 20:27:38
  * @Description: Description
  */
 import { ref, reactive, watch, computed, onMounted } from 'vue';
@@ -103,9 +99,12 @@ import Favorites from './Favorites/Favorites.vue';
 onMounted(() => {
   window.onkeyup = (e: KeyboardEvent) => {
     e.preventDefault();
-    if (e.key == 'Alt' || e.key == 'Control') {
+    if (e.key == 'Alt') {
       if (isSearchFocused.value) {
         searchBox.value.blur();
+        searchBlur();
+        uncheckSuggestWords();
+        isSearchFocused.value = false;
       } else {
         searchBox.value.focus();
       }
@@ -128,7 +127,7 @@ let engineIndex: number = searchEnginesStore.selectedEngine;
 let selectedEngine = reactive<SearchEngine>({
   ...searchEnginesStore.searchEngines[engineIndex],
 });
-let suggestionIndex = -1;
+let suggestionIndex = ref(-1);
 let suggestWords = ref<Array<SuggestWords>>([]);
 const Configs = useStore.Configs();
 const searchBox = ref();
@@ -153,7 +152,11 @@ const containerClick = (e: Event) => {
   if (e.target == container.value) {
     showHideSearchHistory(e);
     uncheckSuggestWords();
+    searchBox.value.blur();
+    searchBlur();
+    uncheckSuggestWords();
     isSearchFocused.value = false;
+    suggestIsShow.value = false;
   }
 };
 
@@ -186,6 +189,7 @@ const switchEngine = (): void => {
 //开始搜索
 //FIX:fixed problem when search string has spacial character
 //feat:Support for directly entering URL addresses in the search box
+let timeout: any = null;
 const startSearch = (
   keyWord = searchContent.value.trim(),
   needClear = false
@@ -199,26 +203,37 @@ const startSearch = (
   if (keyWord.trim() !== searchContent.value.trim()) {
     searchContent.value = keyWord.trim();
   }
+  //搜索历史滚动到最顶部
+  isScrollingToTop.value = true;
+  scrollUl.value.children[0].scrollIntoView({
+    top: 0,
+    behavior: 'instant',
+  });
+
   //添加搜索历史
   addSearchHistory(keyWord);
 
+  // 隐藏
+  searchBox.value.blur();
+  searchBlur();
   uncheckSuggestWords();
-
-  suggestionIndex = 0;
-
-  // 隐藏搜索建议框
+  isSearchFocused.value = false;
   suggestIsShow.value = false;
 
-  //If keyWord is an URL
-  if (URLReg.exec(keyWord)) {
-    window.open(keyWord, '_blank');
-  } else {
-    //新标签页打开
-    window.open(reqUrl, '_blank');
-  }
-  if (needClear) {
-    clearContent();
-  }
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    isScrollingToTop.value = false;
+    //If keyWord is an URL
+    if (URLReg.exec(keyWord)) {
+      window.open(keyWord, '_blank');
+    } else {
+      //新标签页打开
+      window.open(reqUrl, '_blank');
+    }
+    if (needClear) {
+      clearContent();
+    }
+  }, 400);
 };
 
 const searchEngineElement = ref<HTMLFormElement>();
@@ -285,7 +300,7 @@ const searchSuggestion = throttle(
       //清除阴影
       toggleShadow(false);
       //清除一下历史选择的index
-      suggestionIndex = -1;
+      suggestionIndex.value = -1;
       //搜索建议的trigger保持开启
       suggestIsShow.value = true;
       if (searchContent.value) {
@@ -319,7 +334,25 @@ const clearContent = (): void => {
   searchContent.value = '';
 };
 
+const scrollUl = ref();
+const isScrollingToTop = ref(false);
+
+watch(suggestionIndex, () => {
+  //滚动
+  if (isScrollingToTop.value) return;
+  scrollUl.value.children[suggestionIndex.value].scrollIntoView({
+    behavior: 'smooth',
+    block: 'start',
+    inline: 'nearest',
+  });
+});
+
 //实现上下键选择候选词
+let removeandInit = () => {
+  removeActive();
+  suggestWords.value[suggestionIndex.value].isSelected = true;
+  searchContent.value = suggestWords.value[suggestionIndex.value].title;
+};
 const moveSuggestion = (e: KeyboardEvent): void => {
   let key = e.key;
   //候选词列表不为空
@@ -327,35 +360,43 @@ const moveSuggestion = (e: KeyboardEvent): void => {
     if (key == 'ArrowUp') {
       //阻止上下按键操作光标
       e.preventDefault();
-      if (suggestionIndex == 0 || suggestionIndex == -1) {
-        suggestionIndex = suggestWords.value.length - 1;
+      if (suggestionIndex.value == 0 || suggestionIndex.value == -1) {
+        suggestionIndex.value = suggestWords.value.length - 1;
       } else {
-        suggestionIndex = (suggestionIndex - 1) % suggestWords.value.length;
+        suggestionIndex.value =
+          (suggestionIndex.value - 1) % suggestWords.value.length;
       }
-      removeActive();
-      suggestWords.value[suggestionIndex].isSelected = true;
-      searchContent.value = suggestWords.value[suggestionIndex].title;
+      removeandInit();
     } else if (key == 'ArrowDown') {
       e.preventDefault();
-      if (suggestWords.value.length - 1 == suggestionIndex) {
-        suggestionIndex = 0;
+      if (suggestWords.value.length - 1 == suggestionIndex.value) {
+        suggestionIndex.value = 0;
       } else {
-        suggestionIndex = (suggestionIndex + 1) % suggestWords.value.length;
+        suggestionIndex.value =
+          (suggestionIndex.value + 1) % suggestWords.value.length;
       }
-      removeActive();
-      suggestWords.value[suggestionIndex].isSelected = true;
-      searchContent.value = suggestWords.value[suggestionIndex].title;
+      removeandInit();
+    } else if (key == 'Home') {
+      e.preventDefault();
+      suggestionIndex.value = 0;
+      removeandInit();
+    } else if (key == 'End') {
+      e.preventDefault();
+      suggestionIndex.value = suggestWords.value.length - 1;
+      removeandInit();
     }
   }
   //del按下可以快速删除历史
   if (key == 'Delete') {
     //防止误删搜索建议中的内容
     if (suggestWords.value.length != 0 && !isSuggestMode) {
-      historySearch.deleteHistory(suggestionIndex);
-      suggestWords.value.splice(suggestionIndex, 1);
+      historySearch.deleteHistory(suggestionIndex.value);
+      suggestWords.value.splice(suggestionIndex.value, 1);
       if (suggestWords.value.length) {
-        suggestionIndex - 1 >= 0 ? suggestionIndex-- : suggestionIndex;
-        suggestWords.value[suggestionIndex].isSelected = true;
+        suggestionIndex.value - 1 >= 0
+          ? suggestionIndex.value--
+          : suggestionIndex.value;
+        suggestWords.value[suggestionIndex.value].isSelected = true;
       } else {
         toggleSearchBorder(true);
       }
@@ -381,6 +422,10 @@ const showHideSearchHistory = (e: Event) => {
   if (e.type == 'focusin') {
     focus();
   } else {
+    if (isSearchFocused.value) {
+      isSearchFocused.value = false;
+      return;
+    }
     searchBlur();
   }
 };
@@ -396,6 +441,8 @@ const suggestActiveControl = (e: Event) => {
 
 //删除搜索历史
 const delHistory = (index: number) => {
+  focus();
+  emit('focus');
   suggestWords.value.splice(index, 1);
   historySearch.deleteHistory(index);
   //删空后将搜索框设为圆角边框

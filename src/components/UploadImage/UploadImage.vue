@@ -50,8 +50,6 @@ const isShowConfrim = ref();
 const fileInput = ref();
 const { change } = useUploadImage({ emit });
 
-console.log(Configs.bgs.length);
-
 const addPicClick = () => {
   if (fileInput.value) {
     fileInput.value.click();

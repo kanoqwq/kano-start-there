@@ -4,6 +4,9 @@
 }
 
 .container {
+  &::-webkit-scrollbar {
+    display: none;
+  }
   position: relative;
   z-index: 99;
   height: 100%;
@@ -75,7 +78,7 @@
   .search-engine {
     position: relative;
     height: 50px;
-    transition: all 0.3s;
+    transition: all 0.2s;
     transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
     backdrop-filter: blur(10px);
     border-radius: 6px;

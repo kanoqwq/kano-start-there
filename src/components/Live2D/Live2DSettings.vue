@@ -1,6 +1,6 @@
 <template>
   <div class="L2dList">
-    <ul class="list">
+    <ul class="list" ref="scrollList">
       <li
         class="dark:dark-text dark:dark-btn rounded dark:hover:dark-input"
         v-for="(item, index) in l2DList"
@@ -17,13 +17,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import useStore from '@/store';
 import { Toast } from '../Toast';
 import Button from '../Button/Button.vue';
 const l2DList = ref<any>({});
 const selectedIndex = ref<number>(0);
 const Configs = useStore.Configs();
+const scrollList = ref();
 const getL2DList = async () => {
   let { messages } = await (
     await fetch('./assets/Live2d/model_list.json')
@@ -63,7 +64,17 @@ const save = () => {
 };
 
 onMounted(() => {
-  getL2DList();
+  getL2DList().then(() => {
+    nextTick(() => {
+      setTimeout(() => {
+        scrollList.value.children[Configs.modId].scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest',
+        });
+      }, 300);
+    });
+  });
 });
 </script>
 
