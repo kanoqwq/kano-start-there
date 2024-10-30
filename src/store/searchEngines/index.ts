@@ -33,6 +33,14 @@ export const searchEngines = defineStore("searchEngines", {
           url: "https://duckduckgo.com/?t=h_&hps=1&start=1&ia=web&q=",
           method: "suggestDuckDuckGo",
         },
+        {
+          name: "搜狗",
+          icon: "icon-sougou",
+          url: !isMobile()
+            ? "https://www.sogou.com/web?query="
+            : "https://m.sogou.com/web/searchList.jsp?s_from=pcsearch&keyword=",
+          method: "suggestBaidu",
+        },
       ] as Array<SearchEngine>,
       //上一次选中的搜索引擎index
       lastSelectedEngine: Number(getItem("selectedEngine")) || 0,

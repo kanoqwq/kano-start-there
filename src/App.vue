@@ -4,7 +4,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-10-29 20:49:15
+ * @Last Modified time: 2024-10-30 20:58:59
  * @Description: Description
  */
 import { ref, onMounted, watch, computed } from 'vue';
@@ -59,12 +59,12 @@ const onFocus = () => {
   transform: scale(1.1);
 }
 .main {
-  position: relative;
+  position: absolute;
   height: 100%;
   width: 100%;
   overflow: hidden;
   .bg {
-    position: absolute;
+    position: fixed;
     z-index: 1;
     left: 0;
     bottom: 0;
@@ -79,7 +79,7 @@ const onFocus = () => {
   }
 
   .mask {
-    position: absolute;
+    position: fixed;
     z-index: 2;
     left: 0;
     right: 0;
