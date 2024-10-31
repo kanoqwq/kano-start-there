@@ -76,7 +76,7 @@ onMounted(() => {
   getL2DList().then(() => {
     nextTick(() => {
       setTimeout(() => {
-        scrollList.value.children[Configs.modId].scrollIntoView({
+        scrollList.value.children && scrollList.value.children[Configs.modId].scrollIntoView({
           behavior: 'smooth',
           block: 'start',
           inline: 'nearest',

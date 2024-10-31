@@ -73,6 +73,7 @@ onMounted(() => {
   --tab-height: 30px;
   position: relative;
   user-select: none;
+  flex-shrink: 0;
   .tab-content {
     z-index: 10;
   }
