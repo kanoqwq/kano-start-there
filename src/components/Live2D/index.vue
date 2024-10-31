@@ -55,7 +55,6 @@ onMounted(() => {
                     tools: !isMobile() ? [
                         "hitokoto",
                         "asteroids",
-                        "switch-model",
                         "switch-texture",
                         "photo",
                         "info",
