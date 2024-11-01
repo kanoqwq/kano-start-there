@@ -54,6 +54,7 @@ const close = (e: Event) => {
 
       .input {
         height: 30px;
+        margin: 6px;
       }
     }
   }
