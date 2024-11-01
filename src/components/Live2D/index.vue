@@ -54,8 +54,6 @@ onMounted(() => {
                     //移动端无需工具栏
                     tools: !isMobile() ? [
                         "hitokoto",
-                        "asteroids",
-                        "switch-texture",
                         "photo",
                         "info",
                         "quit",
