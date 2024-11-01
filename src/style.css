@@ -3,115 +3,120 @@
 @tailwind utilities;
 
 @layer utilities {
-  @keyframes rotate {
-    0% {
-      transform-origin: 50%;
-      transform: rotate(0deg);
+    @keyframes rotate {
+        0% {
+            transform-origin: 50%;
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform-origin: 50%;
+            transform: rotate(360deg);
+        }
     }
 
-    100% {
-      transform-origin: 50%;
-      transform: rotate(360deg);
+
+    .confirm {
+        width: 100%;
+
+        h1 {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px;
+        }
+
+        .options {
+            text-align: center;
+
+            button {
+                margin: 10px;
+            }
+        }
     }
-  }
 
-
-  .confirm {
-    width: 100%;
-  
-    h1 {
-      font-size: 20px;
-      font-weight: bold;
-      text-align: center;
-      margin: 20px;
+    body,
+    html {
+        height: 100%;
+        overflow: hidden;
     }
-  
-    .options {
-      text-align: center;
-  
-      button {
-        margin: 10px;
-      }
+
+    .dark-hover-bg {
+        background-color: rgb(23 30 40) !important;
     }
-  }
 
-  body,
-  html {
-    height: 100%;
-    overflow: hidden;
-  }
-  .dark-hover-bg {
-    background-color: rgb(23 30 40) !important;
-  }
+    .dark-input {
+        background-color: rgb(31 41 55 / 0.5) !important;
+    }
 
-  .dark-input {
-    background-color: rgb(31 41 55 / 0.5) !important;
-  }
+    .dark-switch {
+        background-color: #999 !important;
+    }
 
-  .dark-switch {
-    background-color: #999 !important;
-  }
+    .dark-active-switch {
+        background-color: #dddddd !important;
+    }
 
-  .dark-active-switch {
-    background-color: #dddddd !important;
-  }
+    .dark-bg {
+        background-color: rgb(31 41 55 / 1) !important;
+        color: #ccc;
+    }
 
-  .dark-bg {
-    background-color: rgb(31 41 55 / 1) !important;
-    color: #ccc;
-  }
+    .dark-text,
+    .dark-text * {
+        color: #ccc !important;
+    }
 
-  .dark-text,
-  .dark-text * {
-    color: #ccc !important;
-  }
+    .dark-btn {
+        color: #ccc !important;
+        background-color: rgb(75 85 99 / .5);
+    }
 
-  .dark-btn {
-    color: #ccc !important;
-    background-color: rgb(75 85 99 / .5);
-  }
+    .dark-suggest-bg {
+        background: rgba(0, 0, 0, 0.5) !important;
+    }
 
-  .dark-suggest-bg {
-    background: rgba(0, 0, 0, 0.5) !important;
-  }
+    .dark-add-btn {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+    }
 
-  .dark-add-btn {
-    background-color: rgba(0, 0, 0, 0.2) !important;
-  }
+    .dark-add-btn-hover {
+        background-color: rgba(0, 0, 0, 0.4) !important;
+    }
 
-  .dark-add-btn-hover {
-    background-color: rgba(0, 0, 0, 0.4) !important;
-  }
+    .dark-kano-icon {
+        color: #ccc !important;
+    }
 
-  .dark-kano-icon {
-    color: #ccc !important;
-  }
+    .dark-shadow {
+        box-shadow: 2px 8px 16px #000000bf !important;
+    }
 
-  .dark-shadow {
-    box-shadow: 2px 8px 16px #000000bf !important;
-  }
+    .dark-icon {
+        fill: #ccc !important;
+    }
 
-  .dark-icon {
-    fill: #ccc !important;
-  }
+    .dark-beian {
+        background-color: rgba(0, 0, 0, 0.20) !important;
+    }
 
-  .dark-search-engine {
-    background: rgba(0, 0, 0, 0.5);
-  }
+    .dark-search-engine {
+        background: rgba(0, 0, 0, 0.5);
+    }
 
-  .input-dark {
-    color: #ccc !important;
-  }
+    .input-dark {
+        color: #ccc !important;
+    }
 
-  .dark-modal {
-    background-color: rgba(0, 0, 0, .5) !important;
-    color: #eee !important;
-    box-shadow: 0px 0px 15px #000 !important;
-  }
+    .dark-modal {
+        background-color: rgba(0, 0, 0, .5) !important;
+        color: #eee !important;
+        box-shadow: 0px 0px 15px #000 !important;
+    }
 
-  .dark-close-btn {
-    color: #ccc !important;
-    background-color: #00000050 !important;
-  }
+    .dark-close-btn {
+        color: #ccc !important;
+        background-color: #00000050 !important;
+    }
 
 }

@@ -7,7 +7,7 @@
  * @Last Modified time: 2024-10-30 20:58:59
  * @Description: Description
  */
-import { ref, onMounted, watch, computed } from 'vue';
+import {ref, onMounted, watch, computed} from 'vue';
 import Search from './components/Search.vue';
 // iconfont
 import '@/assets/js/iconfont.js';
@@ -45,9 +45,13 @@ const onFocus = () => {
 <template>
   <div class="main">
     <div class="mask" ref="mask"></div>
-    <div class="bg" ref="bg"></div>
-    <Search @blur="onBlur" @focus="onFocus" />
-    <Live2D />
+    <div class="bg" ref="bg">
+      <div class="beian dark:dark-text dark:dark-beian">
+        <span>湘ICP备20011733号-1 | 湘公网安备 43120202000238号</span>
+      </div>
+    </div>
+    <Search @blur="onBlur" @focus="onFocus"/>
+    <Live2D/>
   </div>
 </template>
 
@@ -55,16 +59,22 @@ const onFocus = () => {
 .kano-blur {
   backdrop-filter: blur(10px);
 }
+
 .kano-scale {
   transform: scale(1.1);
 }
+
 .main {
   position: absolute;
   height: 100%;
   width: 100%;
   overflow: hidden;
+
   .bg {
     position: fixed;
+    display: flex;
+    align-items: end;
+    justify-content: center;
     z-index: 1;
     left: 0;
     bottom: 0;
@@ -76,6 +86,15 @@ const onFocus = () => {
     background-attachment: fixed;
     background-position: center;
     transition: transform 0.5s;
+
+    .beian {
+      padding: 10px;
+      border-radius: 8px;
+      margin: 4px;
+      backdrop-filter: blur(10px);
+      background-color: rgba(255, 255, 255, .20);
+      font-size: 12px;
+    }
   }
 
   .mask {
