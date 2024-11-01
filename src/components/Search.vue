@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto" @click="containerClick" ref="container">
+  <div class="container mx-auto" @click.self="containerClick" ref="container">
     <div class="top-banner flex justify-end">
       <svg
         class="icon kano-icon dark:dark-icon w-8 icon-hover"
@@ -85,7 +85,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-10-30 21:15:22
+ * @Last Modified time: 2024-11-02 02:05:01
  * @Description: Description
  */
 import { ref, reactive, watch, computed, onMounted } from 'vue';
@@ -139,36 +139,28 @@ const isSearchFocused = ref(false);
 //设置搜索建议模式的标识
 let isSuggestMode = false;
 
-const container = ref();
-
 const uncheckSuggestWords = () => {
   suggestWords.value = [...historySearch.gethistorySearchList].map((item) => ({
     ...item,
     isSelected: false,
   }));
 };
+
 //点击container隐藏搜索历史框
 const containerClick = (e: Event) => {
-  if (e.target == container.value) {
-    showHideSearchHistory(e);
-    uncheckSuggestWords();
-    searchBox.value.blur();
-    searchBlur();
-    uncheckSuggestWords();
-    isSearchFocused.value = false;
-    suggestIsShow.value = false;
-  }
+  showHideSearchHistory(e);
+  uncheckSuggestWords();
+  searchBox.value.blur();
+  searchBlur();
+  uncheckSuggestWords();
+  isSearchFocused.value = false;
+  suggestIsShow.value = false;
 };
 
 watch([suggestWords, suggestIsShow, searchContent, suggestActive], () => {
-  if (
-    (suggestWords.value.length && suggestIsShow.value) ||
-    suggestActive.value
-  ) {
-    toggleSearchBorder(false);
-  } else {
-    toggleSearchBorder(true);
-  }
+  suggestWords.value.length && suggestIsShow.value
+    ? toggleSearchBorder(false)
+    : toggleSearchBorder(true);
 });
 
 //点击图标切换搜索引擎
@@ -273,6 +265,7 @@ const searchBlur = () => {
   }
   isSearchFocused.value = false;
   searchBox.value.blur();
+  toggleSearchBorder(true);
   if (!suggestActive.value) {
     suggestIsShow.value = false;
   }
@@ -425,16 +418,20 @@ const addSearchHistory = (keyword: string) => {
 };
 
 //展示/隐藏搜索历史
+let showHideTimer: any = null;
 const showHideSearchHistory = (e: Event) => {
-  if (e.type == 'focusin') {
-    focus();
-  } else {
-    if (isSearchFocused.value) {
-      isSearchFocused.value = false;
-      return;
+  showHideTimer && clearTimeout(showHideTimer);
+  showHideTimer = setTimeout(() => {
+    if (e.type == 'focusin') {
+      focus();
+    } else {
+      if (isSearchFocused.value) {
+        isSearchFocused.value = false;
+        return;
+      }
+      searchBlur();
     }
-    searchBlur();
-  }
+  }, 100);
 };
 
 //判定鼠标是否在搜索历史框内

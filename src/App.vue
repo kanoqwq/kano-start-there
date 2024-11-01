@@ -4,7 +4,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-10-30 20:58:59
+ * @Last Modified time: 2024-11-02 01:53:20
  * @Description: Description
  */
 import {ref, onMounted, watch, computed} from 'vue';
@@ -93,7 +93,7 @@ const onFocus = () => {
       margin: 4px;
       backdrop-filter: blur(10px);
       background-color: rgba(255, 255, 255, .20);
-      font-size: 12px;
+      font-size: 10px;
     }
   }
 
