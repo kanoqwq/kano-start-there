@@ -19,6 +19,7 @@ export interface SearchEngine {
 
 
 interface LinkObj {
+  id?: number,
   href: string,
   imgUrl: string,
   isBlank?: boolean,

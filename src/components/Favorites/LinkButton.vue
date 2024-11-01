@@ -50,6 +50,7 @@ import { ref } from 'vue';
 import Modal from '@/components/Modal/index.vue';
 
 const props = defineProps<{
+  id: number;
   href: string;
   imgUrl: string;
   isBlank?: boolean;
@@ -67,10 +68,10 @@ let btnClass =
   'rounded dark:dark-btn p-2 bg-stone-300 transition-all hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50';
 
 const close = () => {
-  if (props.href) {
+  if (props.id) {
     isShowConfrim.value = false;
     setTimeout(() => {
-      Configs.removeFavLinkByUrl(props.href);
+      Configs.removeFavLink(props.id);
     }, 300);
     Toast({
       value: '删除成功~',

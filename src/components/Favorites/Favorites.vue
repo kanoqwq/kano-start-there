@@ -8,6 +8,7 @@
         :clickable="true"
         :showOpt="false"
         :href="item.href"
+        :id="item.id"
         :imgUrl="item.imgUrl"
         :isBlank="item.isBlank" />
     </template>
@@ -20,6 +21,7 @@
         :clickable="false"
         :showOpt="true"
         :href="item.href"
+        :id="item.id"
         :imgUrl="item.imgUrl"
         :isBlank="item.isBlank" />
     </template>
@@ -48,6 +50,7 @@ defineProps({
 });
 const Configs = useStore.Configs();
 const editData = ref({
+  id: -1,
   imgUrl: '',
   href: '',
   isBlank: true,
@@ -58,9 +61,10 @@ const editLinkShow = ref(false);
 const edit = (item: any) => {
   editLinkShow.value = true;
   editData.value = {
+    id: item.id,
     imgUrl: item.imgUrl,
     href: item.href,
-    isBlank: true,
+    isBlank: item.isBlank,
   };
 };
 const onClose = () => {

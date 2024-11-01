@@ -100,17 +100,15 @@ export const Configs = defineStore("Configs", {
     },
     //修改常用链接
     updateFavLink(linkObj: LinkObj) {
-      let curLinksIndex: number = this.favLinks.findIndex(item => item.href.trim() == linkObj.href.trim())
-      //如在现有列表重找到url一致的标签，则进行替换
-      if (curLinksIndex !== -1) {
-        if (linkObj) {
-          this.favLinks[curLinksIndex] = {
-            href: linkObj.href.trim(),
-            imgUrl: linkObj.imgUrl.trim(),
-            isBlank: linkObj.isBlank
-          }
-          setItem("favLinks", this.favLinks)
+      if (linkObj.id) {
+        let curLinksIndex: number = this.favLinks.findIndex(item => item.id == linkObj.id)
+        this.favLinks[curLinksIndex] = {
+          id: this.favLinks[curLinksIndex].id,
+          href: linkObj.href.trim(),
+          imgUrl: linkObj.imgUrl.trim(),
+          isBlank: linkObj.isBlank
         }
+        setItem("favLinks", this.favLinks)
       }
     },
     // 设置常用链接
@@ -124,6 +122,7 @@ export const Configs = defineStore("Configs", {
       } else {
         if (linkObj) {
           this.favLinks.push({
+            id: this.favLinks.length + 1,
             href: linkObj.href.trim(),
             imgUrl: linkObj.imgUrl.trim(),
             isBlank: linkObj.isBlank
@@ -133,8 +132,8 @@ export const Configs = defineStore("Configs", {
       }
     },
     //删除指定链接
-    removeFavLinkByUrl(href: string) {
-      const newFavLinks = this.favLinks.filter(item => item.href != href)
+    removeFavLink(id: number) {
+      const newFavLinks = this.favLinks.filter(item => item.id != id)
       this.favLinks = newFavLinks
       setItem("favLinks", newFavLinks)
     },

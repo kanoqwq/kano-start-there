@@ -90,6 +90,7 @@ watch(
   () => props.data,
   () => {
     if (props.data) {
+      link.id = props.data.id;
       link.imgUrl = props.data.imgUrl;
       link.href = props.data.href;
       link.isBlank = props.data.isBlank;
@@ -135,10 +136,6 @@ const save = () => {
     } else {
       Configs.setFavLink(toRaw(link));
     }
-    //清空并初始化
-    link.href = '';
-    link.imgUrl = '';
-    link.isBlank = true;
     Toast({
       value: props.showEdit ? '保存成功~' : '添加成功~',
       color: 'green',
@@ -155,6 +152,10 @@ const save = () => {
   } finally {
     setTimeout(() => {
       dialogisDisplay.value = false;
+      //清空并初始化
+      link.href = '';
+      link.imgUrl = '';
+      link.isBlank = true;
       emit('onclose');
     }, 300);
   }
