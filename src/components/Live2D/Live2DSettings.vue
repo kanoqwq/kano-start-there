@@ -6,8 +6,7 @@
         v-for="(item, index) in l2DList"
         :key="item"
         @click="selected(index)"
-        :class="{ active: item.active }"
-      >
+        :class="{ active: item.active }">
         {{ item.message }}
       </li>
     </ul>
@@ -18,10 +17,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, nextTick } from "vue";
-import useStore from "@/store";
-import { Toast } from "../Toast";
-import Button from "../Button/Button.vue";
+import { ref, onMounted, nextTick } from 'vue';
+import useStore from '@/store';
+import { Toast } from '../Toast';
+import Button from '../Button/Button.vue';
 const l2DList = ref<any>({});
 const selectedIndex = ref<number>(0);
 const Configs = useStore.Configs();
@@ -29,7 +28,7 @@ const scrollList = ref();
 const getL2DList = async () => {
   try {
     let { messages } = await (
-      await fetch("./assets/Live2d/model_list.json")
+      await fetch('./assets/Live2d/model_list.json')
     ).json();
 
     l2DList.value = messages.map((item: any) => ({
@@ -39,10 +38,10 @@ const getL2DList = async () => {
     l2DList.value[Configs.modId].active = true;
   } catch {
     Toast({
-      value: "获取Live2d列表失败",
-      color: "yellow",
+      value: '获取Live2d列表失败',
+      color: 'yellow',
       duration: 2000,
-      background: "#00000099",
+      background: '#00000099',
     });
   }
 };
@@ -64,9 +63,9 @@ const save = () => {
   Configs.setModelId(selectedIndex.value);
   Toast({
     value: `保存成功！1秒后自动刷新页面！`,
-    color: "green",
+    color: 'green',
     duration: 1000,
-    background: "#00000099",
+    background: '#00000099',
     success() {
       location.reload();
     },
@@ -74,15 +73,16 @@ const save = () => {
 };
 
 onMounted(() => {
+  selectedIndex.value = Configs.modId;
   getL2DList().then(() => {
     nextTick(() => {
       setTimeout(() => {
         try {
           scrollList.value.children &&
             scrollList.value.children[Configs.modId].scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-              inline: "nearest",
+              behavior: 'smooth',
+              block: 'start',
+              inline: 'nearest',
             });
         } catch {}
       }, 300);
