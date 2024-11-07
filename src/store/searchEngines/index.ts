@@ -83,6 +83,7 @@ export const searchEngines = defineStore("searchEngines", {
           name: "Yahoo!",
           icon: "icon-yahoo-fill",
           url: "https://hk.search.yahoo.com/search?p=",
+          method: "suggestBaidu",
         },
         {
           name: "知乎",

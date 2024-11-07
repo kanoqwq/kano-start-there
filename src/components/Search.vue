@@ -61,7 +61,9 @@
           @mouseenter.stop="suggestActiveControl"
           @mouseleave.stop="suggestActiveControl"
           class="search-suggestion top-border absolute dark:dark-suggest-bg"
-          v-show="suggestWords.length && suggestIsShow"
+          v-show="
+            (suggestWords.length && suggestIsShow) || isSearchEngineListMode
+          "
         >
           <ul ref="scrollUl">
             <transition-group name="suggestion-ul">
@@ -102,7 +104,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-11-07 15:15:40
+ * @Last Modified time: 2024-11-07 16:32:22
  * @Description: Description
  */
 import { ref, reactive, watch, computed, onMounted } from "vue";
@@ -180,7 +182,6 @@ const uncheckSuggestWords = () => {
 };
 
 //点击container隐藏搜索历史框
-let timer: any = null;
 const containerClick = (e: Event) => {
   showHideSearchHistory(e);
   uncheckSuggestWords();
@@ -189,14 +190,12 @@ const containerClick = (e: Event) => {
   uncheckSuggestWords();
   isSearchFocused.value = false;
   suggestIsShow.value = false;
-  timer && clearTimeout(timer);
-  timer = setTimeout(() => {
-    isSearchEngineListMode.value = false;
-  }, 200);
+  isSearchEngineListMode.value = false;
 };
 
 watch([suggestWords, suggestIsShow, searchContent, suggestActive], () => {
-  suggestWords.value.length && suggestIsShow.value
+  (suggestWords.value.length && suggestIsShow.value) ||
+  isSearchEngineListMode.value
     ? toggleSearchBorder(false)
     : toggleSearchBorder(true);
 });
@@ -491,7 +490,6 @@ const delHistory = (index: number) => {
   }
 };
 
-//TODO:添加设置按钮,需要弹出一个模态框
 const settingHandler = () => {
   settingsIsShow.value = true;
 };
