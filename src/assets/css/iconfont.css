@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4031152 */
-  src: url('iconfont.woff2?t=1730466620275') format('woff2'),
-       url('iconfont.woff?t=1730466620275') format('woff'),
-       url('iconfont.ttf?t=1730466620275') format('truetype');
+  src: url('iconfont.woff2?t=1730964669167') format('woff2'),
+       url('iconfont.woff?t=1730964669167') format('woff'),
+       url('iconfont.ttf?t=1730964669167') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,42 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-xiaohongshu:before {
+  content: "\e602";
+}
+
+.icon-zhihu:before {
+  content: "\e69b";
+}
+
+.icon-stackoverflow:before {
+  content: "\e625";
+}
+
+.icon-yahoo-fill:before {
+  content: "\e883";
+}
+
+.icon-baidurenzhenga:before {
+  content: "\e61b";
+}
+
+.icon-sousuo:before {
+  content: "\ea7a";
+}
+
+.icon-mozilla:before {
+  content: "\e600";
+}
+
+.icon-douyin:before {
+  content: "\e673";
+}
+
+.icon-bilibili-line1:before {
+  content: "\ea96";
 }
 
 .icon-bilibili-line:before {

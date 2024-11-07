@@ -34,6 +34,18 @@ export const searchEngines = defineStore("searchEngines", {
           method: "suggestDuckDuckGo",
         },
         {
+          name: "Baidu开发者",
+          icon: "icon-baidurenzhenga",
+          url: 'https://kaifa.baidu.com/searchPage?wd=',
+          method: "suggestBaidu",
+        },
+        {
+          name: "360搜索",
+          icon: "icon-sousuo",
+          url: "https://www.so.com/s?q=",
+          method: "suggestBaidu",
+        },
+        {
           name: "搜狗",
           icon: "icon-sougou",
           url: !isMobile()
@@ -41,6 +53,48 @@ export const searchEngines = defineStore("searchEngines", {
             : "https://m.sogou.com/web/searchList.jsp?s_from=pcsearch&keyword=",
           method: "suggestBaidu",
         },
+        {
+          name: "GitHub",
+          icon: "icon-github",
+          url: "https://github.com/search?q=",
+        },
+        {
+          name: "StackOverflow",
+          icon: "icon-stackoverflow",
+          url: "https://stackoverflow.com/nocaptcha?s=",
+        },
+        {
+          name: "MDN",
+          icon: "icon-mozilla",
+          url: "https://developer.mozilla.org/zh-CN/search?q=",
+        },
+        {
+          name: "哔哩哔哩",
+          icon: "icon-bilibili-line",
+          url: "https://search.bilibili.com/all?keyword=",
+        },
+        {
+          name: "抖音",
+          icon: "icon-douyin",
+          url: "https://www.douyin.com/search/",
+        },
+
+        {
+          name: "Yahoo!",
+          icon: "icon-yahoo-fill",
+          url: "https://hk.search.yahoo.com/search?p=",
+        },
+        {
+          name: "知乎",
+          icon: "icon-zhihu",
+          url: "https://www.zhihu.com/search?type=content&q=",
+        },
+        {
+          name: "小红书",
+          icon: "icon-xiaohongshu",
+          url: "https://www.xiaohongshu.com/search_result/?&m_source=itab&keyword=",
+        },
+
       ] as Array<SearchEngine>,
       //上一次选中的搜索引擎index
       lastSelectedEngine: Number(getItem("selectedEngine")) || 0,
@@ -55,6 +109,9 @@ export const searchEngines = defineStore("searchEngines", {
       }
       return tmp;
     },
+    getSearchEngines(state) {
+      return state.searchEngines
+    }
   },
   actions: {
     //设置搜索引擎选中记录

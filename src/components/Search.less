@@ -3,6 +3,20 @@
   opacity: 0;
 }
 
+.suggestion-ul-enter-active,
+.suggestion-ul-leave-active {
+  transition: transform 0.2s ease !important;
+  transform: translateX(0%);
+  position: relative;
+}
+
+.suggestion-ul-enter-from,
+.suggestion-ul-leave-to {
+  transition: transform 0.2s ease !important;
+  transform: translateX(-100%);
+  position: absolute;
+}
+
 .container {
   &::-webkit-scrollbar {
     display: none;
@@ -46,7 +60,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-
+      transition: all 0.3s;
       .searchkey {
         display: block;
         width: 100%;
@@ -73,6 +87,10 @@
     .active {
       background-color: rgb(0 0 0 / 0.1);
     }
+  }
+
+  .searchEngineListBox:hover {
+    background-color: transparent !important;
   }
 
   .search-engine {

@@ -64,22 +64,29 @@
           v-show="suggestWords.length && suggestIsShow"
         >
           <ul ref="scrollUl">
-            <li
-              class="inner dark:dark-text"
-              :class="{ active: item.isSelected }"
-              @click.stop="startSearch(item.title)"
-              v-for="(item, index) in suggestWords"
-              :key="index"
-            >
-              <span class="searchkey" :id="`key_${index}_${Math.random()}`">{{
-                item.title
-              }}</span>
-              <i
-                v-show="item.allowDel"
-                @click.stop.prevent="delHistory(index)"
-                class="iconfont icon-close icon close"
-              ></i>
-            </li>
+            <transition-group name="suggestion-ul">
+              <li
+                v-if="!isSearchEngineListMode"
+                class="inner dark:dark-text"
+                :class="{ active: item.isSelected }"
+                @click.stop="startSearch(item.title)"
+                v-for="(item, index) in suggestWords"
+                :key="index"
+              >
+                <span class="searchkey" :id="`key_${index}_${Math.random()}`">{{
+                  item.title
+                }}</span>
+                <i
+                  v-show="item.allowDel"
+                  @click.stop.prevent="delHistory(index)"
+                  class="iconfont icon-close icon close"
+                ></i>
+              </li>
+              <!-- 搜索引擎切换列表 -->
+              <li v-else class="searchEngineListBox">
+                <SearchEngines />
+              </li>
+            </transition-group>
           </ul>
         </div>
       </Transition>
@@ -95,11 +102,12 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-11-07 09:20:46
+ * @Last Modified time: 2024-11-07 15:15:40
  * @Description: Description
  */
 import { ref, reactive, watch, computed, onMounted } from "vue";
 import Settings from "./Settings.vue";
+import SearchEngines from "@/components/SearchEngines/index.vue";
 import throttle from "lodash/throttle";
 import { suggestAPI } from "@/utils/searchSuggestions";
 import useStore from "@/store";
@@ -146,8 +154,23 @@ const suggestActive = ref(false);
 const settingsIsShow = ref(false);
 const filterWords = computed(() => Configs.formattedFilterWords);
 const isSearchFocused = ref(false);
+
+watch(
+  () => searchEnginesStore.selectedEngine,
+  (index) => {
+    const newEngine = searchEnginesStore.searchEngines[index];
+    selectedEngine.name = newEngine.name;
+    selectedEngine.url = newEngine.url;
+    selectedEngine.icon = newEngine.icon;
+    selectedEngine.method = newEngine.method;
+  }
+);
+
 //设置搜索建议模式的标识
 let isSuggestMode = false;
+
+//是否为搜索引擎切换模式
+const isSearchEngineListMode = ref(false);
 
 const uncheckSuggestWords = () => {
   suggestWords.value = [...historySearch.gethistorySearchList].map((item) => ({
@@ -157,6 +180,7 @@ const uncheckSuggestWords = () => {
 };
 
 //点击container隐藏搜索历史框
+let timer: any = null;
 const containerClick = (e: Event) => {
   showHideSearchHistory(e);
   uncheckSuggestWords();
@@ -165,6 +189,10 @@ const containerClick = (e: Event) => {
   uncheckSuggestWords();
   isSearchFocused.value = false;
   suggestIsShow.value = false;
+  timer && clearTimeout(timer);
+  timer = setTimeout(() => {
+    isSearchEngineListMode.value = false;
+  }, 200);
 };
 
 watch([suggestWords, suggestIsShow, searchContent, suggestActive], () => {
@@ -175,17 +203,8 @@ watch([suggestWords, suggestIsShow, searchContent, suggestActive], () => {
 
 //点击图标切换搜索引擎
 const switchEngine = (): void => {
-  //限制数字范围
-  engineIndex = (engineIndex + 1) % searchEnginesStore.searchEngines.length;
-  let newEngine = searchEnginesStore.searchEngines[engineIndex];
-
-  //保存选择历史
-  searchEnginesStore.setSelectedEngine(engineIndex);
-
-  selectedEngine.name = newEngine.name;
-  selectedEngine.url = newEngine.url;
-  selectedEngine.icon = newEngine.icon;
-  selectedEngine.method = newEngine.method;
+  isSearchEngineListMode.value = true;
+  focus();
 };
 
 //开始搜索
@@ -252,11 +271,16 @@ const toggleShadow = (flag: boolean) => {
 
 const eventMouse = (e: MouseEvent): void => {
   if (e.type == "mouseenter" && !isSearchFocused.value) {
+    if (isSearchEngineListMode.value) {
+      toggleShadow(false);
+      return;
+    }
     if (searchContent.value.length == 0) {
       toggleShadow(true);
     }
   } else {
     if (searchContent.value.length == 0) {
+      if (isSearchEngineListMode.value) return;
       toggleShadow(false);
     }
   }
@@ -308,12 +332,11 @@ const searchSuggestion = throttle(
       suggestionIndex.value = -1;
       //搜索建议的trigger保持开启
       suggestIsShow.value = true;
-      if (searchContent.value) {
+      if (searchContent.value && method) {
         let res = await suggestAPI[method](searchContent.value);
         suggestWords.value.length = 0;
         suggestWords.value.push(...res);
         isSuggestMode = true;
-
         //远端没有数据返回，下边框为圆角
         if (suggestWords.value.length == 0) {
           toggleSearchBorder(true);
@@ -434,6 +457,7 @@ const showHideSearchHistory = (e: Event) => {
   showHideTimer = setTimeout(() => {
     if (e.type == "focusin") {
       focus();
+      isSearchEngineListMode.value = false;
     } else {
       if (isSearchFocused.value) {
         isSearchFocused.value = false;
