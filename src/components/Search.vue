@@ -104,7 +104,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-11-07 17:06:58
+ * @Last Modified time: 2024-11-07 17:21:19
  * @Description: Description
  */
 import { ref, reactive, watch, computed, onMounted } from "vue";
@@ -115,6 +115,7 @@ import { suggestAPI } from "@/utils/searchSuggestions";
 import useStore from "@/store";
 import { SearchEngine, SuggestWords } from "@/types/global";
 import Favorites from "./Favorites/Favorites.vue";
+import { openWithoutReferrer } from "@/utils/openLink";
 
 onMounted(() => {
   window.onkeyup = (e: KeyboardEvent) => {
@@ -145,7 +146,8 @@ const searchEnginesStore = useStore.searchEngines();
 let searchContent = ref("");
 let engineId: number = searchEnginesStore.selectedEngine;
 let selectedEngine = reactive<SearchEngine>({
-  ...(searchEnginesStore.searchEngines.find((i) => i.id == engineId) || searchEnginesStore.searchEngines[0]),
+  ...(searchEnginesStore.searchEngines.find((i) => i.id == engineId) ||
+    searchEnginesStore.searchEngines[0]),
 });
 let suggestionIndex = ref(-1);
 let suggestWords = ref<Array<SuggestWords>>([]);
@@ -160,7 +162,9 @@ const isSearchFocused = ref(false);
 watch(
   () => searchEnginesStore.selectedEngine,
   (id) => {
-    const newEngine = searchEnginesStore.searchEngines.find((i) => i.id == id) || searchEnginesStore.searchEngines[0];
+    const newEngine =
+      searchEnginesStore.searchEngines.find((i) => i.id == id) ||
+      searchEnginesStore.searchEngines[0];
     selectedEngine.name = newEngine.name;
     selectedEngine.url = newEngine.url;
     selectedEngine.icon = newEngine.icon;
@@ -247,10 +251,9 @@ const startSearch = (
     isScrollingToTop.value = false;
     //If keyWord is an URL
     if (URLReg.exec(keyWord)) {
-      window.open(keyWord, "_blank");
+      openWithoutReferrer(keyWord);
     } else {
-      //新标签页打开
-      window.open(reqUrl, "_blank");
+      openWithoutReferrer(reqUrl);
     }
     if (needClear) {
       clearContent();
