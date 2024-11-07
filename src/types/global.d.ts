@@ -11,6 +11,7 @@ export interface SuggestWords {
 }
 
 export interface SearchEngine {
+  id: number,
   name: string;
   icon: string;
   url: string;

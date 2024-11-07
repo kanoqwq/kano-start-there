@@ -2,9 +2,9 @@
   <div class="searchEngineListBox dark:dark-text select-none">
     <div
       class="inner"
-      v-for="(item, index) in searchEngines"
-      :key="`${item}-${index}`"
-      @click="selectItem(index)"
+      v-for="item in searchEngines"
+      :key="item.id"
+      @click="selectItem(item.id)"
       :class="item.active ? 'active' : ''"
     >
       <i
@@ -17,24 +17,23 @@
 
 <script lang="ts" setup>
 import useStore from "@/store";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 const searchEnginesStore = useStore.searchEngines();
 const searchEngines = ref(
-  searchEnginesStore.getSearchEngines.map((item, index) => ({
+  searchEnginesStore.getSearchEngines.map((item) => ({
     ...item,
-    active: searchEnginesStore.selectedEngine == index,
+    active: searchEnginesStore.selectedEngine == item.id,
   }))
 );
-watch(
-  () => searchEnginesStore.selectedEngine,
-  (index) => {
-    selectItem(index);
-  }
-);
-const selectItem = (index: number) => {
-  searchEnginesStore.setSelectedEngine(index);
+
+const selectItem = (id: number) => {
+  searchEnginesStore.setSelectedEngine(id);
   searchEngines.value.forEach((item) => (item.active = false));
-  searchEngines.value[index].active = true;
+  searchEngines.value.forEach(item=>{
+    if(item.id === id){
+      item.active = true
+    }
+  })
 };
 </script>
 

@@ -104,7 +104,7 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-11-07 16:32:22
+ * @Last Modified time: 2024-11-07 17:06:58
  * @Description: Description
  */
 import { ref, reactive, watch, computed, onMounted } from "vue";
@@ -143,9 +143,9 @@ const searchEnginesStore = useStore.searchEngines();
 
 // const global = inject(globalKey)
 let searchContent = ref("");
-let engineIndex: number = searchEnginesStore.selectedEngine;
+let engineId: number = searchEnginesStore.selectedEngine;
 let selectedEngine = reactive<SearchEngine>({
-  ...searchEnginesStore.searchEngines[engineIndex],
+  ...(searchEnginesStore.searchEngines.find((i) => i.id == engineId) || searchEnginesStore.searchEngines[0]),
 });
 let suggestionIndex = ref(-1);
 let suggestWords = ref<Array<SuggestWords>>([]);
@@ -159,8 +159,8 @@ const isSearchFocused = ref(false);
 
 watch(
   () => searchEnginesStore.selectedEngine,
-  (index) => {
-    const newEngine = searchEnginesStore.searchEngines[index];
+  (id) => {
+    const newEngine = searchEnginesStore.searchEngines.find((i) => i.id == id) || searchEnginesStore.searchEngines[0];
     selectedEngine.name = newEngine.name;
     selectedEngine.url = newEngine.url;
     selectedEngine.icon = newEngine.icon;
@@ -188,9 +188,9 @@ const containerClick = (e: Event) => {
   searchBox.value.blur();
   searchBlur();
   uncheckSuggestWords();
-  isSearchFocused.value = false;
-  suggestIsShow.value = false;
   isSearchEngineListMode.value = false;
+  suggestIsShow.value = false;
+  isSearchFocused.value = false;
 };
 
 watch([suggestWords, suggestIsShow, searchContent, suggestActive], () => {
