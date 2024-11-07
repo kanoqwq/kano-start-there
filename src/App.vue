@@ -4,15 +4,15 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-11-02 01:53:20
+ * @Last Modified time: 2024-11-07 09:21:02
  * @Description: Description
  */
-import {ref, onMounted, watch, computed} from 'vue';
-import Search from './components/Search.vue';
+import { ref, onMounted, watch, computed } from "vue";
+import Search from "./components/Search.vue";
 // iconfont
-import '@/assets/js/iconfont.js';
-import Live2D from '@/components/Live2D/index.vue';
-import useStore from './store';
+import "@/assets/js/iconfont.js";
+import Live2D from "@/components/Live2D/index.vue";
+import useStore from "./store";
 
 const Configs = useStore.Configs();
 let bg = ref<HTMLDivElement>();
@@ -34,24 +34,33 @@ onMounted(() => {
 });
 
 const onBlur = () => {
-  mask.value && mask.value.classList.remove('kano-blur');
-  bg.value && bg.value.classList.remove('kano-scale');
+  mask.value && mask.value.classList.remove("kano-blur");
+  bg.value && bg.value.classList.remove("kano-scale");
 };
 const onFocus = () => {
-  mask.value && mask.value.classList.add('kano-blur');
-  bg.value && bg.value.classList.add('kano-scale');
+  mask.value && mask.value.classList.add("kano-blur");
+  bg.value && bg.value.classList.add("kano-scale");
+};
+
+const search = ref()
+const mainClick = (e: MouseEvent) => {
+  //capture mask element
+  if (e.target === mask.value) {
+    console.log(search.value.blur(e));
+    // onBlur()
+  }
 };
 </script>
 <template>
-  <div class="main">
+  <div class="main" @click.capture="mainClick">
     <div class="mask" ref="mask"></div>
     <div class="bg" ref="bg">
       <div class="beian dark:dark-text dark:dark-beian">
         <span>湘ICP备20011733号-1 | 湘公网安备 43120202000238号</span>
       </div>
     </div>
-    <Search @blur="onBlur" @focus="onFocus"/>
-    <Live2D/>
+    <Search ref="search" @blur="onBlur" @focus="onFocus" />
+    <Live2D />
   </div>
 </template>
 
@@ -92,7 +101,7 @@ const onFocus = () => {
       border-radius: 8px;
       margin: 4px;
       backdrop-filter: blur(10px);
-      background-color: rgba(255, 255, 255, .20);
+      background-color: rgba(255, 255, 255, 0.2);
       font-size: 10px;
     }
   }

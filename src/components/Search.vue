@@ -4,20 +4,24 @@
       <svg
         class="icon kano-icon dark:dark-icon w-8 icon-hover"
         aria-hidden="false"
-        @click.stop="settingHandler">
+        @click.stop="settingHandler"
+      >
         <use xlink:href="#icon-settings" class="rotate"></use>
       </svg>
     </div>
     <div ref="searchEle" class="search relative flex flex-col">
       <div
         class="search-engine flex overflow-hidden dark:dark-search-engine"
-        ref="searchEngineElement">
+        ref="searchEngineElement"
+      >
         <div
           class="flex items-center"
           id="engine_switch_btn"
-          @click.stop="switchEngine">
+          @click.stop="switchEngine"
+        >
           <i
-            :class="`icon kano-icon dark:dark-kano-icon iconfont dark:dark-icon ${selectedEngine.icon}`"></i>
+            :class="`icon kano-icon dark:dark-kano-icon iconfont dark:dark-icon ${selectedEngine.icon}`"
+          ></i>
         </div>
         <input
           ref="searchBox"
@@ -33,17 +37,20 @@
           @focusout.stop="showHideSearchHistory"
           @mouseleave.stop="eventMouse"
           class="input pl-3 box-border outline-none dark:input-dark"
-          :placeholder="`在${selectedEngine.name}上搜索`" />
+          :placeholder="`在${selectedEngine.name}上搜索`"
+        />
         <div
           class="clear-input"
           @click.stop="clearContent"
-          v-show="searchContent">
+          v-show="searchContent"
+        >
           <i class="iconfont dark:dark:dark-text icon-close icon close"></i>
         </div>
         <button
           id="searchbtn"
           class="search-btn flex justify-center items-center dark:hover:dark-hover-bg"
-          @click.stop="startSearch(undefined, true)">
+          @click.stop="startSearch(undefined, true)"
+        >
           <svg class="icon" aria-hidden="false" height="30px">
             <use xlink:href="#icon-search"></use>
           </svg>
@@ -54,21 +61,24 @@
           @mouseenter.stop="suggestActiveControl"
           @mouseleave.stop="suggestActiveControl"
           class="search-suggestion top-border absolute dark:dark-suggest-bg"
-          v-show="suggestWords.length && suggestIsShow">
+          v-show="suggestWords.length && suggestIsShow"
+        >
           <ul ref="scrollUl">
             <li
               class="inner dark:dark-text"
               :class="{ active: item.isSelected }"
               @click.stop="startSearch(item.title)"
               v-for="(item, index) in suggestWords"
-              :key="index">
+              :key="index"
+            >
               <span class="searchkey" :id="`key_${index}_${Math.random()}`">{{
                 item.title
               }}</span>
               <i
                 v-show="item.allowDel"
                 @click.stop.prevent="delHistory(index)"
-                class="iconfont icon-close icon close"></i>
+                class="iconfont icon-close icon close"
+              ></i>
             </li>
           </ul>
         </div>
@@ -85,21 +95,21 @@
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
  * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-11-02 02:05:01
+ * @Last Modified time: 2024-11-07 09:20:46
  * @Description: Description
  */
-import { ref, reactive, watch, computed, onMounted } from 'vue';
-import Settings from './Settings.vue';
-import throttle from 'lodash/throttle';
-import { suggestAPI } from '@/utils/searchSuggestions';
-import useStore from '@/store';
-import { SearchEngine, SuggestWords } from '@/types/global';
-import Favorites from './Favorites/Favorites.vue';
+import { ref, reactive, watch, computed, onMounted } from "vue";
+import Settings from "./Settings.vue";
+import throttle from "lodash/throttle";
+import { suggestAPI } from "@/utils/searchSuggestions";
+import useStore from "@/store";
+import { SearchEngine, SuggestWords } from "@/types/global";
+import Favorites from "./Favorites/Favorites.vue";
 
 onMounted(() => {
   window.onkeyup = (e: KeyboardEvent) => {
     e.preventDefault();
-    if (e.key == 'Alt') {
+    if (e.key == "Alt") {
       if (isSearchFocused.value) {
         searchBox.value.blur();
         searchBlur();
@@ -109,20 +119,20 @@ onMounted(() => {
         searchBox.value.focus();
       }
     }
-    if (e.key == 'Escape') {
+    if (e.key == "Escape") {
       searchBox.value.blur();
     }
   };
 });
 
-const emit = defineEmits(['blur', 'focus']);
+const emit = defineEmits(["blur", "focus"]);
 
 //store
 const historySearch = useStore.historySearch();
 const searchEnginesStore = useStore.searchEngines();
 
 // const global = inject(globalKey)
-let searchContent = ref('');
+let searchContent = ref("");
 let engineIndex: number = searchEnginesStore.selectedEngine;
 let selectedEngine = reactive<SearchEngine>({
   ...searchEnginesStore.searchEngines[engineIndex],
@@ -190,7 +200,7 @@ const startSearch = (
     /^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$/;
 
   let reqUrl =
-    selectedEngine.url + encodeURIComponent(keyWord) + ' ' + filterWords.value;
+    selectedEngine.url + encodeURIComponent(keyWord) + " " + filterWords.value;
 
   if (keyWord.trim() !== searchContent.value.trim()) {
     searchContent.value = keyWord.trim();
@@ -200,7 +210,7 @@ const startSearch = (
   try {
     scrollUl.value.children[0].scrollIntoView({
       top: 0,
-      behavior: 'instant',
+      behavior: "instant",
     });
   } catch {}
 
@@ -219,10 +229,10 @@ const startSearch = (
     isScrollingToTop.value = false;
     //If keyWord is an URL
     if (URLReg.exec(keyWord)) {
-      window.open(keyWord, '_blank');
+      window.open(keyWord, "_blank");
     } else {
       //新标签页打开
-      window.open(reqUrl, '_blank');
+      window.open(reqUrl, "_blank");
     }
     if (needClear) {
       clearContent();
@@ -232,16 +242,16 @@ const startSearch = (
 
 const searchEngineElement = ref<HTMLFormElement>();
 const toggleShadow = (flag: boolean) => {
-  searchEngineElement.value?.classList?.[flag ? 'add' : 'remove']('shadow');
-  searchEngineElement.value?.classList?.[flag ? 'add' : 'remove'](
-    'dark:dark-shadow'
+  searchEngineElement.value?.classList?.[flag ? "add" : "remove"]("shadow");
+  searchEngineElement.value?.classList?.[flag ? "add" : "remove"](
+    "dark:dark-shadow"
   );
 };
 
 // 鼠标滑过改变阴影
 
 const eventMouse = (e: MouseEvent): void => {
-  if (e.type == 'mouseenter' && !isSearchFocused.value) {
+  if (e.type == "mouseenter" && !isSearchFocused.value) {
     if (searchContent.value.length == 0) {
       toggleShadow(true);
     }
@@ -260,8 +270,8 @@ const enterEvent = (): void => {
 
 const searchBlur = () => {
   if (Configs.searchTransitonEnabled) {
-    searchEle.value.style.top = '';
-    emit('blur');
+    searchEle.value.style.top = "";
+    emit("blur");
   }
   isSearchFocused.value = false;
   searchBox.value.blur();
@@ -275,8 +285,8 @@ const searchEle = ref();
 
 const focus = () => {
   if (Configs.searchTransitonEnabled) {
-    searchEle.value.style.top = '33%';
-    emit('focus');
+    searchEle.value.style.top = "33%";
+    emit("focus");
   }
   toggleShadow(false);
   suggestIsShow.value = true;
@@ -289,7 +299,7 @@ const focus = () => {
 //搜索建议(谷歌接口暂时无法支持跨域)
 const searchSuggestion = throttle(
   async (
-    method: 'suggestBaidu' | 'suggestBing' | 'suggestDuckDuckGo'
+    method: "suggestBaidu" | "suggestBing" | "suggestDuckDuckGo"
   ): Promise<void> => {
     try {
       //清除阴影
@@ -316,7 +326,7 @@ const searchSuggestion = throttle(
         suggestWords.value = [...historySearch.gethistorySearchList];
       }
     } catch (e) {
-      console.log('搜索建议获取失败');
+      console.log("搜索建议获取失败");
     }
   },
   100
@@ -326,7 +336,7 @@ const searchSuggestion = throttle(
 const clearContent = (): void => {
   isSuggestMode = false;
   suggestWords.value.length = 0;
-  searchContent.value = '';
+  searchContent.value = "";
 };
 
 const scrollUl = ref();
@@ -337,9 +347,9 @@ watch(suggestionIndex, () => {
   if (isScrollingToTop.value) return;
   try {
     scrollUl.value.children[suggestionIndex.value].scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-      inline: 'nearest',
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
     });
   } catch {}
 });
@@ -357,7 +367,7 @@ const moveSuggestion = (e: KeyboardEvent): void => {
 
   //候选词列表不为空
   if (suggestWords.value.length != 0) {
-    if (key == 'ArrowUp') {
+    if (key == "ArrowUp") {
       //阻止上下按键操作光标
       e.preventDefault();
       if (suggestionIndex.value == 0 || suggestionIndex.value == -1) {
@@ -367,7 +377,7 @@ const moveSuggestion = (e: KeyboardEvent): void => {
           (suggestionIndex.value - 1) % suggestWords.value.length;
       }
       removeandInit();
-    } else if (key == 'ArrowDown') {
+    } else if (key == "ArrowDown") {
       e.preventDefault();
       if (suggestWords.value.length - 1 == suggestionIndex.value) {
         suggestionIndex.value = 0;
@@ -376,18 +386,18 @@ const moveSuggestion = (e: KeyboardEvent): void => {
           (suggestionIndex.value + 1) % suggestWords.value.length;
       }
       removeandInit();
-    } else if (key == 'Home') {
+    } else if (key == "Home") {
       e.preventDefault();
       suggestionIndex.value = 0;
       removeandInit();
-    } else if (key == 'End') {
+    } else if (key == "End") {
       e.preventDefault();
       suggestionIndex.value = suggestWords.value.length - 1;
       removeandInit();
     }
   }
   //del按下可以快速删除历史
-  if (key == 'Delete') {
+  if (key == "Delete") {
     //防止误删搜索建议中的内容
     if (suggestWords.value.length != 0 && !isSuggestMode) {
       historySearch.deleteHistory(suggestionIndex.value);
@@ -422,7 +432,7 @@ let showHideTimer: any = null;
 const showHideSearchHistory = (e: Event) => {
   showHideTimer && clearTimeout(showHideTimer);
   showHideTimer = setTimeout(() => {
-    if (e.type == 'focusin') {
+    if (e.type == "focusin") {
       focus();
     } else {
       if (isSearchFocused.value) {
@@ -436,7 +446,7 @@ const showHideSearchHistory = (e: Event) => {
 
 //判定鼠标是否在搜索历史框内
 const suggestActiveControl = (e: Event) => {
-  if (e.type == 'mouseenter') {
+  if (e.type == "mouseenter") {
     suggestActive.value = true;
   } else {
     suggestActive.value = false;
@@ -446,7 +456,7 @@ const suggestActiveControl = (e: Event) => {
 //删除搜索历史
 const delHistory = (index: number) => {
   focus();
-  emit('focus');
+  emit("focus");
   suggestWords.value.splice(index, 1);
   historySearch.deleteHistory(index);
   //删空后将搜索框设为圆角边框
@@ -464,12 +474,17 @@ const settingHandler = () => {
 
 //切换搜索的下边框
 const toggleSearchBorder = (active: boolean) => {
-  searchEngineElement.value?.classList[active ? 'remove' : 'add'](
-    'search-engine-active'
+  searchEngineElement.value?.classList[active ? "remove" : "add"](
+    "search-engine-active"
   );
 };
+
+//导出
+defineExpose({
+  blur: containerClick,
+});
 </script>
 
 <style scoped lang="less">
-@import url('./Search.less');
+@import url("./Search.less");
 </style>
