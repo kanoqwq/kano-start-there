@@ -2,6 +2,7 @@
 .suggestion-leave-to {
   opacity: 0;
 }
+
 .suggestion-ul-enter-active,
 .suggestion-ul-leave-active {
   transition: transform 0.2s ease !important;
@@ -23,11 +24,13 @@
   &::-webkit-scrollbar {
     display: none;
   }
+
   position: relative;
   z-index: 99;
   height: 100%;
   padding: 0 15px;
   overflow-y: auto;
+
   .top-banner {
     position: fixed;
     right: 0px;
@@ -42,6 +45,25 @@
   .rotate {
     transition: all 0.2s;
     animation: rotate 2s infinite linear;
+  }
+
+  .day-night-switch {
+    position: relative;
+    width: 30px;
+    height: 30px;
+
+    .icon {
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-size: 30px;
+      color: #ccc;
+      transition: all 0.2s;
+    }
+
+    .icon:hover {
+      color: #666;
+    }
   }
 
   .icon-hover:hover .rotate {
@@ -63,6 +85,7 @@
       justify-content: space-between;
       align-items: center;
       transition: all 0.3s;
+
       .searchkey {
         display: block;
         width: 100%;
@@ -130,7 +153,7 @@
     }
 
     .shadow {
-      box-shadow: 2px 8px 16px #999;
+      box-shadow: 0px 0px 15px #cccccc96;
     }
 
     .input {
@@ -145,7 +168,7 @@
     }
 
     &-btn:hover {
-      background-color: #eee;
+      background-color: #eeeeee88;
     }
   }
 

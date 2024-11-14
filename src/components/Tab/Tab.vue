@@ -7,7 +7,7 @@
       class="tab-content flex justify-center items-center dark:dark-text">
       {{ item }}
     </div>
-    <div ref="tabIndicator" class="tab-indicator dark:dark-bg"></div>
+    <div ref="tabIndicator" class="tab-indicator dark:dark-bg dark:dark-shadow "></div>
   </div>
 </template>
 
@@ -89,6 +89,7 @@ onMounted(() => {
     /*left: 0;*/
     opacity: 0.6;
     border-radius: 10px;
+    box-shadow: 0px 0px 15px #ffffff96;
   }
 }
 </style>

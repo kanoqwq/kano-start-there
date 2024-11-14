@@ -100,6 +100,7 @@ const close = (e: Event) => {
       width: 100%;
       height: 30px;
       margin-bottom: 10px;
+      margin-top: 5px;
 
       .tab-content {
         width: 20%;

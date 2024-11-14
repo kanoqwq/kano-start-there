@@ -42,7 +42,7 @@
     }
 
     .dark-hover-bg {
-        background-color: rgb(23 30 40) !important;
+        background-color: rgb(23 30 40/.5) !important;
     }
 
     .dark-input {
@@ -89,8 +89,9 @@
     }
 
     .dark-shadow {
-        box-shadow: 2px 8px 16px #000000bf !important;
+        box-shadow: 1px 1px 16px #000000bf !important;
     }
+
 
     .dark-icon {
         fill: #ccc !important;
