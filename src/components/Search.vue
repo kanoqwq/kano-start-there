@@ -30,7 +30,7 @@
             type="text"
             autocomplete="off"
             v-model="searchContent"
-            @keyup.enter="enterEvent"
+            @keydown.enter="(e:KeyboardEvent)=>{ e.isComposing ? true : enterEvent()}"
             @input.stop="searchSuggestion(selectedEngine.method)"
             @keydown.stop="moveSuggestion"
             @mouseenter.stop="eventMouse"
