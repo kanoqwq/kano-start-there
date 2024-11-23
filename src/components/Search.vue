@@ -405,15 +405,16 @@ const moveSuggestion = (e: KeyboardEvent): void => {
             (suggestionIndex.value + 1) % suggestWords.value.length;
       }
       removeandInit();
-    } else if (key == 'Home') {
-      e.preventDefault();
-      suggestionIndex.value = 0;
-      removeandInit();
-    } else if (key == 'End') {
-      e.preventDefault();
-      suggestionIndex.value = suggestWords.value.length - 1;
-      removeandInit();
     }
+    // else if (key == 'Home') {
+    //   e.preventDefault();
+    //   suggestionIndex.value = 0;
+    //   removeandInit();
+    // } else if (key == 'End') {
+    //   e.preventDefault();
+    //   suggestionIndex.value = suggestWords.value.length - 1;
+    //   removeandInit();
+    // }
   }
   //del按下可以快速删除历史
   if (key == 'Delete') {
