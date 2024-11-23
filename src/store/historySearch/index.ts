@@ -12,13 +12,17 @@ export const historySearch = defineStore("historySearch", {
     },
     getters: {
         gethistorySearchList(state) {
-            return state.historySearchList.map((item) => {
-                return {
-                    title: item,
-                    isSelected: false,
-                    allowDel: true,
-                };
-            });
+            if (searchHistoryIsEnabled == 'true') {
+                return state.historySearchList.map((item) => {
+                    return {
+                        title: item,
+                        isSelected: false,
+                        allowDel: true,
+                    };
+                })
+            } else {
+                return [];
+            }
         },
     },
     actions: {
