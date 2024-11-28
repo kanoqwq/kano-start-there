@@ -3,8 +3,8 @@
  * @Author: kanoqwq
  * @Email: kanoqwq@qq.com
  * @Date: 2023-04-17 14:47:15
- * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-11-07 09:21:02
+ * @Last Modified by: minikano
+ * @Last Modified time: 2024-11-28 08:28:35
  * @Description: Description
  */
 import { ref, onMounted, watch, computed } from "vue";
@@ -15,7 +15,7 @@ import Live2D from "@/components/Live2D/index.vue";
 import useStore from "./store";
 
 const Configs = useStore.Configs();
-let bg = ref<HTMLDivElement>();
+const bg = ref<HTMLDivElement>();
 const mask = ref<HTMLDivElement>();
 
 const background = computed(() => Configs.getBackgroundImage(-1));
@@ -34,12 +34,12 @@ onMounted(() => {
 });
 
 const onBlur = () => {
-  mask.value && mask.value.classList.remove("kano-blur");
-  bg.value && bg.value.classList.remove("kano-scale");
+  mask.value?.classList.remove("kano-blur");
+  bg.value?.classList.remove("kano-scale");
 };
 const onFocus = () => {
-  mask.value && mask.value.classList.add("kano-blur");
-  bg.value && bg.value.classList.add("kano-scale");
+  mask.value?.classList.add("kano-blur");
+  bg.value?.classList.add("kano-scale");
 };
 
 const search = ref()

@@ -2,12 +2,12 @@
  * @Author: kanoqwq
  * @Email: 1540508428@qq.com
  * @Date: 2023-04-17 14:47:36
- * @Last Modified by: kanoqwq
- * @Last Modified time: 2024-10-26 21:58:45
+ * @Last Modified by: minikano
+ * @Last Modified time: 2024-11-28 08:52:51
  * @Description: Description
  */
 
-import {createVNode, render} from "vue";
+import { createVNode, render } from "vue";
 import toastTemplate from "./index.vue";
 
 export interface Props {
@@ -16,7 +16,7 @@ export interface Props {
     background?: string;
     color?: string;
     fontWeight?: string;
-    success?: Function
+    success?: () => undefined
 }
 
 const defaultOptions = {
@@ -27,7 +27,7 @@ const defaultOptions = {
 
 export const Toast = (options: Props): void => {
     const container = document.createElement("div");
-    const opt = {...defaultOptions, ...options};
+    const opt = { ...defaultOptions, ...options };
     const vm = createVNode(toastTemplate, opt);
     render(vm, container);
     document.body.appendChild(container);
@@ -45,6 +45,6 @@ export const Toast = (options: Props): void => {
     //移除元素
     setTimeout(() => {
         document.body.removeChild(container);
-        opt.success && opt.success();
+        opt.success?.();
     }, opt.duration + 300);
 };

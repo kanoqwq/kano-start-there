@@ -21,16 +21,18 @@ import { ref, onMounted, nextTick } from 'vue';
 import useStore from '@/store';
 import { Toast } from '../Toast';
 import Button from '../Button/Button.vue';
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const l2DList = ref<any>({});
 const selectedIndex = ref<number>(0);
 const Configs = useStore.Configs();
 const scrollList = ref();
 const getL2DList = async () => {
   try {
-    let { messages } = await (
+    const { messages } = await (
       await fetch('./assets/Live2d/model_list.json')
     ).json();
 
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     l2DList.value = messages.map((item: any) => ({
       message: item,
       active: false,
@@ -47,6 +49,7 @@ const getL2DList = async () => {
 };
 
 const init = () => {
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   l2DList.value = l2DList.value.map((item: any) => ({
     ...item,
     active: false,
@@ -62,7 +65,7 @@ const selected = (index: number) => {
 const save = () => {
   Configs.setModelId(selectedIndex.value);
   Toast({
-    value: `保存成功！1秒后自动刷新页面！`,
+    value: "保存成功！1秒后自动刷新页面！",
     color: 'green',
     duration: 1000,
     background: '#00000099',
@@ -78,8 +81,7 @@ onMounted(() => {
     nextTick(() => {
       setTimeout(() => {
         try {
-          scrollList.value.children &&
-            scrollList.value.children[Configs.modId].scrollIntoView({
+          scrollList.value.children?.[Configs.modId].scrollIntoView({
               behavior: 'smooth',
               block: 'start',
               inline: 'nearest',

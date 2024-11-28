@@ -21,12 +21,13 @@
 <script lang="ts" setup>
 defineProps<{
   text: string;
-  modelValue: Boolean;
+  modelValue: boolean;
   class?: string;
 }>();
 
 const emit = defineEmits(['update:modelValue']);
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const toggle = (e: any) => {
   emit('update:modelValue', e.target.checked);
 };

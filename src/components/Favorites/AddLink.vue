@@ -57,7 +57,7 @@
 <script lang="ts" setup>
 import { ref, reactive, toRaw, watch } from 'vue';
 import useStore from '@/store';
-import { LinkObj } from '@/types/global';
+import type { LinkObj } from '@/types/global';
 import { Toast } from '../Toast';
 import Modal from '@/components/Modal/index.vue';
 import Button from '../Button/Button.vue';
@@ -105,14 +105,14 @@ const addLink = () => {
 const fileInput = ref();
 
 const onUpload = () => {
-  fileInput.value && fileInput.value.click();
+  fileInput.value?.click();
   console.log('upload');
 };
 
 const fileChange = async (e: Event) => {
   try {
-    let res = await change(e);
-    if (res.data && res.msg == 'ok') {
+    const res = await change(e);
+    if (res.data && res.msg === 'ok') {
       link.imgUrl = res.data;
       Toast({
         value: '上传成功！',
@@ -120,6 +120,7 @@ const fileChange = async (e: Event) => {
         duration: 1000,
       });
     }
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   } catch (e: any) {
     Toast({
       value: e.msg,
@@ -142,6 +143,7 @@ const save = () => {
       duration: 1000,
       background: '#00000099',
     });
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   } catch (e: any) {
     Toast({
       value: e.message,

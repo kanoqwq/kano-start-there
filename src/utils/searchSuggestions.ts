@@ -1,6 +1,7 @@
 import { jsonp } from "vue-jsonp";
 //构造统一回传对象
-const makeObject = (res: Array<any>, titleProp: string = ""): Array<any> => {
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+const makeObject = (res: Array<any>, titleProp = ""): Array<any> => {
   if (res) {
     let newRes = [...res];
     newRes = newRes.map((item) => {
@@ -10,14 +11,13 @@ const makeObject = (res: Array<any>, titleProp: string = ""): Array<any> => {
       };
     });
     return newRes;
-  } else {
-    return [];
   }
+    return [];
 };
 
 //baidu
 const suggestBaidu = async (searchContent: string) => {
-  let res = await jsonp("https://suggestion.baidu.com/su", {
+  const res = await jsonp("https://suggestion.baidu.com/su", {
     callbackName: "baidu_cb",
     wd: searchContent,
     cb: "baidu_cb",
@@ -29,7 +29,7 @@ const suggestBaidu = async (searchContent: string) => {
 
 //bing
 const suggestBing = async (searchContent: string) => {
-  let res = await jsonp("https://sg1.api.bing.com/qsonhs.aspx", {
+  const res = await jsonp("https://sg1.api.bing.com/qsonhs.aspx", {
     callbackName: "bing_cb",
     q: searchContent,
     type: "cb",

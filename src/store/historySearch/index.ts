@@ -1,18 +1,21 @@
-import {defineStore} from "pinia";
-import {getItem, getItemArray, setItem} from "@/utils/storage";
+import { defineStore } from "pinia";
+import { getItem, getItemArray, setItem } from "@/utils/storage";
+import { Configs } from "../Configs";
+
 //搜索历史存储库
-const searchHistoryIsEnabled = getItem("searchHistoryIsEnabled")
+const searchHistoryIsEnabled = getItem("searchHistoryIsEnabled") ? getItem("searchHistoryIsEnabled") === 'true' : true
+
 export const historySearch = defineStore("historySearch", {
     state: () => {
         return {
             //搜索历史列表
             //搜索历史功能未启用则为空数组
-            historySearchList: searchHistoryIsEnabled == 'true' ? getItemArray("historySearchList") ?? <Array<any>>[] : [],
+            historySearchList: searchHistoryIsEnabled ? getItemArray("historySearchList") ?? <Array<string>>[] : [],
         };
     },
     getters: {
         gethistorySearchList(state) {
-            if (searchHistoryIsEnabled == 'true') {
+            if (searchHistoryIsEnabled) {
                 return state.historySearchList.map((item) => {
                     return {
                         title: item,
@@ -20,15 +23,14 @@ export const historySearch = defineStore("historySearch", {
                         allowDel: true,
                     };
                 })
-            } else {
-                return [];
             }
+            return [];
         },
     },
     actions: {
         //存储搜索历史
         addHistory(item: string): void {
-            if (item && item.trim() != "") {
+            if (item && item.trim() !== "") {
                 // 去重
                 this.historySearchList.unshift(item);
                 this.historySearchList = [...new Set(this.historySearchList)]
@@ -43,7 +45,7 @@ export const historySearch = defineStore("historySearch", {
         //导入设置
         importSettings(settings: typeof this.$state) {
             if (settings) {
-                let state = this.$state
+                const state = this.$state
                 state.historySearchList = settings.historySearchList
                 setItem('historySearchList', settings.historySearchList)
                 // Object.keys(settings).forEach((key: any) => {

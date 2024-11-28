@@ -215,9 +215,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits<{
-  (event: "close"): void;
-}>();
+const emit = defineEmits<(event: "close") => void>();
 
 //侦听prop
 watch(
@@ -253,7 +251,7 @@ const addFilterWord = () => {
     const res = Configs.setFilterWord(filterWord.value);
     if (!res) {
       Toast({
-        value: `关键词已存在！`,
+        value: "关键词已存在！",
         color: "yellow",
         duration: 2000,
         background: "#00000099",
@@ -275,7 +273,7 @@ const reset = () => {
   isShowConfrim.value = false;
   Configs.reset();
   Toast({
-    value: `重置成功！1秒后自动刷新页面！`,
+    value: "重置成功！1秒后自动刷新页面！",
     color: "green",
     duration: 1000,
     background: "#00000099",
@@ -296,7 +294,7 @@ const submit = () => {
       ? Configs.toggleSearchHistory(true)
       : Configs.toggleSearchHistory(false);
   Toast({
-    value: `保存成功！1秒后自动刷新页面！`,
+    value: "保存成功！1秒后自动刷新页面！",
     color: "green",
     duration: 1000,
     background: "#00000099",
@@ -308,6 +306,7 @@ const submit = () => {
 
 const clearBtnText = ref("清空收藏夹");
 const clearable = ref(false);
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 let timer: any = null;
 //清空收藏夹
 const clearFavorite = () => {
@@ -317,7 +316,7 @@ const clearFavorite = () => {
     Configs.clearFavLink();
     emit("close");
     Toast({
-      value: `操作成功！`,
+      value: "操作成功！",
       color: "green",
       duration: 1000,
       background: "#00000099",
@@ -343,6 +342,7 @@ const exportSettings = () => {
       HistorySearch: toRaw(HistorySearch.$state),
     }),
   ]);
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const saveLink: any = document.createElementNS(
       "http://www.w3.org/1999/xhtml",
       "a"
@@ -351,7 +351,7 @@ const exportSettings = () => {
   saveLink.download = "kano-start-there-configs.json";
   saveLink.click();
   Toast({
-    value: `操作成功！`,
+    value: "操作成功！",
     color: "green",
     duration: 1000,
     background: "#00000099",
@@ -367,12 +367,12 @@ const importSettings = () => {
 const fileInputChange = async (e: Event) => {
   try {
     const res = await change(e);
-    let {Configs: config, HistorySearch: hisSearch} = JSON.parse(res.data);
+    const {Configs: config, HistorySearch: hisSearch} = JSON.parse(res.data);
     if (!config && !hisSearch) throw new Error();
     Configs.importSettings(config);
     HistorySearch.importSettings(hisSearch);
     Toast({
-      value: `导入成功,一秒后刷新页面`,
+      value: "导入成功,一秒后刷新页面",
       color: "green",
       duration: 1000,
       background: "#00000099",
@@ -382,7 +382,7 @@ const fileInputChange = async (e: Event) => {
     });
   } catch (e) {
     Toast({
-      value: `导入出错，请检查文件格式！`,
+      value: "导入出错，请检查文件格式！",
       color: "red",
       duration: 2000,
       background: "#00000099",

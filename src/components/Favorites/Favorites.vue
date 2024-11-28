@@ -58,7 +58,7 @@ const editData = ref({
 const addLinkBtn = ref();
 const editLinkShow = ref(false);
 
-const edit = (item: any) => {
+const edit = (item: LinkObj) => {
   editLinkShow.value = true;
   editData.value = {
     id: item.id,

@@ -1,11 +1,11 @@
-import {defineStore} from "pinia";
-import {getItemArray, setItem, getItem} from "@/utils/storage";
-import {LinkObj} from "@/types/global";
+import { defineStore } from "pinia";
+import { getItemArray, setItem, getItem } from "@/utils/storage";
+import type { LinkObj } from "@/types/global";
 
-let images = getItem("backgroundImages")
-let live2dEnabled = getItem("live2dEnabled")
-let searchTransitonIsEnabled = getItem("searchTransitonIsEnabled")
-let searchHistoryIsEnabled = getItem("searchHistoryIsEnabled")
+const images = getItem("backgroundImages")
+const live2dEnabled = getItem("live2dEnabled")
+const searchTransitonIsEnabled = getItem("searchTransitonIsEnabled")
+const searchHistoryIsEnabled = getItem("searchHistoryIsEnabled")
 
 export const Configs = defineStore("Configs", {
     state() {
@@ -13,11 +13,11 @@ export const Configs = defineStore("Configs", {
             //背景图片（多图）
             backgroundImages: (images ? (JSON.parse(images).length ? JSON.parse(images) : []) : ['./assets/bg.webp']) as Array<string>,
             //是否启用live2d
-            live2dIsEnabled: live2dEnabled ? live2dEnabled == 'true' : true,
+            live2dIsEnabled: live2dEnabled ? live2dEnabled === 'true' : true,
             //是否启用搜索框动画
-            searchTransitonIsEnabled: searchTransitonIsEnabled ? searchTransitonIsEnabled == 'true' : true,
+            searchTransitonIsEnabled: searchTransitonIsEnabled ? searchTransitonIsEnabled === 'true' : true,
             //是否启用搜索历史功能
-            searchHistoryIsEnabled: searchHistoryIsEnabled ? searchHistoryIsEnabled == 'true' : true,
+            searchHistoryIsEnabled: searchHistoryIsEnabled ? searchHistoryIsEnabled === 'true' : true,
             //常用链接列表
             favLinks: getItemArray("favLinks") || [],
             //过滤词列表
@@ -46,24 +46,23 @@ export const Configs = defineStore("Configs", {
         },
         //格式化后的过滤词（可以直接附加在url的keyword后面）
         formattedFilterWords(state) {
-            return state.filterWords.length ? '-' + state.filterWords.join(' -') : ''
+            return state.filterWords.length ? `-${state.filterWords.join(' -')}` : ''
         }
     },
     actions: {
         //设置过滤词
         setFilterWord(word: string) {
-            if (this.filterWords.findIndex(item => item.toLowerCase() === word.toLowerCase()) == -1) {
+            if (this.filterWords.findIndex(item => item.toLowerCase() === word.toLowerCase()) === -1) {
                 const newFilterWords = [...new Set([...this.filterWords].concat(word))]
                 this.filterWords = newFilterWords
                 setItem("filterWords", newFilterWords);
                 return true;
-            } else {
-                return false
             }
+            return false
         },
         //删除指定过滤词
         removeFilterWord(word: string) {
-            const newFilterWords = this.filterWords.filter(wd => wd != word)
+            const newFilterWords = this.filterWords.filter(wd => wd !== word)
             this.filterWords = newFilterWords
             setItem("filterWords", newFilterWords);
         },
@@ -81,7 +80,7 @@ export const Configs = defineStore("Configs", {
         },
         //获取背景图片
         getBackgroundImage(index: number): string {
-            if (index < 0 || isNaN(Number(index))) {
+            if (index < 0 || Number.isNaN(Number(index))) {
                 return this.backgroundImages[this.backgroundImages.length - 1];
             }
             return this.backgroundImages[index];
@@ -111,7 +110,7 @@ export const Configs = defineStore("Configs", {
         //修改常用链接
         updateFavLink(linkObj: LinkObj) {
             if (linkObj.id) {
-                let curLinksIndex: number = this.favLinks.findIndex(item => item.id == linkObj.id)
+                const curLinksIndex: number = this.favLinks.findIndex(item => item.id === linkObj.id)
                 this.favLinks[curLinksIndex] = {
                     id: this.favLinks[curLinksIndex].id,
                     href: linkObj.href.trim(),
@@ -123,27 +122,28 @@ export const Configs = defineStore("Configs", {
         },
         // 设置常用链接
         setFavLink(linkObj: LinkObj) {
-            if (linkObj.href.trim() == '') {
+            if (linkObj.href.trim() === '') {
                 throw new Error("链接不能为空")
-            } else if (linkObj.imgUrl.trim() == '') {
+            }
+            if (linkObj.imgUrl.trim() === '') {
                 throw new Error("图片地址不能为空")
-            } else if (this.favLinks.length >= 4) {
+            }
+            if (this.favLinks.length >= 4) {
                 throw new Error("常用链接最大不超过四个")
-            } else {
-                if (linkObj) {
-                    this.favLinks.push({
-                        id: this.favLinks.length + 1,
-                        href: linkObj.href.trim(),
-                        imgUrl: linkObj.imgUrl.trim(),
-                        isBlank: linkObj.isBlank
-                    })
-                    setItem("favLinks", this.favLinks)
-                }
+            }
+            if (linkObj) {
+                this.favLinks.push({
+                    id: this.favLinks.length + 1,
+                    href: linkObj.href.trim(),
+                    imgUrl: linkObj.imgUrl.trim(),
+                    isBlank: linkObj.isBlank
+                })
+                setItem("favLinks", this.favLinks)
             }
         },
         //删除指定链接
         removeFavLink(id: number) {
-            const newFavLinks = this.favLinks.filter(item => item.id != id)
+            const newFavLinks = this.favLinks.filter(item => item.id !== id)
             this.favLinks = newFavLinks
             setItem("favLinks", newFavLinks)
         },
@@ -164,7 +164,7 @@ export const Configs = defineStore("Configs", {
         //导入设置
         importSettings(settings: typeof this.$state) {
             if (settings) {
-                let state = this.$state
+                const state = this.$state
                 state.backgroundImages = settings.backgroundImages
                 setItem('backgroundImages', settings.backgroundImages)
                 state.favLinks = settings.favLinks

@@ -1,4 +1,4 @@
-import { AxiosStatic } from "axios";
+import type { AxiosStatic } from "axios";
 
 export interface Global {
   axios?: AxiosStatic;

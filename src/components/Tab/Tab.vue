@@ -15,9 +15,11 @@
 import { nextTick, onMounted, ref } from 'vue';
 const emits = defineEmits(['select']);
 const props = defineProps<{
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   tabs: Array<any>;
 }>();
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const selectedItem = ref<{ target?: any; index?: number }>({ index: 0 });
 const tabIndicator = ref();
 const tab = ref();
@@ -32,24 +34,25 @@ const onClick = (e: Event, index: number) => {
 };
 
 //tab指示器随动
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const tabClick = (e: any) => {
   const tabItemLeft = e.target.getBoundingClientRect().left;
   const tabLeft = tab.value.getBoundingClientRect().left;
-  tabIndicator.value.style.left = tabItemLeft - tabLeft + 'px';
+  tabIndicator.value.style.left = `${tabItemLeft - tabLeft}px`;
 };
 
 const autoResize = () => {
   if (selectedItem.value.target && tabIndicator.value) {
     const selectRect = selectedItem.value.target.getBoundingClientRect();
-    tabIndicator.value.style.width = selectRect.width + 'px';
-    tabIndicator.value.style.height = selectRect.height + 'px';
+    tabIndicator.value.style.width = `${selectRect.width}px`;
+    tabIndicator.value.style.height = `${selectRect.height}px`;
     selectedItem.value.target.click();
   } else {
     if (tab.value && tabIndicator.value) {
       const firstEle = tab.value.children[0];
       const firstEleRect = firstEle.getBoundingClientRect();
-      tabIndicator.value.style.width = firstEleRect.width + 'px';
-      tabIndicator.value.style.height = firstEleRect.height + 'px';
+      tabIndicator.value.style.width = `${firstEleRect.width}px`;
+      tabIndicator.value.style.height = `${firstEleRect.height}px`;
       firstEle.click();
     }
   }

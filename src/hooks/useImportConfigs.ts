@@ -4,11 +4,13 @@ export type Options = {
 
 export type returnType = Promise<{
     msg: string,
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     data: any
 }>
 
 export const useImportConfigs = ({ maxUploadSize }: Options) => {
     const MAX_UPLOAD_SIZE = maxUploadSize ? maxUploadSize : 3
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     const change = (event: any): returnType => {
         return new Promise((resolve, reject): void => {
             const file = event.target.files[0];
@@ -20,8 +22,9 @@ export const useImportConfigs = ({ maxUploadSize }: Options) => {
                 } else {
                     const reader = new FileReader();
                     reader.readAsText(file); // 将文件读取为Data URL
-                    reader.onload = function (e: any) {
-                        const text = e.target.result;
+                    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+                    reader.onload = (e: any) => {
+                        const text =e.target.result;
                         resolve({ msg: 'ok', data: text })
                     };
                 }

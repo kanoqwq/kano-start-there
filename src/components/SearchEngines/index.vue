@@ -22,13 +22,15 @@ const searchEnginesStore = useStore.searchEngines();
 const searchEngines = ref(
   searchEnginesStore.getSearchEngines.map((item) => ({
     ...item,
-    active: searchEnginesStore.selectedEngine == item.id,
+    active: searchEnginesStore.selectedEngine === item.id,
   }))
 );
 
 const selectItem = (id: number) => {
   searchEnginesStore.setSelectedEngine(id);
-  searchEngines.value.forEach((item) => (item.active = false));
+  // biome-ignore lint/complexity/noForEach: <explanation>
+  searchEngines.value.forEach((item) => {item.active = false});
+  // biome-ignore lint/complexity/noForEach: <explanation>
   searchEngines.value.forEach(item=>{
     if(item.id === id){
       item.active = true

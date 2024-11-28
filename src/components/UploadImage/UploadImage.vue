@@ -42,7 +42,7 @@ import { useUploadImage } from './useUploadImage';
 
 const emit = defineEmits(['success']);
 
-let btnClass =
+const btnClass =
   'rounded dark:dark-btn p-2 bg-stone-300 transition-all hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50';
 
 const Configs = useStore.Configs();
@@ -67,10 +67,11 @@ const removePicClick = () => {
   emit('success');
 };
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const fileChange = async (event: any) => {
   try {
-    let res = await change(event);
-    if (res.data && res.msg == 'ok') {
+    const res = await change(event);
+    if (res.data && res.msg === 'ok') {
       Configs.resetBackground();
       Configs.setBackgroundImage(res.data);
       Toast({
@@ -78,6 +79,7 @@ const fileChange = async (event: any) => {
         color: 'green',
       });
     }
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   } catch (e: any) {
     Toast({
       value: e.msg,
