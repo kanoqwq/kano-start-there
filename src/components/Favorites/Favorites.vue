@@ -39,6 +39,7 @@
 import LinkButton from './LinkButton.vue';
 import AddLink from './AddLink.vue';
 import useStore from '@/store/';
+import type { LinkObj } from "@/types/global";
 import { ref } from 'vue';
 
 defineProps({
@@ -61,10 +62,10 @@ const editLinkShow = ref(false);
 const edit = (item: LinkObj) => {
   editLinkShow.value = true;
   editData.value = {
-    id: item.id,
+    id: item.id as number,
     imgUrl: item.imgUrl,
     href: item.href,
-    isBlank: item.isBlank,
+    isBlank: item.isBlank as boolean,
   };
 };
 const onClose = () => {

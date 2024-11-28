@@ -3,7 +3,7 @@
  * @Email: 1540508428@qq.com
  * @Date: 2023-04-17 14:47:36
  * @Last Modified by: minikano
- * @Last Modified time: 2024-11-28 08:52:51
+ * @Last Modified time: 2024-11-28 09:18:53
  * @Description: Description
  */
 
@@ -16,7 +16,7 @@ export interface Props {
     background?: string;
     color?: string;
     fontWeight?: string;
-    success?: () => undefined
+    success?: () => void
 }
 
 const defaultOptions = {
